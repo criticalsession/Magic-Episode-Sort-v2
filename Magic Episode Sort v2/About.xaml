@@ -1,0 +1,26 @@
+﻿<Window x:Class="Magic_Episode_Sort_v2.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
+        mc:Ignorable="d"
+        Title="Magic Episode Sort > About" Height="283" Width="309" ResizeMode="NoResize">
+
+    <Border Margin="10 10 10 0">
+        <StackPanel Orientation="Vertical">
+            <TextBlock Text="Magic Episode Sort 🏴‍☠️" FontSize="24" FontWeight="bold" />
+            <TextBlock Text="Version 2.0 - Happy Gui Edition" FontSize="16" />
+            <TextBlock Text="Released On: 25 October, 2022"  FontSize="16" />
+            <Border Height="10" />
+            <TextBlock TextWrapping="Wrap">
+                Thank you for downloading, using and supporting free and open source software.
+                <LineBreak /><LineBreak />
+                <Hyperlink NavigateUri="https://github.com/criticalsession" RequestNavigate="Hyperlink_Click">Click here</Hyperlink> 
+                    to visit the project's github if you have any issues, feedback, feature requests or want to contribute!
+            </TextBlock>
+            <Border Height="10" />
+            <TextBlock FontWeight="Bold" HorizontalAlignment="Center" Text="Amante Reale (@CriticalSession)" />
+        </StackPanel>
+    </Border>
+</Window>
