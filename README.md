@@ -1,3 +1,5 @@
-# Magic Episode Sort v2
+# Magic Episode Sort
 
-**With a new and improve UI! (wow)**
+**Version 2.0 - Happy GUI Edition**
+
+New and improved!

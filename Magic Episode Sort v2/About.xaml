@@ -16,7 +16,7 @@
             <TextBlock TextWrapping="Wrap">
                 Thank you for downloading, using and supporting free and open source software.
                 <LineBreak /><LineBreak />
-                <Hyperlink NavigateUri="https://github.com/criticalsession" RequestNavigate="Hyperlink_Click">Click here</Hyperlink> 
+                <Hyperlink NavigateUri="https://github.com/criticalsession/Magic-Episode-Sort-v2" RequestNavigate="Hyperlink_Click">Click here</Hyperlink> 
                     to visit the project's github if you have any issues, feedback, feature requests or want to contribute!
             </TextBlock>
             <Border Height="10" />
