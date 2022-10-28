@@ -1,23 +1,26 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Windows;
 using TheMagic;
 
 namespace Magic_Episode_Sort_v2
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+
+            if (!Settings.SettingsFileExists)
+            {
+                new FirstTime().ShowDialog();
+                OpenPreferences();
+            }
         }
 
         void RetrieveData()
         {
             StartSearch();
-            FinishedSearch();
         }
 
         private void FileExit_Click(object sender, RoutedEventArgs e)
@@ -25,17 +28,28 @@ namespace Magic_Episode_Sort_v2
             Application.Current.Shutdown();
         }
 
+        private void EditSources_Click(object sender, RoutedEventArgs e)
+        {
+            new EditSources().ShowDialog();
+        }
+
         private void About_Click(object sender, RoutedEventArgs e)
         {
             new About().ShowDialog();
         }
 
+        private void Preferences_Click(object sender, RoutedEventArgs e)
+        {
+            OpenPreferences();
+        }
+
+        private void OpenPreferences()
+        {
+            new Preferences().ShowDialog();
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //TODO: if first time
-            new FirstTime().ShowDialog();
-            //TODO: load preferences window
-
             new Thread(() => RetrieveData()).Start();
         }
 
@@ -49,6 +63,8 @@ namespace Magic_Episode_Sort_v2
                 lblSeriesFound.Text = "Series: --";
                 lblEpisodesFound.Text = "Episodes: --";
             });
+
+            FinishedSearch();
 
             //TestEvents ev = new TestEvents();
             //ev.DirectorySearched += OnDirectorySearched;
@@ -69,10 +85,30 @@ namespace Magic_Episode_Sort_v2
         {
             this.Dispatcher.Invoke(() =>
             {
-                lblStatus.Text = "Search Complete";
-                btnSort.IsEnabled = true;
                 progressBar.IsIndeterminate = false;
             });
+
+            if (String.IsNullOrEmpty(Settings.TargetDirectory))
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    btnSort.IsEnabled = false;
+                    lblStatus.Text = "ERROR: NO OUTPUT DIRECTORY SET!";
+                });
+            } 
+            else
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    btnSort.IsEnabled = true;
+                    lblStatus.Text = "Search Complete";
+                });
+            }
+        }
+
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            StartSearch();
         }
     }
 }
