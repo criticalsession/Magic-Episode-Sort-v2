@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using TheMagic;
 
 namespace Magic_Episode_Sort_v2
 {
@@ -23,17 +12,12 @@ namespace Magic_Episode_Sort_v2
         public MainWindow()
         {
             InitializeComponent();
-
-            RetrieveData();
         }
 
         void RetrieveData()
         {
-            lblDirectoriesSearched.Text = "Directories Searched: --";
-            lblSeasonsFound.Text = "Seasons: --";
-            lblSeriesFound.Text = "Series: --";
-            lblEpisodesFound.Text = "Episodes: --";
-            lblNewSeriesFound.Text = "New Series Found: --";
+            StartSearch();
+            FinishedSearch();
         }
 
         private void FileExit_Click(object sender, RoutedEventArgs e)
@@ -44,6 +28,51 @@ namespace Magic_Episode_Sort_v2
         private void About_Click(object sender, RoutedEventArgs e)
         {
             new About().ShowDialog();
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            //TODO: if first time
+            new FirstTime().ShowDialog();
+            //TODO: load preferences window
+
+            new Thread(() => RetrieveData()).Start();
+        }
+
+        private void StartSearch()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                progressBar.IsIndeterminate = true;
+                lblStatus.Text = "Searching...";
+                lblSeasonsFound.Text = "Seasons: --";
+                lblSeriesFound.Text = "Series: --";
+                lblEpisodesFound.Text = "Episodes: --";
+            });
+
+            //TestEvents ev = new TestEvents();
+            //ev.DirectorySearched += OnDirectorySearched;
+            //ev.DoAThing();
+        }
+
+        //int totalDirectories = 0;
+        //private void OnDirectorySearched(object? sender, System.EventArgs e)
+        //{
+        //    totalDirectories++;
+        //    this.Dispatcher.Invoke(() =>
+        //    {
+        //        lblDirectoriesSearched.Text = "Directories Searched: " + totalDirectories.ToString();
+        //    });
+        //}
+
+        private void FinishedSearch()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                lblStatus.Text = "Search Complete";
+                btnSort.IsEnabled = true;
+                progressBar.IsIndeterminate = false;
+            });
         }
     }
 }
