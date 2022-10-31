@@ -28,6 +28,12 @@ namespace Magic_Episode_Sort_v2
             chkRecursiveSearchSubFolders.IsChecked = Settings.RecursiveSearchSubFolders;
             chkSearchSubFolders.IsChecked = Settings.SearchSubFolders;
             txtTargetDirectory.Text = Settings.TargetDirectory;
+
+            if (!chkSearchSubFolders.IsChecked.GetValueOrDefault(false))
+            {
+                chkRecursiveSearchSubFolders.IsChecked = false;
+                chkRecursiveSearchSubFolders.IsEnabled = false;
+            }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -60,6 +66,19 @@ namespace Magic_Episode_Sort_v2
         private void btnEditSources_Click(object sender, RoutedEventArgs e)
         {
             new EditSources().ShowDialog();
+        }
+
+        private void chkSearchSubFolders_Click(object sender, RoutedEventArgs e)
+        {
+            if (!chkSearchSubFolders.IsChecked.GetValueOrDefault(false))
+            {
+                chkRecursiveSearchSubFolders.IsChecked = false;
+                chkRecursiveSearchSubFolders.IsEnabled = false;
+            } 
+            else
+            {
+                chkRecursiveSearchSubFolders.IsEnabled = true;
+            }
         }
     }
 }

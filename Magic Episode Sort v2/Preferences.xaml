@@ -11,7 +11,7 @@
         <GroupBox Header="Directory Search" Padding="10">
             <StackPanel Orientation="Vertical" Margin="0">
                 <CheckBox Name="chkSearchSubFolders" FontSize="14"
-                Content="Search Sub-Folders" IsThreeState="False" />
+                Content="Search Sub-Folders" IsThreeState="False" Click="chkSearchSubFolders_Click" />
                 <CheckBox Name="chkRecursiveSearchSubFolders" FontSize="14"
                 Content="Recursively Search Sub-Folders" IsThreeState="False" />
                 <Border Height="10"></Border>
