@@ -8,13 +8,11 @@ namespace TheMagic
 {
     public class Directree
     {
-        public List<string> Directories { get; set; }
-        public event EventHandler DirectorySearched;
+        public List<string> Directories { get; set; } = new List<string>();
+        public List<VideoFile> VideoFiles { get; set; } = new List<VideoFile>();
 
-        public Directree()
-        {
-            Directories = new List<string>();
-        }
+        public event EventHandler? DirectorySearched;
+        public event EventHandler? FoundVideoFile;
 
         public void Build(List<string> sourceDirectories, bool searchSubDirectories, bool recursive)
         {
@@ -31,6 +29,8 @@ namespace TheMagic
                     }
                 }
             }
+
+            BuildVideoFiles();
         }
 
         private void AddDirsInPath(string path, bool recursive)
@@ -46,6 +46,21 @@ namespace TheMagic
                 if (recursive)
                 {
                     AddDirsInPath(subDirectory, recursive);
+                }
+            }
+        }
+
+        private void BuildVideoFiles()
+        {
+            foreach (string directory in Directories)
+            {
+                foreach (string filePath in Directory.GetFiles(directory))
+                {
+                    if (Settings.Extensions.Contains(Path.GetExtension(filePath)))
+                    {
+                        VideoFiles.Add(new VideoFile(filePath));
+                        FoundVideoFile?.Invoke(this, EventArgs.Empty);
+                    }
                 }
             }
         }

@@ -32,7 +32,14 @@
             </MenuItem>
         </Menu>
 
-        <TreeView Grid.Row="1" Name="treeSearchResults"></TreeView>
+        <!--<TreeView Grid.Row="1" Name="treeSearchResults"></TreeView>-->
+        <ListView Grid.Row="1" Name="lstFiles">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Padding="5"></TextBlock>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
 
         <DockPanel Grid.Row="2">
             <StackPanel Orientation="Vertical" DockPanel.Dock="Left">

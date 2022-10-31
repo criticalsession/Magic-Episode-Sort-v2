@@ -61,9 +61,11 @@ namespace Magic_Episode_Sort_v2
 
             Directree directories = new Directree();
             directories.DirectorySearched += (sender, e) => OnDirectorySearched(directories.Directories.Count);
+            directories.FoundVideoFile += (sender, e) => OnFoundVideoFile(directories.VideoFiles.Count);
+
             directories.Build(Settings.SourceDirectories, Settings.SearchSubFolders, Settings.RecursiveSearchSubFolders);
 
-            FinishedSearch();
+            FinishedSearch(directories);
         }
 
         private void OnDirectorySearched(int totalDirectories)
@@ -74,13 +76,16 @@ namespace Magic_Episode_Sort_v2
             });
         }
 
-        private void FinishedSearch()
+        private void OnFoundVideoFile(int totalVideoFiles)
         {
             this.Dispatcher.Invoke(() =>
             {
-                progressBar.IsIndeterminate = false;
+                lblEpisodesFound.Text = "Episodes: " + totalVideoFiles.ToString();
             });
+        }
 
+        private void FinishedSearch(Directree directree)
+        {
             if (String.IsNullOrEmpty(Settings.TargetDirectory))
             {
                 this.Dispatcher.Invoke(() =>
@@ -97,6 +102,12 @@ namespace Magic_Episode_Sort_v2
                     lblStatus.Text = "Search Complete";
                 });
             }
+
+            this.Dispatcher.Invoke(() =>
+            {
+                progressBar.IsIndeterminate = false;
+                lstFiles.ItemsSource = directree.VideoFiles;
+            });
         }
 
         private void Window_Activated(object sender, EventArgs e)

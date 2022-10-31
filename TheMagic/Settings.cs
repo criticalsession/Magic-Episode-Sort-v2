@@ -65,6 +65,40 @@ namespace TheMagic
             }
         }
 
+        private static List<string>? extensions = null;
+        public static List<string> Extensions
+        {
+            get
+            {
+                if (extensions == null)
+                {
+                    extensions = new List<string>();
+                    extensions.Add(".avi");
+                    extensions.Add(".mkv");
+                    extensions.Add(".mp4");
+                }
+
+                return extensions;
+            }
+        }
+
+        private static List<string>? regexes = null;
+        public static List<string> Regexes
+        {
+            get
+            {
+                if (regexes == null)
+                {
+                    regexes = new List<string>();
+                    regexes.Add("[sS][0-9]+");
+                    regexes.Add("[sS][0-9]+[eE][0-9]+-*[eE]*[0-9]*");
+                    regexes.Add("[0-9]+[xX][0-9]+");
+                }
+
+                return regexes;
+            }
+        }
+
         private static bool settingsLoaded = false;
         private static string appDirectory { get => System.IO.Directory.GetCurrentDirectory(); }
         private static string settingsPath { get => Path.Combine(appDirectory, "mes.settings"); }
@@ -92,6 +126,7 @@ namespace TheMagic
                 else
                 {
                     string[] settingsRead = File.ReadAllLines(settingsPath);
+
                     foreach (string setting in settingsRead)
                     {
                         if (setting.StartsWith("askfornewseriesnames=")) askForNewSeriesNames = ReadSettingsValue(setting, "askfornewseriesnames") == "yes" ? true : false;
@@ -99,7 +134,7 @@ namespace TheMagic
                         if (setting.StartsWith("recursivesearchsubfolders=")) recursiveSearchSubFolders = ReadSettingsValue(setting, "recursivesearchsubfolders") == "yes" ? true : false;
                         if (setting.StartsWith("targetdirectory=")) targetDirectory = ReadSettingsValue(setting, "targetdirectory");
 
-                        if (setting.StartsWith("sources"))
+                        if (setting.StartsWith("sources="))
                         {
                             string sources = ReadSettingsValue(setting, "sources");
                             if (!String.IsNullOrEmpty(sources))
