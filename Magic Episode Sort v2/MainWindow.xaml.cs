@@ -18,11 +18,6 @@ namespace Magic_Episode_Sort_v2
             }
         }
 
-        void RetrieveData()
-        {
-            StartSearch();
-        }
-
         private void FileExit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
@@ -50,7 +45,7 @@ namespace Magic_Episode_Sort_v2
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            new Thread(() => RetrieveData()).Start();
+            new Thread(() => StartSearch()).Start();
         }
 
         private void StartSearch()
@@ -64,22 +59,20 @@ namespace Magic_Episode_Sort_v2
                 lblEpisodesFound.Text = "Episodes: --";
             });
 
-            FinishedSearch();
+            Directree directories = new Directree();
+            directories.DirectorySearched += (sender, e) => OnDirectorySearched(directories.Directories.Count);
+            directories.Build(Settings.SourceDirectories, Settings.SearchSubFolders, Settings.RecursiveSearchSubFolders);
 
-            //TestEvents ev = new TestEvents();
-            //ev.DirectorySearched += OnDirectorySearched;
-            //ev.DoAThing();
+            FinishedSearch();
         }
 
-        //int totalDirectories = 0;
-        //private void OnDirectorySearched(object? sender, System.EventArgs e)
-        //{
-        //    totalDirectories++;
-        //    this.Dispatcher.Invoke(() =>
-        //    {
-        //        lblDirectoriesSearched.Text = "Directories Searched: " + totalDirectories.ToString();
-        //    });
-        //}
+        private void OnDirectorySearched(int totalDirectories)
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                lblDirectoriesSearched.Text = "Directories Searched: " + totalDirectories.ToString();
+            });
+        }
 
         private void FinishedSearch()
         {
