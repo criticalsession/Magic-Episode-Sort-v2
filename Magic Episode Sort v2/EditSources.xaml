@@ -5,8 +5,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
-        Title="Magic Episode Sort > Edit Sources" Height="450" Width="800">
-    <Grid>
+        Title="Magic Episode Sort > Edit Sources" Height="550" Width="450" Loaded="Window_Loaded">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+        </Grid.RowDefinitions>
         
+        <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="14" VerticalAlignment="Center">Sources:</TextBlock>
+
+        <!--
+        <StackPanel Grid.Row="1" Orientation="Vertical" Name="pnlSources">
+            <TextBlock Padding="0 5">C:\Users\Amante\source\repos\Magic Episode Sort v2\Magic Episode Sort v2\bin\Debug\net6.0-windows</TextBlock>
+            <TextBlock Padding="0 5">C:\Drawing</TextBlock>
+            <TextBlock Padding="0 5">C:\Drawing\3D Assets</TextBlock>
+        </StackPanel> -->
+        <ListView Grid.Row="1" Name="lstSources" MouseRightButtonUp="lstSources_MouseRightButtonUp">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Padding="5">
+                        <TextBlock.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Delete Source" Name="ctxDeleteSource" Click="ctxDeleteSource_Click" />
+                            </ContextMenu>
+                        </TextBlock.ContextMenu>
+                    </TextBlock>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
+        <TextBlock Grid.Row="2" FontWeight="Bold" FontSize="14" VerticalAlignment="Center">Add Source:</TextBlock>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Cursor="Hand" Name="btnAddSourceDirectory" Click="btnAddSourceDirectory_Click">Select Directory</Button>
+            <TextBox Grid.Column="1" IsReadOnly="True" Padding="0 3 0 0" Margin="0 0 5 0" Name="txtAddSource" />
+            <Button Grid.Column="2" Cursor="Hand" Name="btnAddSource" Click="btnAddSource_Click" IsEnabled="False">Add Source</Button>
+        </Grid>
     </Grid>
 </Window>
