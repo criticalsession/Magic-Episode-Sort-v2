@@ -57,9 +57,6 @@
                 <TextBlock Name="lblSeriesFound" FontSize="11" />
             </StatusBarItem>
             <StatusBarItem>
-                <TextBlock Name="lblSeasonsFound" FontSize="11" />
-            </StatusBarItem>
-            <StatusBarItem>
                 <TextBlock Name="lblEpisodesFound" FontSize="11" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">

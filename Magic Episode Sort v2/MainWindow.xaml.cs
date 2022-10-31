@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Documents;
 using TheMagic;
 
 namespace Magic_Episode_Sort_v2
@@ -54,14 +57,13 @@ namespace Magic_Episode_Sort_v2
             {
                 progressBar.IsIndeterminate = true;
                 lblStatus.Text = "Searching...";
-                lblSeasonsFound.Text = "Seasons: --";
                 lblSeriesFound.Text = "Series: --";
                 lblEpisodesFound.Text = "Episodes: --";
             });
 
             Directree directories = new Directree();
             directories.DirectorySearched += (sender, e) => OnDirectorySearched(directories.Directories.Count);
-            directories.FoundVideoFile += (sender, e) => OnFoundVideoFile(directories.VideoFiles.Count);
+            directories.FoundVideoFile += (sender, e) => OnFoundVideoFile(directories.VideoFiles);
 
             directories.Build(Settings.SourceDirectories, Settings.SearchSubFolders, Settings.RecursiveSearchSubFolders);
 
@@ -76,11 +78,12 @@ namespace Magic_Episode_Sort_v2
             });
         }
 
-        private void OnFoundVideoFile(int totalVideoFiles)
+        private void OnFoundVideoFile(List<VideoFile> videoFiles)
         {
             this.Dispatcher.Invoke(() =>
             {
-                lblEpisodesFound.Text = "Episodes: " + totalVideoFiles.ToString();
+                lblEpisodesFound.Text = "Episodes: " + videoFiles.Count.ToString();
+                lblSeriesFound.Text = "Series: " + videoFiles.Select(p => p.CustomSeriesName).Distinct().ToList().Count.ToString();
             });
         }
 

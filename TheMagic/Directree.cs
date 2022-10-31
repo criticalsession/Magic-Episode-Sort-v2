@@ -56,13 +56,16 @@ namespace TheMagic
             {
                 foreach (string filePath in Directory.GetFiles(directory))
                 {
-                    if (Settings.Extensions.Contains(Path.GetExtension(filePath)))
+                    VideoFile videoFile = new VideoFile(filePath);
+                    if (videoFile.IsVideoFile)
                     {
-                        VideoFiles.Add(new VideoFile(filePath));
+                        VideoFiles.Add(videoFile);
                         FoundVideoFile?.Invoke(this, EventArgs.Empty);
                     }
                 }
             }
+
+            VideoFiles = VideoFiles.OrderBy(p => p.CustomSeriesName).ThenBy(p => p.SeasonNumber).ToList();
         }
     }
 }

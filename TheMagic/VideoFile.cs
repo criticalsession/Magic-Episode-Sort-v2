@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace TheMagic
@@ -14,20 +16,94 @@ namespace TheMagic
         public string CustomSeriesName { get; set; }
         public string FileName { get; set; }
         public int SeasonNumber { get; set; }
+        
+        private bool IsVideoFileExtension
+        {
+            get
+            {
+                return Settings.Extensions.Contains(Path.GetExtension(SourcePath).ToLower());
+            }
+        }
+
+        private bool RegexMatches
+        {
+            get
+            {
+                foreach (string regex in Settings.Regexes)
+                {
+                    if (Regex.Match(FileName, regex).Success) return true;
+                }
+
+                return false;
+            }
+        }
+
+        public bool IsVideoFile 
+        { 
+            get
+            {
+                return IsVideoFileExtension && RegexMatches;
+            }
+        }
 
         public VideoFile(string path)
         {
             SourcePath = path;
             FileName = Path.GetFileName(path);
             TargetPath = path; // todo
-            OriginalSeriesName = ""; // todo
-            CustomSeriesName = ""; // todo
-            SeasonNumber = 1; // todo
+            OriginalSeriesName = GetSeriesNameFromFileName();
+            CustomSeriesName = OriginalSeriesName; // todo
+            SeasonNumber = GetSeasonNumberFromFileName().GetValueOrDefault(0);
+        }
+
+        private string GetSeriesNameFromFileName()
+        {
+            string seriesName = String.Empty;
+            foreach (string regex in Settings.Regexes)
+            {
+                Match match = Regex.Match(FileName, regex);
+                if (match.Success)
+                {
+                    TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+
+                    seriesName = FileName.Substring(0, match.Index).Replace(".", " ").Trim();
+                    seriesName = textInfo.ToTitleCase(seriesName.ToLower());
+
+                    break;
+                }
+            }
+
+            return seriesName;
+        }
+
+        private int? GetSeasonNumberFromFileName()
+        {
+            foreach (string regex in Settings.Regexes)
+            {
+                Match match = Regex.Match(FileName, regex);
+                if (match.Success)
+                {
+                    string matched = match.Value.ToLower();
+                    if (regex.Contains("e")) //SDDEDD
+                    {
+                        matched = matched.Replace("s", "");
+                        matched = matched.Substring(0, matched.IndexOf("e"));
+                        return int.Parse(matched);
+                    } 
+                    else if (regex.Contains("x")) //DDXDD
+                    {
+                        matched = matched.Substring(0, matched.IndexOf("x"));
+                        return int.Parse(matched);
+                    }
+                }
+            }
+
+            return null;
         }
 
         public override string ToString()
         {
-            return FileName;
+            return String.Format("{0} > Season {1} > {2}", CustomSeriesName, SeasonNumber.ToString().PadLeft(2, '0'), FileName);
         }
     }
 }
