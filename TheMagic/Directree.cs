@@ -65,6 +65,7 @@ namespace TheMagic
                 }
             }
 
+            VideoFiles.RemoveAll(p => String.IsNullOrEmpty(p.OriginalSeriesName));
             VideoFiles = VideoFiles.OrderBy(p => p.CustomSeriesName).ThenBy(p => p.SeasonNumber).ToList();
         }
     }

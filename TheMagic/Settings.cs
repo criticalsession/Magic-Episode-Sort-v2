@@ -103,6 +103,7 @@ namespace TheMagic
         private static string appDirectory { get => System.IO.Directory.GetCurrentDirectory(); }
         private static string settingsPath { get => Path.Combine(appDirectory, "mes.settings"); }
         public static bool SettingsFileExists { get => File.Exists(settingsPath); }
+        public static bool SettingsChanged { get; set; } = true;
 
         public static void LoadSettingsIfNotLoaded()
         {
@@ -187,6 +188,8 @@ namespace TheMagic
             settingsFile.AppendLine("sources=" + sourceDirectoriesManager.GetCSVDirectories());
 
             File.WriteAllText(settingsPath, settingsFile.ToString());
+
+            SettingsChanged = true;
         }
 
     }

@@ -46,11 +46,6 @@ namespace Magic_Episode_Sort_v2
             new Preferences().ShowDialog();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            new Thread(() => StartSearch()).Start();
-        }
-
         private void StartSearch()
         {
             this.Dispatcher.Invoke(() =>
@@ -115,7 +110,11 @@ namespace Magic_Episode_Sort_v2
 
         private void Window_Activated(object sender, EventArgs e)
         {
-            StartSearch();
+            if (Settings.SettingsChanged)
+            {
+                new Thread(() => StartSearch()).Start();
+                Settings.SettingsChanged = false;
+            }
         }
     }
 }

@@ -46,6 +46,14 @@ namespace TheMagic
             }
         }
 
+        public string SeasonDirName
+        {
+            get
+            {
+                return "Season " + SeasonNumber.ToString().PadLeft(2, '0');
+            }
+        }
+
         public VideoFile(string path)
         {
             SourcePath = path;
@@ -68,6 +76,9 @@ namespace TheMagic
 
                     seriesName = FileName.Substring(0, match.Index).Replace(".", " ").Trim();
                     seriesName = textInfo.ToTitleCase(seriesName.ToLower());
+
+                    if (seriesName.EndsWith(" -")) seriesName = seriesName.Substring(0, seriesName.LastIndexOf("-") - 1);
+                    if (seriesName.EndsWith(".")) seriesName = seriesName.Substring(0, seriesName.Length - 1);
 
                     break;
                 }
@@ -103,7 +114,7 @@ namespace TheMagic
 
         public override string ToString()
         {
-            return String.Format("{0} > Season {1} > {2}", CustomSeriesName, SeasonNumber.ToString().PadLeft(2, '0'), FileName);
+            return String.Format("{0} > {1} > {2}", CustomSeriesName, SeasonDirName, FileName);
         }
     }
 }

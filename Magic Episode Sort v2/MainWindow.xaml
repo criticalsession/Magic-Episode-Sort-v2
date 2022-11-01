@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d"
         Title="Magic Episode Sort" Height="600" Width="500"
-        ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Activated="Window_Activated">
+        ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"></RowDefinition>
