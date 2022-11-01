@@ -10,6 +10,8 @@ namespace Magic_Episode_Sort_v2
 {
     public partial class MainWindow : Window
     {
+        Directree directories = new Directree();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -21,6 +23,24 @@ namespace Magic_Episode_Sort_v2
             }
         }
 
+        private void Window_Activated(object sender, EventArgs e)
+        {
+            if (Settings.SettingsChanged)
+            {
+                new Thread(() => StartSearch()).Start();
+                Settings.SettingsChanged = false;
+            }
+        }
+
+        private void btnSort_Click(object sender, RoutedEventArgs e)
+        {
+            if (directories.SearchComplete)
+            {
+                new Thread(() => StartSort()).Start();
+            }
+        }
+
+        #region *** Menu ***
         private void FileExit_Click(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
@@ -45,44 +65,63 @@ namespace Magic_Episode_Sort_v2
         {
             new Preferences().ShowDialog();
         }
+        #endregion
 
+        #region *** Search ***
         private void StartSearch()
         {
-            this.Dispatcher.Invoke(() =>
+            if (Settings.SourceDirectories.Count > 0)
             {
-                progressBar.IsIndeterminate = true;
-                lblStatus.Text = "Searching...";
-                lblSeriesFound.Text = "Series: --";
-                lblEpisodesFound.Text = "Episodes: --";
-            });
+                this.Dispatcher.Invoke(() =>
+                {
+                    this.IsEnabled = false;
+                    progressBar.IsIndeterminate = true;
+                    lblStatus.Text = "Searching...";
+                    lblSeriesFound.Text = "Series: --";
+                    lblEpisodesFound.Text = "Episodes: --";
+                });
 
-            Directree directories = new Directree();
-            directories.DirectorySearched += (sender, e) => OnDirectorySearched(directories.Directories.Count);
-            directories.FoundVideoFile += (sender, e) => OnFoundVideoFile(directories.VideoFiles);
+                directories = new Directree();
+                directories.DirectorySearched += (sender, e) => OnDirectorySearched();
+                directories.FoundVideoFile += (sender, e) => OnFoundVideoFile();
 
-            directories.Build(Settings.SourceDirectories, Settings.SearchSubFolders, Settings.RecursiveSearchSubFolders);
+                directories.Build(Settings.SourceDirectories, Settings.SearchSubFolders, Settings.RecursiveSearchSubFolders);
 
-            FinishedSearch(directories);
+                FinishedSearch();
+            } 
+            else
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    this.IsEnabled = true;
+                    lstFiles.ItemsSource = new string[0];
+                    btnSort.IsEnabled = false;
+                    lblStatus.Text = "No Sources Set";
+                    lblDirectoriesSearched.Text = "";
+                    lblEpisodesFound.Text = "Episodes: --";
+                    lblSeriesFound.Text = "Series: --";
+                });
+            }
         }
 
-        private void OnDirectorySearched(int totalDirectories)
+        private void OnDirectorySearched()
         {
             this.Dispatcher.Invoke(() =>
             {
-                lblDirectoriesSearched.Text = "Directories Searched: " + totalDirectories.ToString();
+                lblDirectoriesSearched.Text = "Directories Searched: " + directories.Directories.Count.ToString();
             });
         }
 
-        private void OnFoundVideoFile(List<VideoFile> videoFiles)
+        private void OnFoundVideoFile()
         {
             this.Dispatcher.Invoke(() =>
             {
-                lblEpisodesFound.Text = "Episodes: " + videoFiles.Count.ToString();
-                lblSeriesFound.Text = "Series: " + videoFiles.Select(p => p.CustomSeriesName).Distinct().ToList().Count.ToString();
+                lblEpisodesFound.Text = "Episodes: " + directories.VideoFiles.Count.ToString();
+                lblSeriesFound.Text = "Series: " + directories.VideoFiles.Select(p => p.CustomSeriesName).Distinct().ToList().Count.ToString();
             });
         }
 
-        private void FinishedSearch(Directree directree)
+        private void FinishedSearch()
         {
             if (String.IsNullOrEmpty(Settings.TargetDirectory))
             {
@@ -94,27 +133,60 @@ namespace Magic_Episode_Sort_v2
             } 
             else
             {
-                this.Dispatcher.Invoke(() =>
+                if (directories.VideoFiles.Count > 0)
                 {
-                    btnSort.IsEnabled = true;
-                    lblStatus.Text = "Search Complete";
-                });
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        btnSort.IsEnabled = true;
+                        lblStatus.Text = "Search Complete";
+                    });
+                } 
+                else
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        btnSort.IsEnabled = false;
+                        lblStatus.Text = "No New Episodes Found";
+                    });
+                }
             }
 
             this.Dispatcher.Invoke(() =>
             {
+                this.IsEnabled = true;
                 progressBar.IsIndeterminate = false;
-                lstFiles.ItemsSource = directree.VideoFiles;
+                lstFiles.ItemsSource = directories.VideoFiles;
             });
         }
+        #endregion
 
-        private void Window_Activated(object sender, EventArgs e)
+        #region *** Sort ***
+        private void StartSort()
         {
-            if (Settings.SettingsChanged)
+            this.Dispatcher.Invoke(() =>
             {
-                new Thread(() => StartSearch()).Start();
-                Settings.SettingsChanged = false;
-            }
+                this.IsEnabled = false;
+                progressBar.IsIndeterminate = true;
+                lblStatus.Text = "Sorting...";
+            });
+
+            Thread.Sleep(3000);
+            FinishedSort();
         }
+
+        private void FinishedSort()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                btnSort.IsEnabled = false;
+                lblStatus.Text = "Sort Complete, Refreshing...";
+            });
+
+            Settings.SaveSettings();
+
+            Thread.Sleep(1000);
+            StartSearch();
+        }
+        #endregion
     }
 }

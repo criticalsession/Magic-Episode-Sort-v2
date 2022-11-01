@@ -11,6 +11,7 @@ namespace TheMagic
     {
         public List<string> Directories { get; set; } = new List<string>();
         public List<VideoFile> VideoFiles { get; set; } = new List<VideoFile>();
+        public bool SearchComplete = false;
 
         public event EventHandler? DirectorySearched;
         public event EventHandler? FoundVideoFile;
@@ -32,6 +33,8 @@ namespace TheMagic
             }
 
             BuildVideoFiles();
+
+            SearchComplete = true;
         }
 
         private void AddDirsInPath(string path, bool recursive)
