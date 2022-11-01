@@ -78,7 +78,9 @@ namespace TheMagic
                     seriesName = textInfo.ToTitleCase(seriesName.ToLower());
 
                     if (seriesName.EndsWith(" -")) seriesName = seriesName.Substring(0, seriesName.LastIndexOf("-") - 1);
+                    if (seriesName.EndsWith("-")) seriesName = seriesName.Substring(0, seriesName.Length - 1);
                     if (seriesName.EndsWith(".")) seriesName = seriesName.Substring(0, seriesName.Length - 1);
+                    seriesName = seriesName.Replace("  ", " ");
 
                     break;
                 }

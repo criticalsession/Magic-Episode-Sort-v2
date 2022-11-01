@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,9 +17,9 @@ namespace TheMagic
 
         public void Build(List<string> sourceDirectories, bool searchSubDirectories, bool recursive)
         {
-            foreach (var directory in sourceDirectories)
+            foreach (string directory in sourceDirectories)
             {
-                if (!Directories.Contains(directory))
+                if (directory.ToLower() != Settings.TargetDirectory.ToLower() && !Directories.Contains(directory))
                 {
                     Directories.Add(directory);
                     DirectorySearched?.Invoke(this, EventArgs.Empty);
@@ -37,15 +38,18 @@ namespace TheMagic
         {
             foreach (string subDirectory in Directory.GetDirectories(path).ToList())
             {
-                if (!Directories.Contains(subDirectory))
+                if (subDirectory.ToLower() != Settings.TargetDirectory.ToLower())
                 {
-                    Directories.Add(subDirectory);
-                    DirectorySearched?.Invoke(this, EventArgs.Empty);
-                }
+                    if (!Directories.Contains(subDirectory))
+                    {
+                        Directories.Add(subDirectory);
+                        DirectorySearched?.Invoke(this, EventArgs.Empty);
+                    }
 
-                if (recursive)
-                {
-                    AddDirsInPath(subDirectory, recursive);
+                    if (recursive)
+                    {
+                        AddDirsInPath(subDirectory, recursive);
+                    }
                 }
             }
         }

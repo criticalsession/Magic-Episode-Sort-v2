@@ -44,7 +44,7 @@ namespace TheMagic
             set => recursiveSearchSubFolders = value;
         }
 
-        private static string? targetDirectory;
+        private static string targetDirectory = "";
         public static string TargetDirectory
         {
             get
