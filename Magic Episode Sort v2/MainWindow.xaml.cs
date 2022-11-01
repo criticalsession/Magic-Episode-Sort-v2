@@ -117,7 +117,7 @@ namespace Magic_Episode_Sort_v2
             this.Dispatcher.Invoke(() =>
             {
                 lblEpisodesFound.Text = "Episodes: " + directories.VideoFiles.Count.ToString();
-                lblSeriesFound.Text = "Series: " + directories.VideoFiles.Select(p => p.CustomSeriesName).Distinct().ToList().Count.ToString();
+                lblSeriesFound.Text = "Series: " + directories.DistingSeriesTitles.Count.ToString();
             });
         }
 

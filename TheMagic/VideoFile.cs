@@ -12,8 +12,7 @@ namespace TheMagic
     {
         public string SourcePath { get; set; }
         public string TargetPath { get; set; }
-        public string OriginalSeriesName { get; set; }
-        public string CustomSeriesName { get; set; }
+        public SeriesTitle SeriesTitle { get; set; }
         public string FileName { get; set; }
         public int SeasonNumber { get; set; }
         
@@ -59,35 +58,8 @@ namespace TheMagic
             SourcePath = path;
             FileName = Path.GetFileName(path);
             TargetPath = path; // todo
-            OriginalSeriesName = GetSeriesNameFromFileName();
-            CustomSeriesName = OriginalSeriesName; // todo
+            SeriesTitle = new SeriesTitle(FileName);
             SeasonNumber = GetSeasonNumberFromFileName().GetValueOrDefault(0);
-        }
-
-        private string GetSeriesNameFromFileName()
-        {
-            string seriesName = String.Empty;
-            foreach (string regex in Settings.Regexes)
-            {
-                Match match = Regex.Match(FileName, regex);
-                if (match.Success)
-                {
-                    TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-
-                    seriesName = FileName.Substring(0, match.Index).Replace(".", " ").Trim();
-                    seriesName = textInfo.ToTitleCase(seriesName.ToLower());
-
-                    if (seriesName.EndsWith(" -")) seriesName = seriesName.Substring(0, seriesName.LastIndexOf("-") - 1);
-                    if (seriesName.EndsWith("-")) seriesName = seriesName.Substring(0, seriesName.Length - 1);
-                    if (seriesName.EndsWith(".")) seriesName = seriesName.Substring(0, seriesName.Length - 1);
-                    seriesName = seriesName.Replace(":", "");
-                    seriesName = Regex.Replace(seriesName, @"\s+", " "); // replace all extra spaces
-
-                    break;
-                }
-            }
-
-            return seriesName;
         }
 
         private int? GetSeasonNumberFromFileName()
@@ -117,7 +89,7 @@ namespace TheMagic
 
         public override string ToString()
         {
-            return String.Format("{0} > {1} > {2}", CustomSeriesName, SeasonDirName, FileName);
+            return String.Format("{0} > {1} > {2}", SeriesTitle.CustomTitle, SeasonDirName, FileName);
         }
     }
 }

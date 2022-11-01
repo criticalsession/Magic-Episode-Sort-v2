@@ -11,10 +11,19 @@ namespace TheMagic
     {
         public List<string> Directories { get; set; } = new List<string>();
         public List<VideoFile> VideoFiles { get; set; } = new List<VideoFile>();
+
         public bool SearchComplete = false;
 
         public event EventHandler? DirectorySearched;
         public event EventHandler? FoundVideoFile;
+
+        public List<string> DistingSeriesTitles
+        {
+            get
+            {
+                return VideoFiles.Select(p => p.SeriesTitle.CustomTitle).Distinct().ToList();
+            }
+        }
 
         public void Build(List<string> sourceDirectories, bool searchSubDirectories, bool recursive)
         {
@@ -72,8 +81,8 @@ namespace TheMagic
                 }
             }
 
-            VideoFiles.RemoveAll(p => String.IsNullOrEmpty(p.OriginalSeriesName));
-            VideoFiles = VideoFiles.OrderBy(p => p.CustomSeriesName).ThenBy(p => p.SeasonNumber).ToList();
+            VideoFiles.RemoveAll(p => String.IsNullOrEmpty(p.SeriesTitle.OriginalTitle));
+            VideoFiles = VideoFiles.OrderBy(p => p.SeriesTitle.CustomTitle).ThenBy(p => p.SeasonNumber).ToList();
         }
     }
 }
