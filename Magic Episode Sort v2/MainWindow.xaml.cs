@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -160,7 +161,7 @@ namespace Magic_Episode_Sort_v2
 
         private void FinishedSearch()
         {
-            if (String.IsNullOrEmpty(SettingsManager.TargetDirectory))
+            if (String.IsNullOrEmpty(SettingsManager.OutputDirectory))
             {
                 this.Dispatcher.Invoke(() =>
                 {
@@ -206,7 +207,7 @@ namespace Magic_Episode_Sort_v2
             new Thread(() =>
             {
                 Targetree targetree = new Targetree();
-                bool targetreeResult = targetree.BuildDirectoryTreeInTarget(directories.VideoFiles, SettingsManager.TargetDirectory);
+                bool targetreeResult = targetree.BuildDirectoryTreeInTarget(directories.VideoFiles, SettingsManager.OutputDirectory);
 
                 if (targetreeResult)
                 {
@@ -228,9 +229,18 @@ namespace Magic_Episode_Sort_v2
 
             SettingsManager.SaveSettings();
 
-            Thread.Sleep(1500);
+            Thread.Sleep(1000);
 
-            // TODO: show warning popup if errors
+            if (directories.VideoFiles.Any(p => p.MoveError != EpisodeMover.MoveErrors.None))
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    new SortFailed(directories.VideoFiles.Where(p => p.MoveError != EpisodeMover.MoveErrors.None).ToList()).ShowDialog();
+                });
+            }
+
+            if (SettingsManager.OpenOutputDirectoryAfterSort)
+                Process.Start("explorer.exe", SettingsManager.OutputDirectory); 
 
             StartSearch();
         }

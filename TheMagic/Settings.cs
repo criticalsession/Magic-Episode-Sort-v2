@@ -10,14 +10,16 @@ namespace TheMagic
     internal class Settings
     {
         [JsonProperty]
-        internal bool askForNewSeriesNames;
+        internal bool askForNewSeriesNames = true;
         [JsonProperty]
-        internal bool searchSubFolders;
+        internal bool searchSubFolders = true;
         [JsonProperty]
-        internal bool recursiveSearchSubFolders;
+        internal bool recursiveSearchSubFolders = true;
         [JsonProperty] 
-        internal string targetDirectory = "";
+        internal string outputDirectory = "";
         [JsonProperty] 
         internal string sources = "";
+        [JsonProperty]
+        internal bool openOutputDirectoryAfterSort = false;
     }
 }

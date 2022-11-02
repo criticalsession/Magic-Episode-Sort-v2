@@ -27,7 +27,8 @@ namespace Magic_Episode_Sort_v2
             chkAskForNewSeriesNames.IsChecked = SettingsManager.AskForNewSeriesNames;
             chkRecursiveSearchSubFolders.IsChecked = SettingsManager.RecursiveSearchSubFolders;
             chkSearchSubFolders.IsChecked = SettingsManager.SearchSubFolders;
-            txtTargetDirectory.Text = SettingsManager.TargetDirectory;
+            chkOpenOutputDirectory.IsChecked = SettingsManager.OpenOutputDirectoryAfterSort;
+            txtTargetDirectory.Text = SettingsManager.OutputDirectory;
 
             if (!chkSearchSubFolders.IsChecked.GetValueOrDefault(false))
             {
@@ -46,7 +47,8 @@ namespace Magic_Episode_Sort_v2
             SettingsManager.AskForNewSeriesNames = chkAskForNewSeriesNames.IsChecked.GetValueOrDefault(false);
             SettingsManager.RecursiveSearchSubFolders = chkRecursiveSearchSubFolders.IsChecked.GetValueOrDefault(false);
             SettingsManager.SearchSubFolders = chkSearchSubFolders.IsChecked.GetValueOrDefault(false);
-            SettingsManager.TargetDirectory = txtTargetDirectory.Text;
+            SettingsManager.OpenOutputDirectoryAfterSort = chkOpenOutputDirectory.IsChecked.GetValueOrDefault(false);
+            SettingsManager.OutputDirectory = txtTargetDirectory.Text;
 
             SettingsManager.SaveSettings();
             this.Close();

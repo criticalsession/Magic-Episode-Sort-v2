@@ -44,14 +44,24 @@ namespace TheMagic
             set => settings.recursiveSearchSubFolders = value;
         }
 
-        public static string TargetDirectory
+        public static string OutputDirectory
         {
             get
             {
                 LoadSettingsIfNotLoaded();
-                return String.IsNullOrEmpty(settings.targetDirectory) ? "" : settings.targetDirectory;
+                return String.IsNullOrEmpty(settings.outputDirectory) ? "" : settings.outputDirectory;
             }
-            set => settings.targetDirectory = value;
+            set => settings.outputDirectory = value;
+        }
+
+        public static bool OpenOutputDirectoryAfterSort
+        {
+            get
+            {
+                LoadSettingsIfNotLoaded();
+                return settings.openOutputDirectoryAfterSort;
+            }
+            set => settings.openOutputDirectoryAfterSort = value;
         }
 
         private static SourceDirectoriesManager? sourceDirectoriesManager;
@@ -117,7 +127,8 @@ namespace TheMagic
                     settings.askForNewSeriesNames = true;
                     settings.searchSubFolders = true;
                     settings.recursiveSearchSubFolders = true;
-                    settings.targetDirectory = Path.Combine(appDirectory, "Sorted Episodes");
+                    settings.outputDirectory = Path.Combine(appDirectory, "Sorted Episodes");
+                    settings.openOutputDirectoryAfterSort = false;
 
                     sourceDirectoriesManager.AddDirectory(appDirectory);
 

@@ -29,7 +29,7 @@ namespace TheMagic
         {
             foreach (string directory in sourceDirectories)
             {
-                if (directory.ToLower() != SettingsManager.TargetDirectory.ToLower() && !Directories.Contains(directory))
+                if (directory.ToLower() != SettingsManager.OutputDirectory.ToLower() && !Directories.Contains(directory))
                 {
                     Directories.Add(directory);
                     DirectorySearched?.Invoke(this, EventArgs.Empty);
@@ -50,7 +50,7 @@ namespace TheMagic
         {
             foreach (string subDirectory in Directory.GetDirectories(path).ToList())
             {
-                if (subDirectory.ToLower() != SettingsManager.TargetDirectory.ToLower())
+                if (subDirectory.ToLower() != SettingsManager.OutputDirectory.ToLower())
                 {
                     if (!Directories.Contains(subDirectory))
                     {

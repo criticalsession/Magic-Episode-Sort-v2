@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d"
-        Title="Magic Episode Sort > Preferences" Height="291" Width="422" Icon="/MESIcon.png"
+        Title="Magic Episode Sort > Preferences" Height="355" Width="422" Icon="/MESIcon.png"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <StackPanel Orientation="Vertical" Margin="10">
         <GroupBox Header="Directory Search" Padding="10">
@@ -28,6 +28,13 @@
                     <TextBox Name="txtTargetDirectory" Width="200" IsReadOnly="True" Text="C:/downloads/sorted-episodes" VerticalAlignment="Center" Padding="0 5" FontSize="12" />
                     <Button Padding="10 0" Click="SelectTargetDirectory_Click">...</Button>
                 </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="After Sorting..." Padding="10">
+            <StackPanel Orientation="Vertical" Margin="0">
+                <CheckBox Name="chkOpenOutputDirectory" FontSize="14"
+                Content="Open Output Directory in Explorer" IsThreeState="False" />
             </StackPanel>
         </GroupBox>
 

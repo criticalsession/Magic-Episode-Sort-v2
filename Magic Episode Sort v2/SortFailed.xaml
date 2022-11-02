@@ -1,0 +1,25 @@
+﻿<Window x:Class="Magic_Episode_Sort_v2.SortFailed"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
+        mc:Ignorable="d"
+        Title="Magic Episode Sort > Sort Failed" Height="403" Width="381" Icon="/MESIcon.png"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
+    <StackPanel Orientation="Vertical" Margin="10">
+        <TextBlock Name="txtInformation" FontSize="14" TextWrapping="Wrap">Warning: <Bold>Magic Episode Sort</Bold> could not successfully sort all episode files.</TextBlock>
+        <Line Height="5"></Line>
+        <TextBlock TextWrapping="Wrap">The following files no longer exist in the Source directories. This will automatically be resolved when you close this window.</TextBlock>
+        <ListView Height="100" Name="lstNotFound">
+            
+        </ListView>
+        <Line Height="5"></Line>
+        <TextBlock TextWrapping="Wrap">The following files already exist in the Output directory. To fix this, please delete the video files before attempting to sort again.</TextBlock>
+        <ListView Height="100" Name="lstAlreadyExist">
+
+        </ListView>
+        <Line Height="10"></Line>
+        <Button Name="btnClosePopup" HorizontalAlignment="Right" Cursor="Hand" Width="100" Click="btnClosePopup_Click">Great, thanks...</Button>
+    </StackPanel>
+</Window>
