@@ -16,7 +16,7 @@ namespace Magic_Episode_Sort_v2
         {
             InitializeComponent();
 
-            if (!Settings.SettingsFileExists)
+            if (!SettingsManager.SettingsFileExists)
             {
                 new FirstTime().ShowDialog();
                 OpenPreferences();
@@ -25,10 +25,10 @@ namespace Magic_Episode_Sort_v2
 
         private void Window_Activated(object sender, EventArgs e)
         {
-            if (Settings.SettingsChanged)
+            if (SettingsManager.SettingsChanged)
             {
                 new Thread(() => StartSearch()).Start();
-                Settings.SettingsChanged = false;
+                SettingsManager.SettingsChanged = false;
             }
         }
 
@@ -106,7 +106,7 @@ namespace Magic_Episode_Sort_v2
         #region *** Search ***
         private void StartSearch()
         {
-            if (Settings.SourceDirectories.Count > 0)
+            if (SettingsManager.SourceDirectories.Count > 0)
             {
                 this.Dispatcher.Invoke(() =>
                 {
@@ -121,7 +121,7 @@ namespace Magic_Episode_Sort_v2
                 directories.DirectorySearched += (sender, e) => OnDirectorySearched();
                 directories.FoundVideoFile += (sender, e) => OnFoundVideoFile();
 
-                directories.Build(Settings.SourceDirectories, Settings.SearchSubFolders, Settings.RecursiveSearchSubFolders);
+                directories.Build(SettingsManager.SourceDirectories, SettingsManager.SearchSubFolders, SettingsManager.RecursiveSearchSubFolders);
 
                 FinishedSearch();
             } 
@@ -155,7 +155,7 @@ namespace Magic_Episode_Sort_v2
 
         private void FinishedSearch()
         {
-            if (String.IsNullOrEmpty(Settings.TargetDirectory))
+            if (String.IsNullOrEmpty(SettingsManager.TargetDirectory))
             {
                 this.Dispatcher.Invoke(() =>
                 {
@@ -201,7 +201,13 @@ namespace Magic_Episode_Sort_v2
             new Thread(() =>
             {
                 Targetree targetree = new Targetree();
-                targetree.BuildDirectoryTreeInTarget(directories.VideoFiles, Settings.TargetDirectory);
+                bool targetreeResult = targetree.BuildDirectoryTreeInTarget(directories.VideoFiles, SettingsManager.TargetDirectory);
+
+                if (targetreeResult)
+                {
+                    EpisodeMover epmover = new EpisodeMover();
+                    epmover.MoveEpisodeFiles(directories.VideoFiles);
+                }
 
                 FinishedSort();
             }).Start();
@@ -215,7 +221,7 @@ namespace Magic_Episode_Sort_v2
                 lblStatus.Text = "Sort Complete, Refreshing...";
             });
 
-            Settings.SaveSettings();
+            SettingsManager.SaveSettings();
 
             Thread.Sleep(1500);
 

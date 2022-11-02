@@ -20,7 +20,7 @@ namespace TheMagic
         {
             get
             {
-                return Settings.Extensions.Contains(Path.GetExtension(SourcePath).ToLower());
+                return SettingsManager.Extensions.Contains(Path.GetExtension(SourcePath).ToLower());
             }
         }
 
@@ -28,7 +28,7 @@ namespace TheMagic
         {
             get
             {
-                foreach (string regex in Settings.Regexes)
+                foreach (string regex in SettingsManager.Regexes)
                 {
                     if (Regex.Match(FileName, regex).Success) return true;
                 }
@@ -57,14 +57,14 @@ namespace TheMagic
         {
             SourcePath = path;
             FileName = Path.GetFileName(path);
-            TargetPath = path; // todo
+            TargetPath = String.Empty;
             SeriesTitle = new SeriesTitle(FileName);
             SeasonNumber = GetSeasonNumberFromFileName().GetValueOrDefault(0);
         }
 
         private int? GetSeasonNumberFromFileName()
         {
-            foreach (string regex in Settings.Regexes)
+            foreach (string regex in SettingsManager.Regexes)
             {
                 Match match = Regex.Match(FileName, regex);
                 if (match.Success)

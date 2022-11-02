@@ -9,30 +9,39 @@ namespace TheMagic
 {
     public class Targetree
     {
-        public void BuildDirectoryTreeInTarget(List<VideoFile> episodes, string outputDirectory)
+        public bool BuildDirectoryTreeInTarget(List<VideoFile> episodes, string outputDirectory)
         {
-            if (!String.IsNullOrEmpty(outputDirectory))
+            if (String.IsNullOrEmpty(outputDirectory)) return false;
+            else
             {
                 if (!Directory.Exists(outputDirectory))
                     Directory.CreateDirectory(outputDirectory);
 
                 List<string> donePaths = new List<string>();
 
-                foreach (VideoFile episode in episodes)
+                if (episodes.Count == 0) return false;
+                else
                 {
-                    string seriesDirectoryPath = GetSeriesDirectoryPath(outputDirectory, episode);
-                    if (!donePaths.Contains(seriesDirectoryPath) && !Directory.Exists(seriesDirectoryPath))
+                    foreach (VideoFile episode in episodes)
                     {
-                        Directory.CreateDirectory(seriesDirectoryPath);
-                        donePaths.Add(seriesDirectoryPath);
+                        string seriesDirectoryPath = GetSeriesDirectoryPath(outputDirectory, episode);
+                        if (!donePaths.Contains(seriesDirectoryPath) && !Directory.Exists(seriesDirectoryPath))
+                        {
+                            Directory.CreateDirectory(seriesDirectoryPath);
+                            donePaths.Add(seriesDirectoryPath);
+                        }
+
+                        string fullDirectoryPath = GetFullDirectoryPath(outputDirectory, episode);
+                        if (!donePaths.Contains(fullDirectoryPath) && !Directory.Exists(fullDirectoryPath))
+                        {
+                            Directory.CreateDirectory(fullDirectoryPath);
+                            donePaths.Add(fullDirectoryPath);
+                        }
+
+                        episode.TargetPath = Path.Combine(fullDirectoryPath, episode.FileName);
                     }
 
-                    string fullDirectoryPath = GetFullDirectoryPath(outputDirectory, episode);
-                    if (!donePaths.Contains(fullDirectoryPath) && !Directory.Exists(fullDirectoryPath))
-                    {
-                        Directory.CreateDirectory(fullDirectoryPath);
-                        donePaths.Add(fullDirectoryPath);
-                    }
+                    return true;
                 }
             }
         }

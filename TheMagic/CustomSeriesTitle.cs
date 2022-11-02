@@ -24,7 +24,7 @@ namespace TheMagic
         private string GetSeriesTitleFromFileName(string fileName)
         {
             string seriesName = String.Empty;
-            foreach (string regex in Settings.Regexes)
+            foreach (string regex in SettingsManager.Regexes)
             {
                 Match match = Regex.Match(fileName, regex);
                 if (match.Success)

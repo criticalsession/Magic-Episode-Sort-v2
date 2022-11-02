@@ -24,10 +24,10 @@ namespace Magic_Episode_Sort_v2
         {
             InitializeComponent();
 
-            chkAskForNewSeriesNames.IsChecked = Settings.AskForNewSeriesNames;
-            chkRecursiveSearchSubFolders.IsChecked = Settings.RecursiveSearchSubFolders;
-            chkSearchSubFolders.IsChecked = Settings.SearchSubFolders;
-            txtTargetDirectory.Text = Settings.TargetDirectory;
+            chkAskForNewSeriesNames.IsChecked = SettingsManager.AskForNewSeriesNames;
+            chkRecursiveSearchSubFolders.IsChecked = SettingsManager.RecursiveSearchSubFolders;
+            chkSearchSubFolders.IsChecked = SettingsManager.SearchSubFolders;
+            txtTargetDirectory.Text = SettingsManager.TargetDirectory;
 
             if (!chkSearchSubFolders.IsChecked.GetValueOrDefault(false))
             {
@@ -43,12 +43,12 @@ namespace Magic_Episode_Sort_v2
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            Settings.AskForNewSeriesNames = chkAskForNewSeriesNames.IsChecked.GetValueOrDefault(false);
-            Settings.RecursiveSearchSubFolders = chkRecursiveSearchSubFolders.IsChecked.GetValueOrDefault(false);
-            Settings.SearchSubFolders = chkSearchSubFolders.IsChecked.GetValueOrDefault(false);
-            Settings.TargetDirectory = txtTargetDirectory.Text;
+            SettingsManager.AskForNewSeriesNames = chkAskForNewSeriesNames.IsChecked.GetValueOrDefault(false);
+            SettingsManager.RecursiveSearchSubFolders = chkRecursiveSearchSubFolders.IsChecked.GetValueOrDefault(false);
+            SettingsManager.SearchSubFolders = chkSearchSubFolders.IsChecked.GetValueOrDefault(false);
+            SettingsManager.TargetDirectory = txtTargetDirectory.Text;
 
-            Settings.SaveSettings();
+            SettingsManager.SaveSettings();
             this.Close();
         }
 

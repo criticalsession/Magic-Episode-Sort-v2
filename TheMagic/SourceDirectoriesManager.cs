@@ -8,13 +8,31 @@ namespace TheMagic
 {
     internal class SourceDirectoriesManager
     {
-        public List<string> SourceDirectories { get; set; } = new List<string>();
+        public List<string> SourceDirectories
+        {
+            get
+            {
+                List<string> directories = new List<string>();
+                foreach (string d in SettingsManager.settings.sources.Split(";"))
+                {
+                    if (!String.IsNullOrWhiteSpace(d) && !directories.Contains(d))
+                    {
+                        directories.Add(d);
+                    }
+                }
+
+                return directories;
+            }
+        }
 
         internal bool AddDirectory(string dir)
         {
-            if (!SourceDirectories.Contains(dir))
+            List<string> directories = SourceDirectories;
+            if (!directories.Contains(dir))
             {
-                SourceDirectories.Add(dir);
+                directories.Add(dir);
+                SettingsManager.settings.sources = String.Join(';', directories);
+
                 return true;
             }
             else return false;
@@ -22,21 +40,15 @@ namespace TheMagic
 
         internal bool RemoveDirectory(string dir)
         {
-            if (SourceDirectories.Contains(dir))
+            List<string> directories = SourceDirectories;
+            if (directories.Contains(dir))
             {
-                SourceDirectories.Remove(dir);
+                directories.Remove(dir);
+                SettingsManager.settings.sources = String.Join(';', directories);
+
                 return true;
             }
             else return false;
-        }
-
-        internal string GetCSVDirectories()
-        {
-            if (SourceDirectories.Count > 0)
-            {
-                return String.Join(';', SourceDirectories);
-            }
-            else return "";
         }
     }
 }
