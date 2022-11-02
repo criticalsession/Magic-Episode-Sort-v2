@@ -9,11 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="MESIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TheMagic\TheMagic.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="MESIcon.png" />
   </ItemGroup>
 
 </Project>

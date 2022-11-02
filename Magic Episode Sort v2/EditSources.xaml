@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
-        mc:Ignorable="d" ResizeMode="NoResize" WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/MESIcon.png"
         Title="Magic Episode Sort > Edit Sources" Height="550" Width="450" Loaded="Window_Loaded">
     <Grid Margin="10">
         <Grid.RowDefinitions>

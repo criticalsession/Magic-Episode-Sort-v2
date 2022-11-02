@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,12 +7,17 @@ using System.Threading.Tasks;
 
 namespace TheMagic
 {
-    public class Settings
+    internal class Settings
     {
-        public bool askForNewSeriesNames;
-        public bool searchSubFolders;
-        public bool recursiveSearchSubFolders;
-        public string targetDirectory = "";
-        public string sources = "";
+        [JsonProperty]
+        internal bool askForNewSeriesNames;
+        [JsonProperty]
+        internal bool searchSubFolders;
+        [JsonProperty]
+        internal bool recursiveSearchSubFolders;
+        [JsonProperty] 
+        internal string targetDirectory = "";
+        [JsonProperty] 
+        internal string sources = "";
     }
 }

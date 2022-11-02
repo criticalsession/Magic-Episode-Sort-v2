@@ -5,13 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d"
-        Title="Magic Episode Sort > About" Height="268" Width="309" ResizeMode="NoResize"
+        Title="Magic Episode Sort > About" Height="268" Width="309" ResizeMode="NoResize" Icon="/MESIcon.png"
         WindowStartupLocation="CenterScreen">
     <Border Margin="10 10 10 0">
         <StackPanel Orientation="Vertical">
-            <TextBlock FontSize="24" FontWeight="Bold">Magic Episode Sort</TextBlock>
+            <TextBlock FontSize="24" FontWeight="Bold">Magic Episode Sort
+                <Image Source="/MESIcon.png" Width="16"></Image>
+            </TextBlock>
             <TextBlock Text="Version 2.0 - Happy Gui Edition" FontSize="14" />
-            <TextBlock Text="Released: 25 October, 2022"  FontSize="14" />
+            <TextBlock Text="Released: TBD"  FontSize="14" />
             <Border Height="10" />
             <TextBlock TextWrapping="Wrap">
                 Thank you for downloading, using and supporting free and open source software.
@@ -20,7 +22,7 @@
                     to visit the project's github if you have any issues, feedback, feature requests or want to contribute!
             </TextBlock>
             <Border Height="10" />
-            <TextBlock FontWeight="Bold" HorizontalAlignment="Center" Text="Amante Reale (@CriticalSession)" />
+            <TextBlock FontWeight="Bold" HorizontalAlignment="Center" Text="// criticalsession" />
         </StackPanel>
     </Border>
 </Window>

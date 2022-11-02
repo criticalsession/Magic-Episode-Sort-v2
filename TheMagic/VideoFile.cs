@@ -53,6 +53,8 @@ namespace TheMagic
             }
         }
 
+        public EpisodeMover.MoveErrors MoveError { get; internal set; } = EpisodeMover.MoveErrors.None;
+
         public VideoFile(string path)
         {
             SourcePath = path;

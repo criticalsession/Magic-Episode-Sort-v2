@@ -40,6 +40,11 @@ namespace Magic_Episode_Sort_v2
             }
         }
 
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            new Thread(() => StartSearch()).Start();
+        }
+
         private void RefreshEpisodeList()
         {
             this.Dispatcher.Invoke(() =>
@@ -224,6 +229,8 @@ namespace Magic_Episode_Sort_v2
             SettingsManager.SaveSettings();
 
             Thread.Sleep(1500);
+
+            // TODO: show warning popup if errors
 
             StartSearch();
         }

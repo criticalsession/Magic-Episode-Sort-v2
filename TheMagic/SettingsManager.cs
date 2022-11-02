@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -126,35 +127,17 @@ namespace TheMagic
                 }
                 else
                 {
-                    // TODO: refactor to read from json file
-
-                    //string[] settingsRead = File.ReadAllLines(settingsPath);
-
-                    //foreach (string setting in settingsRead)
-                    //{
-                    //    if (setting.StartsWith("askfornewseriesnames=")) askForNewSeriesNames = ReadSettingsValue(setting, "askfornewseriesnames") == "yes" ? true : false;
-                    //    if (setting.StartsWith("searchsubfolders=")) searchSubFolders = ReadSettingsValue(setting, "searchsubfolders") == "yes" ? true : false;
-                    //    if (setting.StartsWith("recursivesearchsubfolders=")) recursiveSearchSubFolders = ReadSettingsValue(setting, "recursivesearchsubfolders") == "yes" ? true : false;
-                    //    if (setting.StartsWith("targetdirectory=")) targetDirectory = ReadSettingsValue(setting, "targetdirectory");
-
-                    //    if (setting.StartsWith("sources="))
-                    //    {
-                    //        string sources = ReadSettingsValue(setting, "sources");
-                    //        if (!String.IsNullOrEmpty(sources))
-                    //        {
-                    //            if (!sources.Contains(";")) sourceDirectoriesManager.AddDirectory(sources);
-                    //            else
-                    //            {
-                    //                foreach (string source in sources.Split(';'))
-                    //                {
-                    //                    sourceDirectoriesManager.AddDirectory(source);
-                    //                }
-                    //            }
-                    //        }
-                    //    }
-                    //}
-
-                    settingsLoaded = true;
+                    Settings? deserializedSettings = JsonConvert.DeserializeObject<Settings>(File.ReadAllText(settingsPath));
+                    if (deserializedSettings != null)
+                    {
+                        settings = deserializedSettings;
+                        settingsLoaded = true;
+                    }
+                    else
+                    {
+                        File.Delete(settingsPath);
+                        LoadSettingsIfNotLoaded();
+                    }
                 }
             }
         }
@@ -177,16 +160,7 @@ namespace TheMagic
         {
             LoadSettingsIfNotLoaded();
 
-            // TODO: refactor to read from json file
-
-            //StringBuilder settingsFile = new StringBuilder();
-            //settingsFile.AppendLine("askfornewseriesnames=" + (askForNewSeriesNames ? "yes" : "no"));
-            //settingsFile.AppendLine("searchsubfolders=" + (searchSubFolders ? "yes" : "no"));
-            //settingsFile.AppendLine("recursivesearchsubfolders=" + (recursiveSearchSubFolders? "yes" : "no"));
-            //settingsFile.AppendLine("targetdirectory=" + targetDirectory);
-            //settingsFile.AppendLine("sources=" + sourceDirectoriesManager.GetCSVDirectories());
-
-            //File.WriteAllText(settingsPath, settingsFile.ToString());
+            File.WriteAllText(settingsPath, JsonConvert.SerializeObject(settings, Formatting.Indented));
 
             SettingsChanged = true;
         }

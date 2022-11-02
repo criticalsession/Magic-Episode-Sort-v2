@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d"
         Title="Magic Episode Sort" Height="600" Width="500"
-        ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
+        ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Activated="Window_Activated" Icon="/MESIcon.png">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="10"></RowDefinition>
-            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
 
@@ -55,7 +55,8 @@
             <StackPanel Orientation="Vertical" DockPanel.Dock="Left">
                 <TextBlock Name="lblStatus" VerticalAlignment="Top" Margin="10 10 0 0" FontSize="14" FontWeight="Bold" DockPanel.Dock="Left" Text="Initializing..." />
             </StackPanel>
-            <Button Name="btnSort" IsEnabled="False" DockPanel.Dock="Right" Margin="10" Cursor="Hand" HorizontalAlignment="Right" Width="150" FontSize="14" Click="btnSort_Click">Sort</Button>
+            <Button Name="btnSort" IsEnabled="False" DockPanel.Dock="Right" Padding="0" Margin="10" Cursor="Hand" HorizontalAlignment="Right" Width="100" FontSize="13" Click="btnSort_Click">Sort</Button>
+            <Button Name="btnRefresh" DockPanel.Dock="Right" Padding="0" Margin="10" Cursor="Hand" HorizontalAlignment="Right" Width="100" FontSize="13" Click="btnRefresh_Click">Refresh</Button>
         </DockPanel>
         
         <StatusBar Grid.Row="4" Padding="10 0" BorderBrush="Black" BorderThickness="0 1 0 0">
