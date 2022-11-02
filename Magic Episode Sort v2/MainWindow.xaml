@@ -37,7 +37,14 @@
         <ListView Grid.Row="1" Name="lstFiles">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" Padding="5"></TextBlock>
+                    <TextBlock Text="{Binding}" Padding="5">
+                        <TextBlock.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Ignore Episode" Name="ctxIgnoreEpisode" Click="ctxIgnoreEpisode_Click" />
+                                <MenuItem Header="Ignore Series" Name="ctxIgnoreSeries" Click="ctxIgnoreSeries_Click" />
+                            </ContextMenu>
+                        </TextBlock.ContextMenu>
+                    </TextBlock>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

@@ -40,6 +40,42 @@ namespace Magic_Episode_Sort_v2
             }
         }
 
+        private void RefreshEpisodeList()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                lstFiles.Items.Refresh();
+            });
+
+            UpdateStatusBar();
+
+            if (directories.VideoFiles.Count == 0)
+                UpdateNoEpisodesFound();
+        }
+
+        private VideoFile? GetSelectedEpisode()
+        {
+            return lstFiles.SelectedItem == null ? null : lstFiles.SelectedItem as VideoFile;
+        }
+
+        private void UpdateStatusBar()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                lblEpisodesFound.Text = "Episodes: " + directories.VideoFiles.Count.ToString();
+                lblSeriesFound.Text = "Series: " + directories.DistingSeriesTitles.Count.ToString();
+            });
+        }
+
+        private void UpdateNoEpisodesFound()
+        {
+            this.Dispatcher.Invoke(() =>
+            {
+                btnSort.IsEnabled = false;
+                lblStatus.Text = "No New Episodes Found";
+            });
+        }
+
         #region *** Menu ***
         private void FileExit_Click(object sender, RoutedEventArgs e)
         {
@@ -114,11 +150,7 @@ namespace Magic_Episode_Sort_v2
 
         private void OnFoundVideoFile()
         {
-            this.Dispatcher.Invoke(() =>
-            {
-                lblEpisodesFound.Text = "Episodes: " + directories.VideoFiles.Count.ToString();
-                lblSeriesFound.Text = "Series: " + directories.DistingSeriesTitles.Count.ToString();
-            });
+            UpdateStatusBar();
         }
 
         private void FinishedSearch()
@@ -143,11 +175,7 @@ namespace Magic_Episode_Sort_v2
                 } 
                 else
                 {
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        btnSort.IsEnabled = false;
-                        lblStatus.Text = "No New Episodes Found";
-                    });
+                    UpdateNoEpisodesFound();
                 }
             }
 
@@ -170,8 +198,13 @@ namespace Magic_Episode_Sort_v2
                 lblStatus.Text = "Sorting...";
             });
 
-            Thread.Sleep(3000);
-            FinishedSort();
+            new Thread(() =>
+            {
+                Targetree targetree = new Targetree();
+                targetree.BuildDirectoryTreeInTarget(directories.VideoFiles, Settings.TargetDirectory);
+
+                FinishedSort();
+            }).Start();
         }
 
         private void FinishedSort()
@@ -184,9 +217,30 @@ namespace Magic_Episode_Sort_v2
 
             Settings.SaveSettings();
 
-            Thread.Sleep(1000);
+            Thread.Sleep(1500);
+
             StartSearch();
         }
         #endregion
+
+        private void ctxIgnoreEpisode_Click(object sender, RoutedEventArgs e)
+        {
+            VideoFile? selected = GetSelectedEpisode();
+            if (selected != null)
+            {
+                directories.VideoFiles.Remove(selected);
+                RefreshEpisodeList();
+            }
+        }
+
+        private void ctxIgnoreSeries_Click(object sender, RoutedEventArgs e)
+        {
+            VideoFile? selected = GetSelectedEpisode();
+            if (selected != null)
+            {
+                directories.VideoFiles.RemoveAll(p => p.SeriesTitle.CustomTitle == selected.SeriesTitle.CustomTitle || p.SeriesTitle.OriginalTitle == selected.SeriesTitle.OriginalTitle);
+                RefreshEpisodeList();
+            }
+        }
     }
 }

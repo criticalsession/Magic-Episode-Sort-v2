@@ -37,8 +37,7 @@ namespace TheMagic
                     if (seriesName.EndsWith(" -")) seriesName = seriesName.Substring(0, seriesName.LastIndexOf("-") - 1);
                     if (seriesName.EndsWith("-")) seriesName = seriesName.Substring(0, seriesName.Length - 1);
                     if (seriesName.EndsWith(".")) seriesName = seriesName.Substring(0, seriesName.Length - 1);
-                    seriesName = seriesName.Replace(":", "");
-                    seriesName = Regex.Replace(seriesName, @"\s+", " "); // replace all extra spaces
+                    seriesName = Utils.Sanitize(seriesName);
 
                     break;
                 }
@@ -46,6 +45,5 @@ namespace TheMagic
 
             return seriesName;
         }
-
     }
 }
