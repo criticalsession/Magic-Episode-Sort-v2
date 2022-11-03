@@ -75,6 +75,16 @@ namespace TheMagic
             }
         }
 
+        private static CustomSeriesTitleManager customSeriesTitleManager = new CustomSeriesTitleManager();
+        public static CustomSeriesTitleManager CustomSeriesTitleManager
+        {
+            get
+            {
+                LoadSettingsIfNotLoaded();
+                return customSeriesTitleManager;
+            }
+        }
+
         private static List<string>? extensions = null;
         public static List<string> Extensions
         {

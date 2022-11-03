@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -12,13 +13,21 @@ namespace TheMagic
     {
         public string OriginalTitle { get; set; }
         public string CustomTitle { get; set; }
+        [JsonIgnore]
         public bool IsNew { get; set; }
+
+        public SeriesTitle()
+        {
+            OriginalTitle = String.Empty;
+            CustomTitle = String.Empty;
+            IsNew = false;
+        }
 
         public SeriesTitle(string videoFileName)
         {
             OriginalTitle = GetSeriesTitleFromFileName(videoFileName);
             CustomTitle = OriginalTitle;
-            IsNew = true;
+            IsNew = false;
         }
 
         private string GetSeriesTitleFromFileName(string fileName)
@@ -44,6 +53,11 @@ namespace TheMagic
             }
 
             return seriesName;
+        }
+
+        public override string ToString()
+        {
+            return OriginalTitle + " -> " + CustomTitle;
         }
     }
 }

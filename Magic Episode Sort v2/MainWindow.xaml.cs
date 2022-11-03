@@ -126,6 +126,13 @@ namespace Magic_Episode_Sort_v2
                 directories = new Directree();
                 directories.DirectorySearched += (sender, e) => OnDirectorySearched();
                 directories.FoundVideoFile += (sender, e) => OnFoundVideoFile();
+                directories.FillingCustomSeriesTitles += (sender, e) =>
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        lblStatus.Text = "Custom Series Titles...";
+                    });
+                };
 
                 directories.Build(SettingsManager.SourceDirectories, SettingsManager.SearchSubFolders, SettingsManager.RecursiveSearchSubFolders);
 

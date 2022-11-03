@@ -21,5 +21,7 @@ namespace TheMagic
         internal string sources = "";
         [JsonProperty]
         internal bool openOutputDirectoryAfterSort = false;
+        [JsonProperty]
+        internal List<SeriesTitle> customSeriesTitles = new List<SeriesTitle>();
     }
 }
