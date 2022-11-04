@@ -22,7 +22,7 @@
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Sources..." Click="EditSources_Click" />
-                <MenuItem Header="_Custom Series Titles..." />
+                <MenuItem Header="_Custom Series Titles..." Click="EditCustomTitles_Click" />
                 <Separator />
                 <MenuItem Header="_Preferences" Click="Preferences_Click" />
             </MenuItem>

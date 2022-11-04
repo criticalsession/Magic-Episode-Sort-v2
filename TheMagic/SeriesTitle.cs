@@ -15,6 +15,13 @@ namespace TheMagic
         public string CustomTitle { get; set; }
         [JsonIgnore]
         public bool IsNew { get; set; }
+        public bool TitleChanged
+        {
+            get
+            {
+                return this.OriginalTitle.ToLower() != this.CustomTitle.ToLower();
+            }
+        }
 
         public SeriesTitle()
         {
@@ -57,7 +64,7 @@ namespace TheMagic
 
         public override string ToString()
         {
-            return OriginalTitle + " -> " + CustomTitle;
+            return !TitleChanged ? CustomTitle : String.Format("{0} (⇐ {1})", CustomTitle, OriginalTitle);
         }
     }
 }

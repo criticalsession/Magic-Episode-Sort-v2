@@ -93,6 +93,11 @@ namespace Magic_Episode_Sort_v2
             new EditSources().ShowDialog();
         }
 
+        private void EditCustomTitles_Click(object sender, RoutedEventArgs e)
+        {
+            new EditCustomSeriesTitles().ShowDialog();
+        }
+
         private void About_Click(object sender, RoutedEventArgs e)
         {
             new About().ShowDialog();
@@ -200,7 +205,7 @@ namespace Magic_Episode_Sort_v2
 
                 List<SeriesTitle> newTitles = SettingsManager.CustomSeriesTitleManager.GetNewSeriesTitles(directories.VideoFiles);
                 if (newTitles.Count > 0 && SettingsManager.AskForNewSeriesNames)
-                    new NewTitles(directories.VideoFiles).ShowDialog();
+                    new EditCustomSeriesTitles(directories.VideoFiles).ShowDialog();
             });
         }
         #endregion
