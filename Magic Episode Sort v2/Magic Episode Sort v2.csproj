@@ -6,10 +6,15 @@
     <RootNamespace>Magic_Episode_Sort_v2</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>MESIcon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="MESIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="MESIcon.ico" />
   </ItemGroup>
 
   <ItemGroup>

@@ -22,7 +22,7 @@
         <GroupBox Header="Output"  Padding="10">
             <StackPanel Orientation="Vertical" Margin="0">
                 <CheckBox Name="chkAskForNewSeriesNames" FontSize="14"
-            Content="Ask to Confirm New Series Names" IsThreeState="False" />
+            Content="Ask to Confirm New Series Titles" IsThreeState="False" />
                 <StackPanel Orientation="Horizontal" Margin="0 4 0 0">
                     <Label FontSize="14">Output Directory:</Label>
                     <TextBox Name="txtTargetDirectory" Width="200" IsReadOnly="True" Text="C:/downloads/sorted-episodes" VerticalAlignment="Center" Padding="0 5" FontSize="12" />
