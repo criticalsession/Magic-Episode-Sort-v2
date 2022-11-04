@@ -65,9 +65,10 @@ namespace Magic_Episode_Sort_v2
 
         private void ctxDeleteSource_Click(object sender, RoutedEventArgs e)
         {
-            if (lstSources.SelectedItem != null)
+            var selectedItem = lstSources.SelectedItem;
+            if (selectedItem != null)
             {
-                SettingsManager.RemoveSourceDirectory(lstSources.SelectedItem.ToString());
+                SettingsManager.RemoveSourceDirectory(selectedItem.ToString());
                 lstSources.ItemsSource = SettingsManager.SourceDirectories;
             }
         }

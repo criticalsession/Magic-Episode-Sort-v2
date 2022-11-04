@@ -45,6 +45,8 @@ namespace TheMagic
             BuildVideoFiles();
             FillCustomSeriesTitles();
 
+            VideoFiles = VideoFiles.OrderBy(p => p.SeriesTitle.CustomTitle).ThenBy(p => p.SeasonNumber).ToList();
+
             SearchComplete = true;
         }
 
@@ -84,7 +86,6 @@ namespace TheMagic
             }
 
             VideoFiles.RemoveAll(p => String.IsNullOrEmpty(p.SeriesTitle.OriginalTitle));
-            VideoFiles = VideoFiles.OrderBy(p => p.SeriesTitle.CustomTitle).ThenBy(p => p.SeasonNumber).ToList();
         }        
         
         private void FillCustomSeriesTitles()

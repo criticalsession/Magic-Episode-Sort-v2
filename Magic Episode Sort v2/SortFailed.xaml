@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d"
-        Title="Magic Episode Sort > Sort Failed" Height="403" Width="381" Icon="/MESIcon.png"
+        Title="Magic Episode Sort > Sort Failed" Height="372" Width="381" Icon="/MESIcon.png"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
     <StackPanel Orientation="Vertical" Margin="10">
         <TextBlock Name="txtInformation" FontSize="14" TextWrapping="Wrap">Warning: <Bold>Magic Episode Sort</Bold> could not successfully sort all episode files.</TextBlock>
@@ -19,7 +19,5 @@
         <ListView Height="100" Name="lstAlreadyExist">
 
         </ListView>
-        <Line Height="10"></Line>
-        <Button Name="btnClosePopup" HorizontalAlignment="Right" Cursor="Hand" Width="100" Click="btnClosePopup_Click">Great, thanks...</Button>
     </StackPanel>
 </Window>

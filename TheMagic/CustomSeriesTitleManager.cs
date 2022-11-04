@@ -63,6 +63,11 @@ namespace TheMagic
             return CustomSeriesTitles.FirstOrDefault(p => p.OriginalTitle == originalTitle.ToLower());
         }
 
+        public List<SeriesTitle> GetNewSeriesTitles(List<VideoFile> videoFiles)
+        {
+            return videoFiles.Where(p => p.SeriesTitle.IsNew).Select(p => p.SeriesTitle).Distinct().ToList();
+        }
+
         public bool HasCustomSeriesTitle(string originalTitle)
         {
             return CustomSeriesTitles.Any(p => p.OriginalTitle == originalTitle.ToLower());

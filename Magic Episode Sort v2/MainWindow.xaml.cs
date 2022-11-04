@@ -197,6 +197,10 @@ namespace Magic_Episode_Sort_v2
                 this.IsEnabled = true;
                 progressBar.IsIndeterminate = false;
                 lstFiles.ItemsSource = directories.VideoFiles;
+
+                List<SeriesTitle> newTitles = SettingsManager.CustomSeriesTitleManager.GetNewSeriesTitles(directories.VideoFiles);
+                if (newTitles.Count > 0 && SettingsManager.AskForNewSeriesNames)
+                    new NewTitles(directories.VideoFiles).ShowDialog();
             });
         }
         #endregion
