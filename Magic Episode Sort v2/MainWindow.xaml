@@ -40,8 +40,8 @@
                     <TextBlock Text="{Binding}" Padding="5">
                         <TextBlock.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Ignore Episode" Name="ctxIgnoreEpisode" Click="ctxIgnoreEpisode_Click" />
-                                <MenuItem Header="Ignore Series" Name="ctxIgnoreSeries" Click="ctxIgnoreSeries_Click" />
+                                <MenuItem Header="Skip Episode" Name="ctxIgnoreEpisode" Click="ctxIgnoreEpisode_Click" />
+                                <MenuItem Header="Skip Series" Name="ctxIgnoreSeries" Click="ctxIgnoreSeries_Click" />
                             </ContextMenu>
                         </TextBlock.ContextMenu>
                     </TextBlock>

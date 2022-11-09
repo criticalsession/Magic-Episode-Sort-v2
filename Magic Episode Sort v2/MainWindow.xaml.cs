@@ -22,6 +22,9 @@ namespace Magic_Episode_Sort_v2
                 new FirstTime().ShowDialog();
                 OpenPreferences();
             }
+
+            var api = new TVMazeAPI();
+            MessageBox.Show(api.GetSeriesDetails("bobs burgers"));
         }
 
         private void Window_Activated(object sender, EventArgs e)
