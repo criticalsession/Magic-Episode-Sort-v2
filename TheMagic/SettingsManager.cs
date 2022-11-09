@@ -39,9 +39,19 @@ namespace TheMagic
             get
             {
                 LoadSettingsIfNotLoaded();
-                return settings.recursiveSearchSubFolders;
+                return settings.searchSubFolders && settings.recursiveSearchSubFolders;
             }
             set => settings.recursiveSearchSubFolders = value;
+        }
+
+        public static bool UseTVMazeAPI
+        {
+            get
+            {
+                LoadSettingsIfNotLoaded();
+                return settings.useTVMazeApi;
+            }
+            set => settings.useTVMazeApi = value;
         }
 
         public static string OutputDirectory

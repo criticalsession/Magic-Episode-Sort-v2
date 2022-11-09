@@ -29,7 +29,7 @@ namespace TheMagic
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public string? GetSeriesDetails(string seriesTitle)
+        public string? GetSeriesTitle(string seriesTitle)
         {
             HttpResponseMessage response = client.GetAsync(String.Format(urlParams, seriesTitle)).Result;
             if (response.IsSuccessStatusCode)
@@ -37,6 +37,7 @@ namespace TheMagic
                 ApiModel? seriesResponse = response.Content.ReadAsAsync<ApiModel>().Result;
                 if (seriesResponse != null) return seriesResponse.name;
             }
+            else return "error";
 
             return null;
         }

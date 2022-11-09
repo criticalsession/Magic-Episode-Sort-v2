@@ -5,36 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d"
-        Title="Magic Episode Sort > Preferences" Height="355" Width="422" Icon="/MESIcon.png"
+        Title="Magic Episode Sort > Preferences" Height="412" Width="422" Icon="/MESIcon.png"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <StackPanel Orientation="Vertical" Margin="10">
         <GroupBox Header="Directory Search" Padding="10">
             <StackPanel Orientation="Vertical" Margin="0">
                 <CheckBox Name="chkSearchSubFolders" FontSize="14"
-                Content="Search Sub-Folders" IsThreeState="False" Click="chkSearchSubFolders_Click" />
+                Content="Search sub-folders" IsThreeState="False" Click="chkSearchSubFolders_Click" />
                 <CheckBox Name="chkRecursiveSearchSubFolders" FontSize="14"
-                Content="Recursively Search Sub-Folders" IsThreeState="False" />
+                Content="Recursively search sub-folders" IsThreeState="False" />
                 <Border Height="10"></Border>
                 <Button Name="btnEditSources" Width="100" HorizontalAlignment="left" Click="btnEditSources_Click">Edit Sources...</Button>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Output"  Padding="10">
+        <GroupBox Header="After Searching..." Padding="10">
             <StackPanel Orientation="Vertical" Margin="0">
                 <CheckBox Name="chkAskForNewSeriesNames" FontSize="14"
-            Content="Ask to Confirm New Series Titles" IsThreeState="False" />
-                <StackPanel Orientation="Horizontal" Margin="0 4 0 0">
-                    <Label FontSize="14">Output Directory:</Label>
-                    <TextBox Name="txtTargetDirectory" Width="200" IsReadOnly="True" Text="C:/downloads/sorted-episodes" VerticalAlignment="Center" Padding="0 5" FontSize="12" />
-                    <Button Padding="10 0" Click="SelectTargetDirectory_Click">...</Button>
-                </StackPanel>
+                    Content="Ask to confirm new series titles" IsThreeState="False" />
+                <CheckBox Name="chkUseTVMazeAPI" FontSize="14" 
+                    Content="Attempt to get series titles from TVMaze API" IsThreeState="False"/>
+            </StackPanel>
+        </GroupBox>
+        
+        <GroupBox Header="Output"  Padding="10">
+            <StackPanel Orientation="Horizontal" Margin="0">
+                <Label FontSize="14">Output Directory:</Label>
+                <TextBox Name="txtTargetDirectory" Width="200" IsReadOnly="True" Text="C:/downloads/sorted-episodes" VerticalAlignment="Center" Padding="0 5" FontSize="12" />
+                <Button Padding="10 0" Click="SelectTargetDirectory_Click">...</Button>
             </StackPanel>
         </GroupBox>
 
         <GroupBox Header="After Sorting..." Padding="10">
             <StackPanel Orientation="Vertical" Margin="0">
                 <CheckBox Name="chkOpenOutputDirectory" FontSize="14"
-                Content="Open Output Directory in Explorer" IsThreeState="False" />
+                Content="Open output directory in explorer" IsThreeState="False" />
             </StackPanel>
         </GroupBox>
 

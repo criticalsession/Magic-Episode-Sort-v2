@@ -15,6 +15,8 @@ namespace TheMagic
         internal bool searchSubFolders = true;
         [JsonProperty]
         internal bool recursiveSearchSubFolders = true;
+        [JsonProperty]
+        internal bool useTVMazeApi = false;
         [JsonProperty] 
         internal string outputDirectory = "";
         [JsonProperty] 

@@ -28,6 +28,7 @@ namespace Magic_Episode_Sort_v2
             chkRecursiveSearchSubFolders.IsChecked = SettingsManager.RecursiveSearchSubFolders;
             chkSearchSubFolders.IsChecked = SettingsManager.SearchSubFolders;
             chkOpenOutputDirectory.IsChecked = SettingsManager.OpenOutputDirectoryAfterSort;
+            chkUseTVMazeAPI.IsChecked = SettingsManager.UseTVMazeAPI;
             txtTargetDirectory.Text = SettingsManager.OutputDirectory;
 
             if (!chkSearchSubFolders.IsChecked.GetValueOrDefault(false))
@@ -48,6 +49,7 @@ namespace Magic_Episode_Sort_v2
             SettingsManager.RecursiveSearchSubFolders = chkRecursiveSearchSubFolders.IsChecked.GetValueOrDefault(false);
             SettingsManager.SearchSubFolders = chkSearchSubFolders.IsChecked.GetValueOrDefault(false);
             SettingsManager.OpenOutputDirectoryAfterSort = chkOpenOutputDirectory.IsChecked.GetValueOrDefault(false);
+            SettingsManager.UseTVMazeAPI = chkUseTVMazeAPI.IsChecked.GetValueOrDefault(false);
             SettingsManager.OutputDirectory = txtTargetDirectory.Text;
 
             SettingsManager.SaveSettings();

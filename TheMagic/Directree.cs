@@ -91,6 +91,7 @@ namespace TheMagic
         private void FillCustomSeriesTitles()
         {
             FillingCustomSeriesTitles?.Invoke(this, EventArgs.Empty);
+            TVMazeAPI? tvMazeApi = null;
 
             foreach (VideoFile videoFile in VideoFiles)
             {
@@ -104,9 +105,44 @@ namespace TheMagic
                 }
                 else
                 {
-                    SettingsManager.CustomSeriesTitleManager.AddCustomSeriesTitle(title, title);
-                    videoFile.SeriesTitle.CustomTitle = title;
-                    videoFile.SeriesTitle.IsNew = true;
+                    if (SettingsManager.UseTVMazeAPI)
+                    {
+                        if (tvMazeApi == null) tvMazeApi = new TVMazeAPI();
+                        string? apiResponse = null;
+                        int errorCount = 0;
+
+                        do
+                        {
+                            if (errorCount > 2) break;
+
+                            apiResponse = tvMazeApi.GetSeriesTitle(title);
+                            if (apiResponse == "error") // wait a bit then try again
+                            {
+                                errorCount++;
+                                Thread.Sleep(200);
+                            }
+                            else break;
+                        } while (true);
+
+                        if (!String.IsNullOrEmpty(apiResponse) && apiResponse != "error")
+                        {
+                            SettingsManager.CustomSeriesTitleManager.AddCustomSeriesTitle(title, apiResponse);
+                            videoFile.SeriesTitle.CustomTitle = apiResponse;
+                            videoFile.SeriesTitle.IsNew = true;
+                        } 
+                        else
+                        {
+                            SettingsManager.CustomSeriesTitleManager.AddCustomSeriesTitle(title, title);
+                            videoFile.SeriesTitle.CustomTitle = title;
+                            videoFile.SeriesTitle.IsNew = true;
+                        }
+                    }
+                    else
+                    {
+                        SettingsManager.CustomSeriesTitleManager.AddCustomSeriesTitle(title, title);
+                        videoFile.SeriesTitle.CustomTitle = title;
+                        videoFile.SeriesTitle.IsNew = true;
+                    }
                 }
             }
         }

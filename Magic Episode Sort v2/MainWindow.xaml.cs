@@ -22,9 +22,6 @@ namespace Magic_Episode_Sort_v2
                 new FirstTime().ShowDialog();
                 OpenPreferences();
             }
-
-            var api = new TVMazeAPI();
-            MessageBox.Show(api.GetSeriesDetails("bobs burgers"));
         }
 
         private void Window_Activated(object sender, EventArgs e)
@@ -138,7 +135,14 @@ namespace Magic_Episode_Sort_v2
                 {
                     this.Dispatcher.Invoke(() =>
                     {
-                        lblStatus.Text = "Custom Series Titles...";
+                        if (SettingsManager.UseTVMazeAPI)
+                        {
+                            lblStatus.Text = "Fetching TV Maze API Series Titles...";
+                        }
+                        else
+                        {
+                            lblStatus.Text = "Loading Custom Series Titles...";
+                        }
                     });
                 };
 
