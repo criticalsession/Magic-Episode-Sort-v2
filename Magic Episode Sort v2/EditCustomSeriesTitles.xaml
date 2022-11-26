@@ -35,7 +35,7 @@
             </Grid.ColumnDefinitions>
 
             <TextBox ToolTip="Press Escape to reset. Click Save or press Enter to apply changes." Name="txtCustomTitle" VerticalAlignment="Center" Padding="5" Margin="0 0 5 0" Grid.Column="0" FontSize="14" IsEnabled="false" KeyUp="txtCustomTitle_KeyUp"></TextBox>
-            <Button Name="btnCustomTitle" Grid.Column="1" IsEnabled="false" FontSize="14" Cursor="Hand" Click="btnCustomTitle_Click">Save</Button>
+            <Button Name="btnCustomTitle" Grid.Column="1" IsEnabled="false" FontSize="14" Cursor="Hand" Click="btnCustomTitle_Click">Update</Button>
         </Grid>
     </Grid>
 </Window>
