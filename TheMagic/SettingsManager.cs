@@ -130,8 +130,8 @@ namespace TheMagic
         }
 
         private static bool settingsLoaded = false;
-        private static string appDirectory { get => System.IO.Directory.GetCurrentDirectory(); }
-        private static string settingsPath { get => Path.Combine(appDirectory, "mes.settings"); }
+        private static string settingsFolder { get => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Magic Episode Sort"); }
+        private static string settingsPath { get => Path.Combine(settingsFolder, "mes.settings"); }
         public static bool SettingsFileExists { get => File.Exists(settingsPath); }
         public static bool SettingsChanged { get; set; } = true;
 
@@ -139,6 +139,8 @@ namespace TheMagic
         {
             if (!settingsLoaded)
             {
+                if (!Directory.Exists(settingsFolder)) Directory.CreateDirectory(settingsFolder);
+
                 settings = new Settings();
                 sourceDirectoriesManager = new SourceDirectoriesManager();
 
@@ -147,10 +149,8 @@ namespace TheMagic
                     settings.askForNewSeriesNames = true;
                     settings.searchSubFolders = true;
                     settings.recursiveSearchSubFolders = true;
-                    settings.outputDirectory = Path.Combine(appDirectory, "Sorted Episodes");
+                    settings.outputDirectory = "";
                     settings.openOutputDirectoryAfterSort = false;
-
-                    sourceDirectoriesManager.AddDirectory(appDirectory);
 
                     settingsLoaded = true;
 
