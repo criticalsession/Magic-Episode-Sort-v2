@@ -207,7 +207,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Magic Episode Sort"
         "ProductCode" = "8:{40FDC6B3-D298-49F5-89F2-1F5B81FAFCAD}"
-        "PackageCode" = "8:{E04A8722-3C60-463F-8AF9-9807DC39D9B9}"
+        "PackageCode" = "8:{D74A469F-CE73-4FC8-9259-653064868D09}"
         "UpgradeCode" = "8:{9325D961-5C54-45C3-9081-007226FC9314}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -327,6 +327,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_B9C6275F933F426CAAFFAB85E1A19A4C"
+            {
+            "Name" = "8:Magic Episode Sort"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_65ED5F36B1784B79810B5A3504176061"
+            "Folder" = "8:_1A34B01AB3D248BA8F2066091CC06309"
+            "WorkingFolder" = "8:_A166C20CA6E542499402633BCC7A164B"
+            "Icon" = "8:_17BA5E34A2B94E1B807D2E9449422D95"
+            "Feature" = "8:"
+            }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D5724A55FF4B4B4E96D04B290CB42AFB"
             {
             "Name" = "8:Magic Episode Sort"
