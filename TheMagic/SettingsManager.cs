@@ -163,6 +163,25 @@ namespace TheMagic
                     {
                         settings = deserializedSettings;
                         settingsLoaded = true;
+
+                        bool issuesFound = false;
+                        if (!String.IsNullOrEmpty(OutputDirectory) && !Directory.Exists(OutputDirectory))
+                        {
+                            OutputDirectory = "";
+                            issuesFound = true;
+                        }
+
+                        foreach (string sourceDirectory in SourceDirectories)
+                        {
+                            if (!String.IsNullOrEmpty(sourceDirectory) && !Directory.Exists(sourceDirectory))
+                            {
+                                RemoveSourceDirectory(sourceDirectory, false);
+                                issuesFound = true;
+                            }
+                        }
+
+                        if (issuesFound)
+                            SaveSettings();
                     }
                     else
                     {
@@ -180,10 +199,10 @@ namespace TheMagic
                 SaveSettings();
         }
 
-        public static void RemoveSourceDirectory(string dir)
+        public static void RemoveSourceDirectory(string dir, bool saveAfter = true)
         {
             LoadSettingsIfNotLoaded();
-            if (sourceDirectoriesManager != null && sourceDirectoriesManager.RemoveDirectory(dir))
+            if (sourceDirectoriesManager != null && sourceDirectoriesManager.RemoveDirectory(dir) && saveAfter)
                 SaveSettings();
         }
 

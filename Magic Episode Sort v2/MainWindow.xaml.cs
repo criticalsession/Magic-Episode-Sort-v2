@@ -157,7 +157,7 @@ namespace Magic_Episode_Sort_v2
                     this.IsEnabled = true;
                     lstFiles.ItemsSource = new string[0];
                     btnSort.IsEnabled = false;
-                    lblStatus.Text = "No Sources Set";
+                    lblStatus.Text = "WARNING: NO SOURCES SET";
                     lblDirectoriesSearched.Text = "";
                     lblEpisodesFound.Text = "Episodes: --";
                     lblSeriesFound.Text = "Series: --";
@@ -185,7 +185,7 @@ namespace Magic_Episode_Sort_v2
                 this.Dispatcher.Invoke(() =>
                 {
                     btnSort.IsEnabled = false;
-                    lblStatus.Text = "ERROR: NO OUTPUT DIRECTORY SET!";
+                    lblStatus.Text = "WARNING: NO OUTPUT DIRECTORY SET";
                 });
             } 
             else
