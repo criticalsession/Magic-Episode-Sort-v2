@@ -11,8 +11,10 @@ namespace TheMagic
     {
         public static string Sanitize(string val)
         {
-            val = val.Replace(":", "");
-            val = Regex.Replace(val, @"\s+", " ");
+            string[] invalidCharacters = new string[] { "\\", "/", ":", "*", "\"", "<", ">", "|" };
+            foreach (string c in invalidCharacters) val = val.Replace(c, "");
+
+            val = Regex.Replace(val, @"\s+", " "); // trim extra spaces
 
             return val;
         }
