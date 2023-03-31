@@ -12,45 +12,31 @@ namespace TheMagic
         {
             get
             {
-                return SettingsManager.settings.customSeriesTitles;
+                return MESDBHandler.LoadCustomTitles();
             }
         }
 
-        public bool AddCustomSeriesTitle(string originalTitle, string customTitle)
+        public void AddCustomSeriesTitle(string originalTitle, string customTitle, bool isNew)
         {
-            if (!HasCustomSeriesTitle(originalTitle))
+            MESDBHandler.SaveCustomTitle(new SeriesTitle()
             {
-                SettingsManager.settings.customSeriesTitles.Add(new SeriesTitle()
-                {
-                    CustomTitle = customTitle,
-                    OriginalTitle = originalTitle.ToLower()
-                });
+                CustomTitle = customTitle,
+                OriginalTitle = originalTitle,
+                IsNew = isNew
+            });
 
-                SettingsManager.SaveSettings();
-
-                return true;
-            }
-
-            return false;
+            SettingsManager.SettingsChanged = true;
         }
 
-        public void ReplaceOrAddCustomSeriesTitle(string originalTitle, string customTitle)
+        public void UpdateCustomSeriesTitle(string originalTitle, string customTitle)
         {
-            RemoveCustomSeriesTitle(originalTitle);
-            AddCustomSeriesTitle(originalTitle, customTitle);
+            AddCustomSeriesTitle(originalTitle, customTitle, false);
         }
 
-        public bool RemoveCustomSeriesTitle(string originalTitle)
+        public void RemoveCustomSeriesTitle(string originalTitle)
         {
-            if (HasCustomSeriesTitle(originalTitle))
-            {
-                SettingsManager.settings.customSeriesTitles.RemoveAll(p => p.OriginalTitle == originalTitle.ToLower());
-                SettingsManager.SaveSettings();
-
-                return true;
-            }
-
-            return false;
+            MESDBHandler.DeleteCustomTitle(originalTitle);
+            SettingsManager.SettingsChanged = true;
         }
 
         public List<SeriesTitle> GetAllCustomSeriesTitles()
@@ -60,17 +46,12 @@ namespace TheMagic
 
         public SeriesTitle? GetCustomSeriesTitle(string originalTitle)
         {
-            return CustomSeriesTitles.FirstOrDefault(p => p.OriginalTitle == originalTitle.ToLower());
+            return CustomSeriesTitles.FirstOrDefault(p => p.OriginalTitle.ToLower() == originalTitle.ToLower());
         }
 
         public List<SeriesTitle> GetNewSeriesTitles(List<VideoFile> videoFiles)
         {
             return videoFiles.Where(p => p.SeriesTitle.IsNew).Select(p => p.SeriesTitle).Distinct().ToList();
-        }
-
-        public bool HasCustomSeriesTitle(string originalTitle)
-        {
-            return CustomSeriesTitles.Any(p => p.OriginalTitle == originalTitle.ToLower());
         }
     }
 }

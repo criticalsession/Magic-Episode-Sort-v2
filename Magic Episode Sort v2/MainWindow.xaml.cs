@@ -17,10 +17,15 @@ namespace Magic_Episode_Sort_v2
         {
             InitializeComponent();
 
-            if (!SettingsManager.SettingsFileExists)
+            if (SettingsManager.FirstTime)
             {
-                new FirstTime().ShowDialog();
-                OpenPreferences();
+                FirstTime firsttime = new FirstTime();
+                firsttime.ShowDialog();
+
+                if (!firsttime.migrationComplete)
+                {
+                    OpenPreferences();
+                }
             }
         }
 
@@ -117,7 +122,7 @@ namespace Magic_Episode_Sort_v2
         #region *** Search ***
         private void StartSearch()
         {
-            if (SettingsManager.SourceDirectories.Count > 0)
+            if (SettingsManager.SourceDirectoriesManager.SourceDirectories.Count > 0)
             {
                 this.Dispatcher.Invoke(() =>
                 {
@@ -146,7 +151,8 @@ namespace Magic_Episode_Sort_v2
                     });
                 };
 
-                directories.Build(SettingsManager.SourceDirectories, SettingsManager.SearchSubFolders, SettingsManager.RecursiveSearchSubFolders);
+                directories.Build(SettingsManager.SourceDirectoriesManager.SourceDirectories, 
+                    SettingsManager.SearchSubFolders, SettingsManager.RecursiveSearchSubFolders);
 
                 FinishedSearch();
             } 

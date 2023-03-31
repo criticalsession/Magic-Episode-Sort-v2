@@ -37,11 +37,11 @@ namespace TheMagic
             }
         }
 
-        public bool IsVideoFile 
+        public bool IsValidVideoFile 
         { 
             get
             {
-                return IsVideoFileExtension && RegexMatches;
+                return IsVideoFileExtension && RegexMatches && !String.IsNullOrEmpty(SeriesTitle.OriginalTitle);
             }
         }
 
@@ -60,7 +60,7 @@ namespace TheMagic
             SourcePath = path;
             FileName = Path.GetFileName(path);
             TargetPath = String.Empty;
-            SeriesTitle = new SeriesTitle(FileName);
+            SeriesTitle = new SeriesTitleExtractor().Extract(FileName);
             SeasonNumber = GetSeasonNumberFromFileName().GetValueOrDefault(0);
         }
 
@@ -92,6 +92,15 @@ namespace TheMagic
         public override string ToString()
         {
             return String.Format("{0} > {1} > {2}", SeriesTitle.CustomTitle, SeasonDirName, FileName);
+        }
+
+        public void SetCustomTitle(string? customTitle, bool isNew)
+        {
+            this.SeriesTitle.CustomTitle = customTitle == null ? this.SeriesTitle.OriginalTitle : customTitle;
+            this.SeriesTitle.IsNew = isNew;
+
+            if (isNew) 
+                SettingsManager.CustomSeriesTitleManager.AddCustomSeriesTitle(this.SeriesTitle.OriginalTitle, this.SeriesTitle.CustomTitle, true);
         }
     }
 }

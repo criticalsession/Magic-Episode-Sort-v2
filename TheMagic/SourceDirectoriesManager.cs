@@ -6,49 +6,78 @@ using System.Threading.Tasks;
 
 namespace TheMagic
 {
-    internal class SourceDirectoriesManager
+    public class SourceDirectoriesManager
     {
-        public List<string> SourceDirectories
+        public List<SourceDirectory> SourceDirectories
         {
             get
             {
-                List<string> directories = new List<string>();
-                foreach (string d in SettingsManager.settings.sources.Split(";"))
-                {
-                    if (!String.IsNullOrWhiteSpace(d) && !directories.Contains(d))
-                    {
-                        directories.Add(d);
-                    }
-                }
+                List<SourceDirectory> directories = MESDBHandler.LoadSourceDirectories();
+                directories = CheckDirectoriesExist(directories);
 
                 return directories;
             }
         }
 
-        internal bool AddDirectory(string dir)
+        private List<SourceDirectory> CheckDirectoriesExist(List<SourceDirectory> directories)
         {
-            List<string> directories = SourceDirectories;
-            if (!directories.Contains(dir))
+            List<SourceDirectory> checkedDirectories = new List<SourceDirectory>();
+            foreach (SourceDirectory dir in directories)
             {
-                directories.Add(dir);
-                SettingsManager.settings.sources = String.Join(';', directories);
+                if (!Directory.Exists(dir.SourcePath))
+                {
+                    RemoveDirectory(dir);
+                }
+                else
+                {
+                    checkedDirectories.Add(dir);
+                }
+            }
+
+            return checkedDirectories;
+        }
+
+        public bool AddDirectory(string dir)
+        {
+            List<SourceDirectory> directories = MESDBHandler.LoadSourceDirectories();
+            if (!directories.Any(p => p.SourcePath == dir))
+            {
+                MESDBHandler.AddSourceDirectory(dir);
+                SettingsManager.SettingsChanged = true;
 
                 return true;
             }
             else return false;
         }
 
-        internal bool RemoveDirectory(string dir)
+        public void RemoveDirectory(SourceDirectory dir)
         {
-            List<string> directories = SourceDirectories;
-            if (directories.Contains(dir))
-            {
-                directories.Remove(dir);
-                SettingsManager.settings.sources = String.Join(';', directories);
+            RemoveDirectory(dir.SourcePath);
+        }
 
-                return true;
+        public bool RemoveDirectory(string? dir)
+        {
+            if (!String.IsNullOrEmpty(dir))
+            {
+                List<SourceDirectory> directories = MESDBHandler.LoadSourceDirectories();
+                if (directories.Any(p => p.SourcePath == dir))
+                {
+                    MESDBHandler.DeleteSourceDirectory(dir);
+                    SettingsManager.SettingsChanged = true;
+
+                    return true;
+                }
             }
-            else return false;
+
+            return false;
+        }
+
+        public List<string> SourceDirectoryPaths
+        {
+            get
+            {
+                return SourceDirectories.Select(p => p.SourcePath).ToList();
+            }
         }
     }
 }

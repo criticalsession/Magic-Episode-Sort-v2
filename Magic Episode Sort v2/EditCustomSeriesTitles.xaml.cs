@@ -91,7 +91,7 @@ namespace Magic_Episode_Sort_v2
 
                 foreach (string original in originalTitlesToUpdate)
                 {
-                    SettingsManager.CustomSeriesTitleManager.ReplaceOrAddCustomSeriesTitle(original, txtCustomTitle.Text);
+                    SettingsManager.CustomSeriesTitleManager.UpdateCustomSeriesTitle(original, txtCustomTitle.Text);
                     foreach (SeriesTitle newSeriesTitle in seriesTitles.Where(p => p.OriginalTitle.ToLower() == original.ToLower()))
                         newSeriesTitle.CustomTitle = txtCustomTitle.Text;
                 }

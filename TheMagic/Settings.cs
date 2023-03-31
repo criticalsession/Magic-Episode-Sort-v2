@@ -9,21 +9,11 @@ namespace TheMagic
 {
     internal class Settings
     {
-        [JsonProperty]
         internal bool askForNewSeriesNames = true;
-        [JsonProperty]
         internal bool searchSubFolders = true;
-        [JsonProperty]
         internal bool recursiveSearchSubFolders = true;
-        [JsonProperty]
         internal bool useTVMazeApi = false;
-        [JsonProperty] 
-        internal string outputDirectory = "";
-        [JsonProperty] 
-        internal string sources = "";
-        [JsonProperty]
         internal bool openOutputDirectoryAfterSort = false;
-        [JsonProperty]
-        internal List<SeriesTitle> customSeriesTitles = new List<SeriesTitle>();
+        internal string outputDirectory = "";
     }
 }

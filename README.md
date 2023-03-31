@@ -1,6 +1,6 @@
 # Magic Episode Sort
 
-**Version 2.0 - Happy GUI Edition**
+**v2.0.0 - The Great SQLite Migration**
 
 *The purpose of this software is not to condone piracy. But if you're gonna do it, you might as well stay organized.*
 

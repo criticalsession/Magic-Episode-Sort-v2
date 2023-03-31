@@ -5,7 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.1] - 2023-03-29
+## [2.0.0] - 2023-04-02
+
+**The Great SQLite Migration**
+
+### Added
+
+- Software now uses SQLite db instead of text files for settings.
+- Automatic import of old settings.
 
 ### Fixed
 
@@ -13,4 +20,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.1.0] - 2022-12-06
 
-Initial Release.
+**Happy GUI Edition**
+
+- Initial Release. No changelog to be found here, sorry.

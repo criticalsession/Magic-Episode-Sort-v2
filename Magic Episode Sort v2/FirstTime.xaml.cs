@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TheMagic;
 
 namespace Magic_Episode_Sort_v2
 {
@@ -19,6 +20,8 @@ namespace Magic_Episode_Sort_v2
     /// </summary>
     public partial class FirstTime : Window
     {
+        public bool migrationComplete = false;
+
         public FirstTime()
         {
             InitializeComponent();
@@ -26,6 +29,16 @@ namespace Magic_Episode_Sort_v2
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            (OldSettingsMigrator.MigrationResults result, int totalSeriesTitles) = OldSettingsMigrator.Migrate();
+
+            if (result == OldSettingsMigrator.MigrationResults.Successful)
+            {
+                MessageBox.Show("Settings migration successful! " + totalSeriesTitles + " custom titles migrated.", "Migration", MessageBoxButton.OK, MessageBoxImage.Information);
+                migrationComplete = true;
+            }
+            else if (result == OldSettingsMigrator.MigrationResults.Error)
+                MessageBox.Show("An unexpected error occured while migrating settings.", "Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+
             this.Close();
         }
     }
