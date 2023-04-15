@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Removed usage guide from README. Will get video tutorials soon.
-- Remove alert when no new video files found.
+- Removed alert when no new video files found.
 
 ## [2.0.0] - 2023-04-02
 
