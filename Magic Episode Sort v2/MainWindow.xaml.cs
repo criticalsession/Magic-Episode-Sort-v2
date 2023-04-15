@@ -122,6 +122,11 @@ namespace Magic_Episode_Sort_v2
         {
             new Preferences().ShowDialog();
         }
+
+        private void Github_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(new ProcessStartInfo("https://github.com/criticalsession/Magic-Episode-Sort-v2") { UseShellExecute = true });
+        }
         #endregion
 
         #region *** Search ***
@@ -333,5 +338,6 @@ namespace Magic_Episode_Sort_v2
                 MessageBox.Show("Directory '" + selected.SourceDirectory + "' added to 'Skip Directory' list. Go to Edit > Skip Directories to edit skipped directories.", "Skip Directory", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
+
     }
 }

@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Skip directories feature.
 - New alerts when: no sources set, no output directory set, skipped episode/series/directory.
+- Github link to Help Menu.
 
 ### Changed
 
