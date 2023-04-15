@@ -30,4 +30,16 @@
     <Resource Include="MESIcon.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="EditSkipDirectories.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="EditSkipDirectories.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>

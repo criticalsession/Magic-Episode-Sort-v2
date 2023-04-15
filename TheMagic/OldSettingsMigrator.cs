@@ -48,7 +48,7 @@ namespace TheMagic
         {
             foreach (string d in deserializedSettings.sources.Split(";"))
             {
-                SettingsManager.SourceDirectoriesManager.AddDirectory(d);
+                SettingsManager.DirectoriesManager.AddSourceDirectory(d);
             }
         }
 

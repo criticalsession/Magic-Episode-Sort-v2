@@ -84,6 +84,8 @@ namespace Magic_Episode_Sort_v2
             {
                 btnSort.IsEnabled = false;
                 lblStatus.Text = "No New Episodes Found";
+
+                MessageBox.Show("No new video files found.", "Search Complete", MessageBoxButton.OK, MessageBoxImage.Information);
             });
         }
 
@@ -101,6 +103,11 @@ namespace Magic_Episode_Sort_v2
         private void EditCustomTitles_Click(object sender, RoutedEventArgs e)
         {
             new EditCustomSeriesTitles().ShowDialog();
+        }
+
+        private void EditSkipDirectories_Click(object sender, RoutedEventArgs e)
+        {
+            new EditSkipDirectories().ShowDialog();
         }
 
         private void About_Click(object sender, RoutedEventArgs e)
@@ -122,7 +129,7 @@ namespace Magic_Episode_Sort_v2
         #region *** Search ***
         private void StartSearch()
         {
-            if (SettingsManager.SourceDirectoriesManager.SourceDirectories.Count > 0)
+            if (SettingsManager.DirectoriesManager.SourceDirectories.Count > 0)
             {
                 this.Dispatcher.Invoke(() =>
                 {
@@ -151,7 +158,7 @@ namespace Magic_Episode_Sort_v2
                     });
                 };
 
-                directories.Build(SettingsManager.SourceDirectoriesManager.SourceDirectories, 
+                directories.Build(SettingsManager.DirectoriesManager.SourceDirectories, 
                     SettingsManager.SearchSubFolders, SettingsManager.RecursiveSearchSubFolders);
 
                 FinishedSearch();
@@ -282,6 +289,8 @@ namespace Magic_Episode_Sort_v2
             {
                 directories.VideoFiles.Remove(selected);
                 RefreshEpisodeList();
+
+                MessageBox.Show("Episode file skipped until next refresh", "Skip Episode", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
 
@@ -292,6 +301,20 @@ namespace Magic_Episode_Sort_v2
             {
                 directories.VideoFiles.RemoveAll(p => p.SeriesTitle.CustomTitle == selected.SeriesTitle.CustomTitle || p.SeriesTitle.OriginalTitle == selected.SeriesTitle.OriginalTitle);
                 RefreshEpisodeList();
+
+                MessageBox.Show("Entire series '" + selected.SeriesTitle.CustomTitle + "' skipped until next refresh", "Skip Series", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private void ctxIgnoreDirectory_Click(object sender, RoutedEventArgs e)
+        {
+            VideoFile? selected = GetSelectedEpisode();
+            if (selected != null)
+            {
+                SettingsManager.DirectoriesManager.AddSkipDirectory(selected.SourceDirectory);
+                RefreshEpisodeList();
+
+                MessageBox.Show("Directory '" + selected.SourceDirectory + "' added to 'Skip Directory' list. Go to Edit > Skip Directories to edit skipped directories.", "Skip Directory", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
     }

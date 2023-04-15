@@ -23,6 +23,7 @@
             <MenuItem Header="_Edit">
                 <MenuItem Header="_Sources..." Click="EditSources_Click" />
                 <MenuItem Header="_Custom Series Titles..." Click="EditCustomTitles_Click" />
+                <MenuItem Header="S_kip Directories..." Click="EditSkipDirectories_Click" />
                 <Separator />
                 <MenuItem Header="_Preferences" Click="Preferences_Click" />
             </MenuItem>
@@ -42,6 +43,7 @@
                             <ContextMenu>
                                 <MenuItem Header="Skip Episode" Name="ctxIgnoreEpisode" Click="ctxIgnoreEpisode_Click" />
                                 <MenuItem Header="Skip Series" Name="ctxIgnoreSeries" Click="ctxIgnoreSeries_Click" />
+                                <MenuItem Header="Skip Directory" Name="ctxIgnoreDirectory" Click="ctxIgnoreDirectory_Click" />
                             </ContextMenu>
                         </TextBlock.ContextMenu>
                     </TextBlock>

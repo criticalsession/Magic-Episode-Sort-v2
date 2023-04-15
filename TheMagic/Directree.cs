@@ -10,6 +10,7 @@ namespace TheMagic
     public class Directree
     {
         public List<string> Directories { get; set; } = new List<string>();
+        public List<string>? SkipDirectories { get; set; } = null;
         public List<VideoFile> VideoFiles { get; set; } = new List<VideoFile>();
 
         public bool SearchComplete = false;
@@ -31,7 +32,7 @@ namespace TheMagic
             foreach (SourceDirectory sourceDirectory in sourceDirectories)
             {
                 string directory = sourceDirectory.SourcePath;
-                if (!SameAsOutputDirectory(directory) && !AlreadyChecked(directory))
+                if (!SameAsOutputDirectory(directory) && !AlreadyChecked(directory) && !SkipDirectory(directory))
                 {
                     Directories.Add(directory);
                     DirectorySearched?.Invoke(this, EventArgs.Empty);
@@ -48,6 +49,13 @@ namespace TheMagic
             SearchComplete = true;
         }
 
+        private bool SkipDirectory(string directory)
+        {
+            if (SkipDirectories == null) SkipDirectories = SettingsManager.DirectoriesManager.SkipDirectoryPaths;
+
+            return SkipDirectories.Contains(directory);
+        }
+
         private bool AlreadyChecked(string directory)
         {
             return Directories.Contains(directory);
@@ -62,7 +70,7 @@ namespace TheMagic
         {
             foreach (string subDirectory in Directory.GetDirectories(path))
             {
-                if (!SameAsOutputDirectory(subDirectory))
+                if (!SameAsOutputDirectory(subDirectory) && !SkipDirectory(subDirectory))
                 {
                     if (!AlreadyChecked(subDirectory))
                     {

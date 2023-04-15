@@ -15,10 +15,12 @@ namespace TheMagic
     public class SettingsManager
     {
         internal static Settings settings;
-        private static SourceDirectoriesManager? sourceDirectoriesManager = null;
+        private static DirectoriesManager? sourceDirectoriesManager = null;
         private static CustomSeriesTitleManager? customSeriesTitleManager = null;
         private static bool? firstTime = null;
         private static bool settingsLoaded = false;
+        private static bool tablesChecked = false;
+
         internal static string settingsFolder => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Magic Episode Sort");
 
         public static bool SettingsChanged { get; set; } = true;
@@ -92,11 +94,11 @@ namespace TheMagic
             }
         }
 
-        public static SourceDirectoriesManager SourceDirectoriesManager
+        public static DirectoriesManager DirectoriesManager
         {
             get
             {
-                if (sourceDirectoriesManager == null) sourceDirectoriesManager = new SourceDirectoriesManager();
+                if (sourceDirectoriesManager == null) sourceDirectoriesManager = new DirectoriesManager();
                 return sourceDirectoriesManager;
             }
         }
@@ -148,6 +150,12 @@ namespace TheMagic
             {
                 settings = MESDBHandler.LoadSettings();
                 settingsLoaded = true;
+
+                if (!tablesChecked)
+                {
+                    MESDBHandler.CheckTablesAreAllSetup();
+                    tablesChecked = true;
+                }
             }
         }
 

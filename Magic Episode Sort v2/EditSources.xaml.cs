@@ -22,17 +22,17 @@ namespace Magic_Episode_Sort_v2
         public EditSources()
         {
             InitializeComponent();
-            lstSources.ItemsSource = SettingsManager.SourceDirectoriesManager.SourceDirectoryPaths;
+            lstSources.ItemsSource = SettingsManager.DirectoriesManager.SourceDirectoryPaths;
         }
 
         private void btnAddSource_Click(object sender, RoutedEventArgs e)
         {
-            SettingsManager.SourceDirectoriesManager.AddDirectory(txtAddSource.Text);
+            SettingsManager.DirectoriesManager.AddSourceDirectory(txtAddSource.Text);
 
             txtAddSource.Text = "";
             btnAddSource.IsEnabled = false;
 
-            lstSources.ItemsSource = SettingsManager.SourceDirectoriesManager.SourceDirectoryPaths;
+            lstSources.ItemsSource = SettingsManager.DirectoriesManager.SourceDirectoryPaths;
         }
 
         private void btnAddSourceDirectory_Click(object sender, RoutedEventArgs e)
@@ -68,8 +68,8 @@ namespace Magic_Episode_Sort_v2
             var selectedItem = lstSources.SelectedItem;
             if (selectedItem != null)
             {
-                SettingsManager.SourceDirectoriesManager.RemoveDirectory(selectedItem.ToString());
-                lstSources.ItemsSource = SettingsManager.SourceDirectoriesManager.SourceDirectoryPaths;
+                SettingsManager.DirectoriesManager.RemoveSourceDirectory(selectedItem.ToString());
+                lstSources.ItemsSource = SettingsManager.DirectoriesManager.SourceDirectoryPaths;
             }
         }
     }

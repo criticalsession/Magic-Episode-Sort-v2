@@ -13,17 +13,19 @@ namespace TheMagic
 {
     internal class MESDBHandler
     {
+        #region Connection String
         private static string connectionString = @"Data Source=" + Path.Combine(SettingsManager.settingsFolder, "MESDB.db") + ";";
         private static SqliteConnection GetConnection()
         {
             return new SqliteConnection(connectionString);
         }
+        #endregion
 
         #region Build DB
         public static void BuildDB()
         {
             if (!Directory.Exists(SettingsManager.settingsFolder)) { Directory.CreateDirectory(SettingsManager.settingsFolder); }
-            using (var conn = GetConnection())
+            using (SqliteConnection conn = GetConnection())
             {
                 conn.Execute(@"CREATE TABLE ""SeriesTitles"" (
 	                ""id""	INTEGER NOT NULL UNIQUE,
@@ -47,6 +49,38 @@ namespace TheMagic
 	                PRIMARY KEY(""id"" AUTOINCREMENT)
                 )");
             }
+
+            CreateSkipDirectoriesTable();
+        }
+
+        private static void CreateSkipDirectoriesTable()
+        {
+            using (SqliteConnection conn = GetConnection())
+            {
+                conn.Execute(@"CREATE TABLE ""SkipDirectories"" (
+                    ""id"" INTEGER NOT NULL UNIQUE,
+                    ""dir"" TEXT NOT NULL,
+                    PRIMARY KEY(""id"" AUTOINCREMENT)
+                )");
+            }
+        }
+
+        public static void CheckTablesAreAllSetup()
+        {
+            if (!TableExists("SkipDirectories"))
+                CreateSkipDirectoriesTable();
+        }
+
+        private static bool TableExists(string tableName)
+        {
+            bool found = false;
+            using (SqliteConnection conn = GetConnection())
+            {
+                int rowCount = conn.ExecuteScalar<int>("SELECT count(*) FROM sqlite_master WHERE type='table' AND name=@TableName;", new { TableName = tableName });
+                if (rowCount > 0) found = true;
+            }
+
+            return found;
         }
         #endregion
 
@@ -55,7 +89,7 @@ namespace TheMagic
         {
             Settings result = new Settings();
 
-            using (IDbConnection conn = GetConnection())
+            using (SqliteConnection conn = GetConnection())
             {
                 IEnumerable<SettingsModel> output = conn.Query<SettingsModel>("select * from Settings", new DynamicParameters());
                 if (output.Count() > 0)
@@ -93,7 +127,7 @@ namespace TheMagic
 
         internal static void SaveSettings(Settings toSave, bool isNew = false)
         {
-            using (IDbConnection conn = GetConnection())
+            using (SqliteConnection conn = GetConnection())
             {
                 SettingsModel model = new SettingsModel();
                 model.Fill(toSave);
@@ -122,7 +156,7 @@ namespace TheMagic
         {
             List<SeriesTitle> result = new List<SeriesTitle>();
 
-            using (IDbConnection conn = GetConnection())
+            using (SqliteConnection conn = GetConnection())
             {
                 IEnumerable<SeriesTitleModel> output = conn.Query<SeriesTitleModel>("select * from SeriesTitles", new DynamicParameters());
                 foreach (var o in output)
@@ -144,7 +178,7 @@ namespace TheMagic
             SeriesTitleModel model = new SeriesTitleModel();
             model.Fill(title);
 
-            using (IDbConnection conn = GetConnection())
+            using (SqliteConnection conn = GetConnection())
             {
                 if (title.IsNew)
                 {
@@ -162,7 +196,7 @@ namespace TheMagic
 
         internal static void DeleteCustomTitle(string originalTitle)
         {
-            using (IDbConnection conn = GetConnection())
+            using (SqliteConnection conn = GetConnection())
             {
                 conn.Execute("delete from SeriesTitles where original = @original", new
                 {
@@ -177,7 +211,7 @@ namespace TheMagic
         {
             List<SourceDirectory> result = new List<SourceDirectory>();
 
-            using (IDbConnection conn = GetConnection())
+            using (SqliteConnection conn = GetConnection())
             {
                 IEnumerable<SourceModel> output = conn.Query<SourceModel>("select * from Sources", new DynamicParameters());
                 foreach (var o in output)
@@ -203,7 +237,7 @@ namespace TheMagic
             SourceModel model = new SourceModel();
             model.Fill(dir);
 
-            using (IDbConnection conn = GetConnection())
+            using (SqliteConnection conn = GetConnection())
             {
                 conn.Execute("insert into Sources(source) values " +
                     "(@source)", model);
@@ -212,9 +246,48 @@ namespace TheMagic
 
         internal static void DeleteSourceDirectory(string dir)
         {
-            using (IDbConnection conn = GetConnection())
+            using (SqliteConnection conn = GetConnection())
             {
                 conn.Execute("delete from Sources where source = @source", new { source = dir });
+            }
+        }
+        #endregion
+
+        #region Skip Directories
+        internal static List<SkipDirectory> LoadSkipDirectories()
+        {
+            List<SkipDirectory> result = new List<SkipDirectory>();
+
+            using (SqliteConnection conn = GetConnection())
+            {
+                IEnumerable<SkipDirectoryModel> output = conn.Query<SkipDirectoryModel>("select * from SkipDirectories", new DynamicParameters());
+                foreach (var o in output)
+                {
+                    result.Add(new SkipDirectory()
+                    {
+                        Id = o.id,
+                        Directory = o.dir
+                    });
+                }
+            }
+
+            return result;
+        }
+
+        internal static void DeleteSkipDirectory(string dir)
+        {
+            using (SqliteConnection conn = GetConnection())
+            {
+                conn.Execute("delete from SkipDirectories where dir = @dir", new { dir = dir });
+            }
+        }
+
+        internal static void AddSkipDirectory(string dir)
+        {
+            using (SqliteConnection conn = GetConnection())
+            {
+                conn.Execute("insert into SkipDirectories(dir) values " +
+                    "(@dir)", new { dir = dir });
             }
         }
         #endregion

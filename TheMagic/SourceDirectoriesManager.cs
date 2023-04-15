@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TheMagic
 {
-    public class SourceDirectoriesManager
+    public class DirectoriesManager
     {
         public List<SourceDirectory> SourceDirectories
         {
@@ -19,6 +19,15 @@ namespace TheMagic
             }
         }
 
+        public List<SkipDirectory> SkipDirectories
+        {
+            get
+            {
+                List<SkipDirectory> directories = MESDBHandler.LoadSkipDirectories();
+                return directories;
+            }
+        }
+
         private List<SourceDirectory> CheckDirectoriesExist(List<SourceDirectory> directories)
         {
             List<SourceDirectory> checkedDirectories = new List<SourceDirectory>();
@@ -26,7 +35,7 @@ namespace TheMagic
             {
                 if (!Directory.Exists(dir.SourcePath))
                 {
-                    RemoveDirectory(dir);
+                    RemoveSourceDirectory(dir);
                 }
                 else
                 {
@@ -37,7 +46,7 @@ namespace TheMagic
             return checkedDirectories;
         }
 
-        public bool AddDirectory(string dir)
+        public bool AddSourceDirectory(string dir)
         {
             List<SourceDirectory> directories = MESDBHandler.LoadSourceDirectories();
             if (!directories.Any(p => p.SourcePath == dir))
@@ -47,15 +56,17 @@ namespace TheMagic
 
                 return true;
             }
-            else return false;
+            
+            
+            return false;
         }
 
-        public void RemoveDirectory(SourceDirectory dir)
+        public void RemoveSourceDirectory(SourceDirectory dir)
         {
-            RemoveDirectory(dir.SourcePath);
+            RemoveSourceDirectory(dir.SourcePath);
         }
 
-        public bool RemoveDirectory(string? dir)
+        public bool RemoveSourceDirectory(string? dir)
         {
             if (!String.IsNullOrEmpty(dir))
             {
@@ -72,11 +83,50 @@ namespace TheMagic
             return false;
         }
 
+        public bool AddSkipDirectory(string dir)
+        {
+            List<SkipDirectory> directories = MESDBHandler.LoadSkipDirectories();
+            if (!directories.Any(p => p.Directory == dir))
+            {
+                MESDBHandler.AddSkipDirectory(dir);
+                SettingsManager.SettingsChanged = true;
+
+                return true;
+            }
+            
+            return false;
+        }
+
+        public bool RemoveSkipDirectory(string? dir)
+        {
+            if (!String.IsNullOrEmpty(dir))
+            {
+                List<SkipDirectory> directories = MESDBHandler.LoadSkipDirectories();
+                if (directories.Any(p => p.Directory == dir))
+                {
+                    MESDBHandler.DeleteSkipDirectory(dir);
+                    SettingsManager.SettingsChanged= true;
+
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public List<string> SourceDirectoryPaths
         {
             get
             {
                 return SourceDirectories.Select(p => p.SourcePath).ToList();
+            }
+        }
+
+        public List<string> SkipDirectoryPaths
+        {
+            get
+            {
+                return SkipDirectories.Select(p => p.Directory).ToList();
             }
         }
     }

@@ -12,7 +12,7 @@
             <TextBlock FontSize="24" FontWeight="Bold">Magic Episode Sort
                 <Image Source="/MESIcon.png" Width="16"></Image>
             </TextBlock>
-            <TextBlock Text="Version 2.0.0 - The Great SQLite Migration" FontSize="14" />
+            <TextBlock Text="Version 2.1.0 - The Great SQLite Migration" FontSize="14" />
             <TextBlock Text="Released: 02 April, 2023"  FontSize="14" />
             <Border Height="10" />
             <TextBlock TextWrapping="Wrap">
