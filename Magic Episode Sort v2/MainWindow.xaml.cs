@@ -83,9 +83,7 @@ namespace Magic_Episode_Sort_v2
             this.Dispatcher.Invoke(() =>
             {
                 btnSort.IsEnabled = false;
-                lblStatus.Text = "No New Episodes Found";
-
-                MessageBox.Show("No new video files found.", "Search Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                lblStatus.Text = "No new video files found.";
             });
         }
 
@@ -170,10 +168,19 @@ namespace Magic_Episode_Sort_v2
                     this.IsEnabled = true;
                     lstFiles.ItemsSource = new string[0];
                     btnSort.IsEnabled = false;
-                    lblStatus.Text = "WARNING: NO SOURCES SET";
+                    lblStatus.Text = "No sources set.";
                     lblDirectoriesSearched.Text = "";
                     lblEpisodesFound.Text = "Episodes: --";
                     lblSeriesFound.Text = "Series: --";
+
+                    var result = MessageBox.Show("There are no sources set. Without sources Magic Episode Sort doesn't know which directories to search.\r\n\r\nWould you like to set up sources now?", 
+                        "No Sources", MessageBoxButton.YesNo, 
+                        MessageBoxImage.Warning);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        new EditSources().ShowDialog();
+                    }
                 });
             }
         }
@@ -198,7 +205,16 @@ namespace Magic_Episode_Sort_v2
                 this.Dispatcher.Invoke(() =>
                 {
                     btnSort.IsEnabled = false;
-                    lblStatus.Text = "WARNING: NO OUTPUT DIRECTORY SET";
+                    lblStatus.Text = "No output directory set.";
+                    var result = MessageBox.Show("No output directory set! Without an output directory Magic Episode Sort won't know where to sort the files.\r\n\r\nWould you like to set it up now?", 
+                        "No Output Directory", 
+                        MessageBoxButton.YesNo, 
+                        MessageBoxImage.Warning);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        OpenPreferences();
+                    }
                 });
             } 
             else
@@ -208,7 +224,7 @@ namespace Magic_Episode_Sort_v2
                     this.Dispatcher.Invoke(() =>
                     {
                         btnSort.IsEnabled = true;
-                        lblStatus.Text = "Search Complete";
+                        lblStatus.Text = "";
                     });
                 } 
                 else

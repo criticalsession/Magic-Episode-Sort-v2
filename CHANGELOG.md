@@ -10,7 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Skip directories feature.
-- New alert box when no new video files are found.
+- New alerts when: no sources set, no output directory set, skipped episode/series/directory.
+
+### Changed
+
+- Removed usage guide from README. Will get video tutorials soon.
+- Remove alert when no new video files found.
 
 ## [2.0.0] - 2023-04-02
 
