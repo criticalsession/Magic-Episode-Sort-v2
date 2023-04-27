@@ -263,16 +263,31 @@ namespace Magic_Episode_Sort_v2
 
             new Thread(() =>
             {
-                Targetree targetree = new Targetree();
-                bool targetreeResult = targetree.BuildDirectoryTreeInTarget(directories.VideoFiles, SettingsManager.OutputDirectory);
-
-                if (targetreeResult)
+                try
                 {
-                    EpisodeMover epmover = new EpisodeMover();
-                    epmover.MoveEpisodeFiles(directories.VideoFiles);
-                }
+                    Targetree targetree = new Targetree();
+                    bool targetreeResult = targetree.BuildDirectoryTreeInTarget(directories.VideoFiles, SettingsManager.OutputDirectory);
 
-                FinishedSort();
+                    if (targetreeResult)
+                    {
+                        EpisodeMover epmover = new EpisodeMover();
+                        epmover.MoveEpisodeFiles(directories.VideoFiles);
+                    }
+
+
+                    FinishedSort();
+                } 
+                catch (Exception ex)
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        btnSort.IsEnabled = false;
+                    });
+
+                    StartSearch();
+
+                    MessageBox.Show("An unexpected error has occured while sorting:" + Environment.NewLine + Environment.NewLine + ex.Message, "Error While Sorting", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }).Start();
         }
 
