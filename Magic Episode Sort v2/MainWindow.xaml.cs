@@ -74,7 +74,7 @@ namespace Magic_Episode_Sort_v2
             this.Dispatcher.Invoke(() =>
             {
                 lblEpisodesFound.Text = "Episodes: " + directories.VideoFiles.Count.ToString();
-                lblSeriesFound.Text = "Series: " + directories.DistingSeriesTitles.Count.ToString();
+                lblSeriesFound.Text = "Series: " + directories.DistinctSeriesTitles.Count.ToString();
             });
         }
 
@@ -161,7 +161,7 @@ namespace Magic_Episode_Sort_v2
                     });
                 };
 
-                directories.Build(SettingsManager.DirectoriesManager.SourceDirectories, 
+                directories.InitializeAndPopulateVideoData(SettingsManager.DirectoriesManager.SourceDirectories, 
                     SettingsManager.SearchSubFolders, SettingsManager.RecursiveSearchSubFolders);
 
                 FinishedSearch();

@@ -9,37 +9,26 @@ namespace TheMagic
 {
     public class Directree
     {
-        public List<string> Directories { get; set; } = new List<string>();
-        public List<string>? SkipDirectories { get; set; } = null;
-        public List<VideoFile> VideoFiles { get; set; } = new List<VideoFile>();
+        private const string ErrorResponse = "error";
+        private static readonly StringComparer IgnoreCaseComparer = StringComparer.OrdinalIgnoreCase;
 
-        public bool SearchComplete = false;
+        public HashSet<string> Directories { get; } = new();
+        public HashSet<string> SkipDirectories { get; private set; } = new(IgnoreCaseComparer);
+        public List<VideoFile> VideoFiles { get; private set; } = new();
+
+        public bool SearchComplete { get; private set; }
 
         public event EventHandler? DirectorySearched;
         public event EventHandler? FoundVideoFile;
         public event EventHandler? FillingCustomSeriesTitles;
 
-        public List<string> DistingSeriesTitles
-        {
-            get
-            {
-                return VideoFiles.Select(p => p.SeriesTitle.CustomTitle).Distinct().ToList();
-            }
-        }
+        public List<string> DistinctSeriesTitles
+            => VideoFiles.Select(p => p.SeriesTitle.CustomTitle).Distinct().ToList();
 
-        public void Build(List<SourceDirectory> sourceDirectories, bool searchSubDirectories, bool recursive)
+        public void InitializeAndPopulateVideoData(List<SourceDirectory> sourceDirectories, bool searchSubDirectories, bool recursive)
         {
-            foreach (SourceDirectory sourceDirectory in sourceDirectories)
-            {
-                string directory = sourceDirectory.SourcePath;
-                if (!SameAsOutputDirectory(directory) && !AlreadyChecked(directory) && !SkipDirectory(directory))
-                {
-                    Directories.Add(directory);
-                    DirectorySearched?.Invoke(this, EventArgs.Empty);
-
-                    if (searchSubDirectories) AddDirsInPath(directory, recursive);
-                }
-            }
+            SkipDirectories = new HashSet<string>(SettingsManager.DirectoriesManager.SkipDirectoryPaths, IgnoreCaseComparer);
+            SearchDirectories(sourceDirectories, searchSubDirectories, recursive);
 
             BuildVideoFiles();
             FillCustomSeriesTitles();
@@ -49,45 +38,49 @@ namespace TheMagic
             SearchComplete = true;
         }
 
-        private bool SkipDirectory(string directory)
-        {
-            if (SkipDirectories == null) SkipDirectories = SettingsManager.DirectoriesManager.SkipDirectoryPaths;
+        private bool ShouldSkipDirectory(string directory)
+            => Directories.Contains(directory) || SkipDirectories.Contains(directory) || IsOutputDirectory(directory);
 
-            return SkipDirectories.Contains(directory);
-        }
+        private static bool IsOutputDirectory(string directory)
+            => IgnoreCaseComparer.Equals(directory, SettingsManager.OutputDirectory);
 
-        private bool AlreadyChecked(string directory)
+        private void SearchDirectories(List<SourceDirectory> sourceDirectories, bool searchSubDirectories, bool recursive)
         {
-            return Directories.Contains(directory);
-        }
-
-        private static bool SameAsOutputDirectory(string directory)
-        {
-            return directory.ToLower() == SettingsManager.OutputDirectory.ToLower();
-        }
-
-        private void AddDirsInPath(string path, bool recursive)
-        {
-            foreach (string subDirectory in Directory.GetDirectories(path))
+            foreach (var sourceDirectory in sourceDirectories)
             {
-                if (!SameAsOutputDirectory(subDirectory) && !SkipDirectory(subDirectory))
-                {
-                    if (!AlreadyChecked(subDirectory))
-                    {
-                        Directories.Add(subDirectory);
-                        DirectorySearched?.Invoke(this, EventArgs.Empty);
-                    }
+                var directory = sourceDirectory.SourcePath;
 
-                    if (recursive) AddDirsInPath(subDirectory, recursive);
-                }
+                if (ShouldSkipDirectory(directory))
+                    continue;
+
+                Directories.Add(directory);
+                DirectorySearched?.Invoke(this, EventArgs.Empty);
+
+                if (searchSubDirectories)
+                    AddSubDirectories(directory, recursive);
+            }
+        }
+
+        private void AddSubDirectories(string path, bool recursive)
+        {
+            foreach (var subDirectory in Directory.GetDirectories(path))
+            {
+                if (ShouldSkipDirectory(subDirectory))
+                    continue;
+
+                Directories.Add(subDirectory);
+                DirectorySearched?.Invoke(this, EventArgs.Empty);
+
+                if (recursive)
+                    AddSubDirectories(subDirectory, recursive);
             }
         }
 
         private void BuildVideoFiles()
         {
-            foreach (string filePath in GetFilePathsInAllDirectories())
+            foreach (var filePath in GetFilePathsInAllDirectories())
             {
-                VideoFile videoFile = new VideoFile(filePath);
+                var videoFile = new VideoFile(filePath);
                 if (videoFile.IsValidVideoFile)
                 {
                     VideoFiles.Add(videoFile);
@@ -97,25 +90,18 @@ namespace TheMagic
         }
 
         private IEnumerable<string> GetFilePathsInAllDirectories()
-        {
-            List<string> filePaths = new List<string>();
+            => Directories.SelectMany(directory => Directory.GetFiles(directory));
 
-            foreach (string directory in Directories)
-                filePaths.AddRange(Directory.GetFiles(directory));
-
-            return filePaths;
-        }
 
         private void FillCustomSeriesTitles()
         {
             FillingCustomSeriesTitles?.Invoke(this, EventArgs.Empty);
-            TVMazeAPI? tvMazeApi = null;
+            var tvMazeApi = SettingsManager.UseTVMazeAPI ? new TVMazeAPI() : null;
 
-            foreach (VideoFile videoFile in VideoFiles)
+            foreach (var videoFile in VideoFiles)
             {
-                string originalTitle = videoFile.SeriesTitle.OriginalTitle;
-
-                SeriesTitle? storedTitle = SettingsManager.CustomSeriesTitleManager.GetCustomSeriesTitle(originalTitle);
+                var originalTitle = videoFile.SeriesTitle.OriginalTitle;
+                var storedTitle = SettingsManager.CustomSeriesTitleManager.GetCustomSeriesTitle(originalTitle);
 
                 if (storedTitle != null)
                 {
@@ -123,18 +109,19 @@ namespace TheMagic
                 }
                 else
                 {
-                    if (SettingsManager.UseTVMazeAPI)
-                    {
-                        if (tvMazeApi == null) tvMazeApi = new TVMazeAPI();
-                        string? apiResponse = GetSeriesTitleFromTVMaze(tvMazeApi, originalTitle);
+                    var titleToUse = originalTitle;
 
-                        if (ReceivedValidResponse(apiResponse)) videoFile.SetCustomTitle(apiResponse, true);
-                        else videoFile.SetCustomTitle(originalTitle, true);
-                    }
-                    else
+                    if (tvMazeApi != null)
                     {
-                        videoFile.SetCustomTitle(originalTitle, true);
+                        var apiResponse = GetSeriesTitleFromTVMaze(tvMazeApi, originalTitle);
+
+                        if (ReceivedValidResponse(apiResponse))
+                        {
+                            titleToUse = apiResponse;
+                        }
                     }
+
+                    videoFile.SetCustomTitle(titleToUse, true);
                 }
             }
         }
@@ -144,25 +131,20 @@ namespace TheMagic
             string? apiResponse = null;
             int errorCount = 0;
 
-            do
+            while (errorCount <= 2)
             {
-                if (errorCount > 2) break;
-
                 apiResponse = tvMazeApi.GetSeriesTitle(originalTitle);
-                if (apiResponse == "error") // wait a bit then try again
-                {
-                    errorCount++;
-                    Thread.Sleep(200);
-                }
-                else break;
-            } while (true);
+                if (apiResponse != ErrorResponse)
+                    break;
+
+                errorCount++;
+                Thread.Sleep(200);
+            }
 
             return apiResponse;
         }
 
         private static bool ReceivedValidResponse(string? apiResponse)
-        {
-            return !String.IsNullOrEmpty(apiResponse) && apiResponse != "error";
-        }
+            => !string.IsNullOrEmpty(apiResponse) && apiResponse != ErrorResponse;
     }
 }
