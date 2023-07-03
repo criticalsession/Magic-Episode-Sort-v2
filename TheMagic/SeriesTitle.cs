@@ -29,6 +29,7 @@ namespace TheMagic
             OriginalTitle = String.Empty;
             CustomTitle = String.Empty;
             IsNew = false;
+            Id = 0;
         }
 
         public override string ToString()

@@ -27,6 +27,10 @@ namespace Magic_Episode_Sort_v2
                     OpenPreferences();
                 }
             }
+            else
+            {
+                SettingsManager.RunDBUpdates();
+            }
         }
 
         private void Window_Activated(object sender, EventArgs e)

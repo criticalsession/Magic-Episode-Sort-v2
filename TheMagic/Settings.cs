@@ -15,5 +15,6 @@ namespace TheMagic
         internal bool useTVMazeApi = false;
         internal bool openOutputDirectoryAfterSort = false;
         internal string outputDirectory = "";
+        internal bool renameFilenames = true;
     }
 }

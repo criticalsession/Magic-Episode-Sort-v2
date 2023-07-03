@@ -38,7 +38,7 @@ namespace TheMagic
                             donePaths.Add(fullDirectoryPath);
                         }
 
-                        episode.TargetPath = Path.Combine(fullDirectoryPath, episode.FileName);
+                        episode.TargetPath = Path.Combine(fullDirectoryPath, episode.NewFileName);
                     }
 
                     return true;

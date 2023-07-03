@@ -85,6 +85,16 @@ namespace TheMagic
             set => settings.openOutputDirectoryAfterSort = value;
         }
 
+        public static bool RenameFilenames
+        {
+            get
+            {
+                LoadSettings();
+                return settings.renameFilenames;
+            }
+            set => settings.renameFilenames = value;
+        }
+
         public static CustomSeriesTitleManager CustomSeriesTitleManager
         {
             get
@@ -118,6 +128,11 @@ namespace TheMagic
             }
         }
 
+        public static void RunDBUpdates()
+        {
+            MESDBHandler.RunDBUpdates();
+        }
+
         public static List<string> Extensions
         {
             get
@@ -136,7 +151,6 @@ namespace TheMagic
             get
             {
                 List<string> regexes = new List<string>();
-                regexes.Add("[sS][0-9]+");
                 regexes.Add("[sS][0-9]+[eE][0-9]+-*[eE]*[0-9]*");
                 regexes.Add("[0-9]+[xX][0-9]+");
 

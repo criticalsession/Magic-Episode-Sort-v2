@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d"
-        Title="Magic Episode Sort > Preferences" Height="412" Width="422" Icon="/MESIcon.png"
+        Title="Magic Episode Sort > Preferences" Height="432" Width="451" Icon="/MESIcon.png"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <StackPanel Orientation="Vertical" Margin="10">
         <GroupBox Header="Directory Search" Padding="10">
@@ -24,7 +24,9 @@
                 <CheckBox Name="chkAskForNewSeriesNames" FontSize="14"
                     Content="Ask to confirm new series titles" IsThreeState="False" />
                 <CheckBox Name="chkUseTVMazeAPI" FontSize="14" 
-                    Content="Attempt to get series titles from TVMaze API" IsThreeState="False"/>
+                    Content="Use TVMaze API for series titles" IsThreeState="False" Click="chkUseTVMazeAPI_Click" />
+                <CheckBox Name="chkRenameFilenames" FontSize="14"
+                Content="Rename filenames to episode name (needs TVMaze API)" IsThreeState="False" />
             </StackPanel>
         </GroupBox>
         

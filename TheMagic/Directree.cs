@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -98,43 +99,78 @@ namespace TheMagic
             FillingCustomSeriesTitles?.Invoke(this, EventArgs.Empty);
             var tvMazeApi = SettingsManager.UseTVMazeAPI ? new TVMazeAPI() : null;
 
+            List<TVMazeSeriesData> seriesData = new List<TVMazeSeriesData>();
+
             foreach (var videoFile in VideoFiles)
             {
-                var originalTitle = videoFile.SeriesTitle.OriginalTitle;
-                var storedTitle = SettingsManager.CustomSeriesTitleManager.GetCustomSeriesTitle(originalTitle);
-
-                if (storedTitle != null)
+                TVMazeSeriesData data = seriesData.FirstOrDefault(p => p.OriginalTitle == videoFile.SeriesTitle.OriginalTitle);
+                if (data == null)
                 {
-                    videoFile.SetCustomTitle(storedTitle.CustomTitle, false);
-                }
-                else
-                {
-                    var titleToUse = originalTitle;
+                    data = new TVMazeSeriesData()
+                    {
+                        OriginalTitle = videoFile.SeriesTitle.OriginalTitle,
+                        SeriesTitle = null,
+                        SeriesId = null,
+                        EpisodeData = null
+                    };
 
                     if (tvMazeApi != null)
                     {
-                        var apiResponse = GetSeriesTitleFromTVMaze(tvMazeApi, originalTitle);
+                        var apiResponse = GetTitleAndIdFromTVMazeApi(tvMazeApi, videoFile.SeriesTitle.OriginalTitle);
+                        data.SeriesTitle = apiResponse.Item1;
+                        data.SeriesId = apiResponse.Item2;
 
-                        if (ReceivedValidResponse(apiResponse))
-                        {
-                            titleToUse = apiResponse;
-                        }
+                        if (data.SeriesId.HasValue && SettingsManager.RenameFilenames) data.EpisodeData = tvMazeApi.GetEpisodeList(data.SeriesId.Value);
                     }
 
-                    videoFile.SetCustomTitle(titleToUse, true);
+                    seriesData.Add(data);
                 }
+
+                SetVideoFileCustomTitle(videoFile, data.SeriesTitle);
+                SetVideoFileEpisodeName(videoFile, data.EpisodeData);
             }
         }
 
-        private static string? GetSeriesTitleFromTVMaze(TVMazeAPI tvMazeApi, string originalTitle)
+        private static void SetVideoFileCustomTitle(VideoFile videoFile, string? tvMazeTitle)
         {
-            string? apiResponse = null;
+            string originalTitle = videoFile.SeriesTitle.OriginalTitle;
+            SeriesTitle? storedTitle = SettingsManager.CustomSeriesTitleManager.GetCustomSeriesTitle(originalTitle);
+
+            if (storedTitle != null) videoFile.SetCustomTitle(storedTitle.CustomTitle, false);
+            else videoFile.SetCustomTitle(String.IsNullOrEmpty(tvMazeTitle) ? originalTitle : tvMazeTitle, true);
+        }
+
+        private static (string?, int?) GetTitleAndIdFromTVMazeApi(TVMazeAPI? tvMazeApi, string originalTitle)
+        {
+            if (tvMazeApi != null)
+            {
+                var apiResponse = GetSeriesDetailsFromApi(tvMazeApi, originalTitle);
+                if (ReceivedValidResponse(apiResponse.Item1)) return apiResponse;
+            }
+
+            return (null, null);
+        }
+
+        private static void SetVideoFileEpisodeName(VideoFile videoFile, TVMazeAPI.EpisodeListApiModel[]? episodeData)
+        {
+            if (episodeData == null) return;
+
+            TVMazeAPI.EpisodeListApiModel? thisEpisode = episodeData.FirstOrDefault(p => p.season == videoFile.SeasonNumber && p.number == videoFile.EpisodeNumber);
+
+            if (thisEpisode == null) return;
+
+            videoFile.EpisodeName = thisEpisode.name;
+        }
+
+        private static (string?, int?) GetSeriesDetailsFromApi(TVMazeAPI tvMazeApi, string originalTitle)
+        {
+            (string?, int?) apiResponse = (null, null);
             int errorCount = 0;
 
             while (errorCount <= 2)
             {
                 apiResponse = tvMazeApi.GetSeriesTitle(originalTitle);
-                if (apiResponse != ErrorResponse)
+                if (apiResponse.Item1 != ErrorResponse)
                     break;
 
                 errorCount++;

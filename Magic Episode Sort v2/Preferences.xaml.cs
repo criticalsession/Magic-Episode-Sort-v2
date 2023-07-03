@@ -30,6 +30,7 @@ namespace Magic_Episode_Sort_v2
             chkOpenOutputDirectory.IsChecked = SettingsManager.OpenOutputDirectoryAfterSort;
             chkUseTVMazeAPI.IsChecked = SettingsManager.UseTVMazeAPI;
             txtTargetDirectory.Text = SettingsManager.OutputDirectory;
+            chkRenameFilenames.IsChecked = SettingsManager.RenameFilenames;
 
             if (!chkSearchSubFolders.IsChecked.GetValueOrDefault(false))
             {
@@ -50,6 +51,7 @@ namespace Magic_Episode_Sort_v2
             SettingsManager.SearchSubFolders = chkSearchSubFolders.IsChecked.GetValueOrDefault(false);
             SettingsManager.OpenOutputDirectoryAfterSort = chkOpenOutputDirectory.IsChecked.GetValueOrDefault(false);
             SettingsManager.UseTVMazeAPI = chkUseTVMazeAPI.IsChecked.GetValueOrDefault(false);
+            SettingsManager.RenameFilenames = SettingsManager.UseTVMazeAPI ? chkRenameFilenames.IsChecked.GetValueOrDefault(false) : false;
             SettingsManager.OutputDirectory = txtTargetDirectory.Text;
 
             SettingsManager.SaveSettings();
@@ -82,6 +84,19 @@ namespace Magic_Episode_Sort_v2
             else
             {
                 chkRecursiveSearchSubFolders.IsEnabled = true;
+            }
+        }
+
+        private void chkUseTVMazeAPI_Click(object sender, RoutedEventArgs e)
+        {
+            if (!chkUseTVMazeAPI.IsChecked.GetValueOrDefault(false))
+            {
+                chkRenameFilenames.IsChecked = false;
+                chkRenameFilenames.IsEnabled = false;
+            }
+            else
+            {
+                chkRenameFilenames.IsEnabled = true;
             }
         }
     }

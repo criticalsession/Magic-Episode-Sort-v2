@@ -14,6 +14,7 @@ namespace TheMagic.Models
         public bool useTvMaze { get; set; }
         public string outputDirectory { get; set; }
         public bool openOutput { get; set; }
+        public bool renameFilenames { get; set; }
 
         internal void Fill(Settings settings)
         {
@@ -23,6 +24,7 @@ namespace TheMagic.Models
             recursive = settings.recursiveSearchSubFolders;
             searchSub = settings.searchSubFolders;
             useTvMaze = settings.useTVMazeApi;
+            renameFilenames = settings.renameFilenames;
         }
     }
 }

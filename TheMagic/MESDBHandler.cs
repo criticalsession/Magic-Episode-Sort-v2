@@ -38,6 +38,7 @@ namespace TheMagic
 	                ""askNew""	INTEGER NOT NULL DEFAULT 1,
 	                ""searchSub""	INTEGER NOT NULL DEFAULT 1,
 	                ""recursive""	INTEGER NOT NULL DEFAULT 1,
+                    ""renameFilenames""	INTEGER NOT NULL DEFAULT 0,
 	                ""useTvMaze""	INTEGER NOT NULL DEFAULT 0,
 	                ""outputDirectory""	TEXT NOT NULL,
 	                ""openOutput""	INTEGER NOT NULL DEFAULT 0
@@ -51,6 +52,27 @@ namespace TheMagic
             }
 
             CreateSkipDirectoriesTable();
+        }
+
+        public static void RunDBUpdates()
+        {
+            // TODO: add versioning
+            using (SqliteConnection conn = GetConnection())
+            {
+                if (!ColExists("Settings", "renameFilenames"))
+                    conn.Execute("ALTER TABLE Settings ADD COLUMN renameFilenames INTEGER NOT NULL DEFAULT 0");
+            }
+        }
+
+        private static bool ColExists(string table, string column)
+        {
+            using (SqliteConnection conn = GetConnection())
+            {
+                int rowCount = conn.ExecuteScalar<int>("SELECT count(*) FROM pragma_table_info(@TableName) WHERE name=@ColumnName;", new { TableName = table, ColumnName = column });
+                if (rowCount > 0) return true;
+            }
+
+            return false;
         }
 
         private static void CreateSkipDirectoriesTable()
@@ -102,7 +124,8 @@ namespace TheMagic
                         outputDirectory = loaded.outputDirectory,
                         recursiveSearchSubFolders = loaded.recursive,
                         searchSubFolders = loaded.searchSub,
-                        useTVMazeApi = loaded.useTvMaze
+                        useTVMazeApi = loaded.useTvMaze,
+                        renameFilenames = loaded.renameFilenames
                     };
 
                     CheckOutputDirectoryExists(result);
@@ -134,8 +157,8 @@ namespace TheMagic
 
                 if (isNew)
                 {
-                    conn.Execute("insert into Settings(askNew, openOutput, outputDirectory, recursive, searchSub, useTvMaze) values " +
-                        "(@askNew, @openOutput, @outputDirectory, @recursive, @searchSub, @useTvMaze)", model);
+                    conn.Execute("insert into Settings(askNew, openOutput, outputDirectory, recursive, searchSub, useTvMaze, renameFilenames) values " +
+                        "(@askNew, @openOutput, @outputDirectory, @recursive, @searchSub, @useTvMaze, @renameFilenames)", model);
                 }
                 else
                 {
@@ -145,6 +168,7 @@ namespace TheMagic
                         "outputDirectory = @outputDirectory," +
                         "recursive = @recursive," +
                         "searchSub = @searchSub," +
+                        "renameFilenames = @renameFilenames," +
                         "useTvMaze = @useTvMaze", model);
                 }
             }
