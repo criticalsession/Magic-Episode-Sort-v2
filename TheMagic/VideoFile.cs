@@ -156,7 +156,7 @@ namespace TheMagic
         {
             if (String.IsNullOrEmpty(EpisodeName))
             {
-                return String.Format("{0} > S{1} > {2}", SeriesTitle.CustomTitle, SeasonNumber.ToString().PadLeft(2, '0'), FileName);
+                return String.Format("{0} > S{1}{2} > {3}", SeriesTitle.CustomTitle, SeasonNumber.ToString().PadLeft(2, '0'), EpisodeNumber > 0 ? "E" + EpisodeNumber : "", FileName);
             }
             else
             {
