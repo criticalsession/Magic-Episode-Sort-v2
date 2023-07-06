@@ -58,8 +58,8 @@
             <StackPanel Orientation="Vertical" DockPanel.Dock="Left">
                 <TextBlock Name="lblStatus" VerticalAlignment="Top" Margin="10 10 0 0" FontSize="14" FontWeight="Bold" DockPanel.Dock="Left" Text="Initializing..." />
             </StackPanel>
-            <Button Name="btnSort" IsEnabled="False" DockPanel.Dock="Right" Padding="0" Margin="10" Cursor="Hand" HorizontalAlignment="Right" Width="100" FontSize="13" Click="btnSort_Click">Sort</Button>
-            <Button Name="btnRefresh" DockPanel.Dock="Right" Padding="0" Margin="10" Cursor="Hand" HorizontalAlignment="Right" Width="100" FontSize="13" Click="btnRefresh_Click">Refresh</Button>
+            <Button Name="btnSort" IsEnabled="True" DockPanel.Dock="Right" Padding="0" Margin="3" Cursor="Hand" HorizontalAlignment="Right" Width="100" FontSize="13" Click="btnSort_Click" BorderBrush="{x:Null}" Background="#FF6FC874" Foreground="White">Sort</Button>
+            <Button Name="btnRefresh" DockPanel.Dock="Right" Padding="0" Margin="3" Cursor="Hand" HorizontalAlignment="Right" Width="100" FontSize="13" Click="btnRefresh_Click" Background="#FFE6E6E6" BorderBrush="{x:Null}">Refresh</Button>
         </DockPanel>
         
         <StatusBar Grid.Row="4" Padding="10 0" BorderBrush="Black" BorderThickness="0 1 0 0">
@@ -73,7 +73,7 @@
                 <TextBlock Name="lblEpisodesFound" FontSize="11" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock Text="Version: 2.0" FontSize="11" />
+                <TextBlock Text="Version: 2.2.2" FontSize="11" />
             </StatusBarItem>
         </StatusBar>
     </Grid>
