@@ -13,7 +13,7 @@ Simply:
 
 ## 1.0 Setup
 
-To download the latest installer head over to the releases section and get the latest release. Magic Episode Sort is currently only supported on Windows.
+To download the latest installer head over to the [releases section](https://github.com/criticalsession/Magic-Episode-Sort-v2/releases) and get the latest release. Magic Episode Sort is currently only supported on Windows.
 
 ## 2.0 Preferences
 
