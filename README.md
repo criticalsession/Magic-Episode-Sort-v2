@@ -26,22 +26,22 @@ The best way to set up Magic Episode Sort is to simply turn on all available opt
 
 #### Directory Search
 
-- "Search sub-folders": When checked, allows Magic Episode Sort to search sub-folders inside the source directories. Default: ON.
+- "Search sub-folders": When checked, allows Magic Episode Sort to search sub-folders inside the source directories.
 
-- "Recursively search sub-folders": When checked, Magic Episode Sort will follow all sub-folders to the end. Default: ON.
+- "Recursively search sub-folders": When checked, Magic Episode Sort will follow all sub-folders to the end.
 
 - "Edit Sources...": Click to open the Sources window and select folders to search.
 
 #### After Searching...
 
 - "Ask to confirm new series titles": When new series titles are found, Magic Episode Sort will ask you to confirm that what it extracted is the correct series title.
-Files often omit brackets and apostrophes in the series title section, so this is where you would update those mistakes. Default: ON.
+Files often omit brackets and apostrophes in the series title section, so this is where you would update those mistakes.
 
 - "Use TVMaze API for series titles": After getting the series title from the filename, Magic Episode Sort will query the TVMaze API in an attempt to 
-get a more accurate title. You will still be asked to confirm. Default: OFF.
+get a more accurate title. You will still be asked to confirm.
 
 - "Rename filenames to episode name (needs TVMaze API)": If TVMaze API is turned ON, and the series title was found in the API, Magic Episode Sort will attempt
-to rename the file to the format: `Series Title - SXXEYY - Episode Name`. Default: OFF.
+to rename the file to the format: `Series Title - SXXEYY - Episode Name`.
 
 #### Output
 
@@ -49,4 +49,4 @@ to rename the file to the format: `Series Title - SXXEYY - Episode Name`. Defaul
 
 #### After Sorting...
 
-- "Open output directory in explorer": After sorting, Magic Episode Sort will open the assigned output directory in Windows Explorer. Default: OFF.
+- "Open output directory in explorer": After sorting, Magic Episode Sort will open the assigned output directory in Windows Explorer.
