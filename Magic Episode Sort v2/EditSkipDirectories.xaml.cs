@@ -37,8 +37,14 @@ namespace Magic_Episode_Sort_v2
 
         private void btnSelectDirectory_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new CommonOpenFileDialog();
-            dialog.IsFolderPicker = true;
+            var dialog = new CommonOpenFileDialog()
+            {
+                IsFolderPicker = true,
+                Multiselect = false,
+                EnsurePathExists = true,
+                Title = "Select Directory to Skip"
+            };
+
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 txtAddDirectory.Text = dialog.FileName;

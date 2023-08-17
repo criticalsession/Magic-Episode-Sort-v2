@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="" Height="637" Width="484" Icon="/MESIcon.png"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary Source="Styles.xaml"/>
+    </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Name="firstRow" Height="60"></RowDefinition>

@@ -7,6 +7,9 @@
         mc:Ignorable="d" Icon="/MESIcon.png"
         Title="Welcome to Magic Episode Sort" Height="350" Width="400" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary Source="Styles.xaml"/>
+    </Window.Resources>
     <StackPanel Orientation="Vertical" Margin="10">
         <TextBlock TextWrapping="Wrap" FontSize="14">
             Welcome to <Bold>Magic Episode Sort</Bold> v2.0.0  <Image Source="/MESIcon.png" Width="16"></Image><LineBreak /><LineBreak />
@@ -21,6 +24,6 @@
         <Border Height="20"></Border>
         <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center">Magic Episode Sort and its developers do not condone piracy.</TextBlock>
         <Border Height="20"></Border>
-        <Button Height="30" Cursor="Hand" Click="Button_Click">Continue</Button>
+        <Button Height="30" Cursor="Hand" Click="Button_Click" Style="{StaticResource GreenButton}">Continue</Button>
     </StackPanel>
 </Window>

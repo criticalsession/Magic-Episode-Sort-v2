@@ -5,8 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d"
-        Title="Magic Episode Sort > Preferences" Height="432" Width="451" Icon="/MESIcon.png"
+        Title="Magic Episode Sort > Preferences" Height="440" Width="451" Icon="/MESIcon.png"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary Source="Styles.xaml"/>
+    </Window.Resources>
     <StackPanel Orientation="Vertical" Margin="10">
         <GroupBox Header="Directory Search" Padding="10">
             <StackPanel Orientation="Vertical" Margin="0">
@@ -34,7 +37,7 @@
             <StackPanel Orientation="Horizontal" Margin="0">
                 <Label FontSize="14">Output Directory:</Label>
                 <TextBox Name="txtTargetDirectory" Width="200" IsReadOnly="True" Text="C:/downloads/sorted-episodes" VerticalAlignment="Center" Padding="0 5" FontSize="12" />
-                <Button Padding="10 0" Click="SelectTargetDirectory_Click">...</Button>
+                <Button Padding="10 0" Click="SelectTargetDirectory_Click" Style="{StaticResource NoCorner}" Width="13">...</Button>
             </StackPanel>
         </GroupBox>
 
@@ -53,7 +56,7 @@
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="1" Cursor="Hand" Click="Cancel_Click">Cancel</Button>
-            <Button Grid.Column="2" Margin="5 0 0 0" Cursor="Hand" FontWeight="Bold" Click="Save_Click">Save</Button>
+            <Button Grid.Column="2" Margin="5 0 0 0" Cursor="Hand" Click="Save_Click" Style="{StaticResource GreenButton}">Save</Button>
         </Grid>
     </StackPanel>
 </Window>

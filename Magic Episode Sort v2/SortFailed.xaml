@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         Title="Magic Episode Sort > Sort Failed" Height="372" Width="381" Icon="/MESIcon.png"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
+    <Window.Resources>
+        <ResourceDictionary Source="Styles.xaml"/>
+    </Window.Resources>
     <StackPanel Orientation="Vertical" Margin="10">
         <TextBlock Name="txtInformation" FontSize="14" TextWrapping="Wrap">Warning: <Bold>Magic Episode Sort</Bold> could not successfully sort all episode files.</TextBlock>
         <Line Height="5"></Line>

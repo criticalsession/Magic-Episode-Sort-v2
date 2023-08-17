@@ -6,6 +6,9 @@
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/MESIcon.png"
         Title="Magic Episode Sort > Edit Sources" Height="550" Width="450" Loaded="Window_Loaded">
+    <Window.Resources>
+        <ResourceDictionary Source="Styles.xaml"/>
+    </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="25"></RowDefinition>
@@ -13,7 +16,7 @@
             <RowDefinition Height="25"></RowDefinition>
             <RowDefinition Height="25"></RowDefinition>
         </Grid.RowDefinitions>
-        
+
         <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="14" VerticalAlignment="Center">Sources:</TextBlock>
 
         <!--
@@ -35,18 +38,18 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
+
         <TextBlock Grid.Row="2" FontWeight="Bold" FontSize="14" VerticalAlignment="Center">Add Source:</TextBlock>
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="130"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="100"></ColumnDefinition>
-                <ColumnDefinition Width="3*"></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <Button Grid.Column="0" Cursor="Hand" Name="btnAddSourceDirectory" Click="btnAddSourceDirectory_Click">Select Directory</Button>
-            <TextBox Grid.Column="1" IsReadOnly="True" Padding="0 3 0 0" Margin="0 0 5 0" Name="txtAddSource" />
+            <TextBox Margin="5 0" Grid.Column="1" IsReadOnly="True" Padding="0 3 0 0" Name="txtAddSource" />
             <Button Grid.Column="2" Cursor="Hand" Name="btnAddSource" Click="btnAddSource_Click" IsEnabled="False">Add Source</Button>
         </Grid>
     </Grid>

@@ -37,8 +37,14 @@ namespace Magic_Episode_Sort_v2
 
         private void btnAddSourceDirectory_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new CommonOpenFileDialog();
-            dialog.IsFolderPicker = true;
+            var dialog = new CommonOpenFileDialog()
+            {
+                IsFolderPicker = true,
+                Multiselect = false,
+                EnsurePathExists = true,
+                Title = "Select Source Directory"
+            };
+
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 txtAddSource.Text = dialog.FileName;

@@ -12,7 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Error handling for unexpected errors during sort (e.g., file in use by another process).
 - Renaming of filenames if TVMaze API enabled to "Series Title - SXEY - Episode Title".
 - Episode number to list of episodes found.
-- Colors :)
+
+### Changed
+
+- Colours!
 
 ## [2.1.0] - 2023-04-15
 

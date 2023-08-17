@@ -60,13 +60,24 @@ namespace Magic_Episode_Sort_v2
 
         private void SelectTargetDirectory_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new CommonOpenFileDialog();
-            dialog.IsFolderPicker = true;
+            string initDirectory = SettingsManager.OutputDirectory;
+            if (String.IsNullOrEmpty(initDirectory)) initDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            var dialog = new CommonOpenFileDialog()
+            {
+                IsFolderPicker = true,
+                Multiselect = false,
+                EnsurePathExists = true,
+                Title = "Select Target Output Directory",
+                InitialDirectory = initDirectory
+            };
+
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 txtTargetDirectory.Text = dialog.FileName;
-                this.Focus();
             }
+
+            this.Focus();
         }
 
         private void btnEditSources_Click(object sender, RoutedEventArgs e)
