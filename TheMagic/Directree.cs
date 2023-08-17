@@ -103,12 +103,14 @@ namespace TheMagic
 
             foreach (var videoFile in VideoFiles)
             {
-                TVMazeSeriesData data = seriesData.FirstOrDefault(p => p.OriginalTitle == videoFile.SeriesTitle.OriginalTitle);
+                string titleToSearch = SettingsManager.CustomSeriesTitleManager.GetCustomSeriesTitle(videoFile.SeriesTitle.OriginalTitle)?.CustomTitle ?? videoFile.SeriesTitle.OriginalTitle;
+
+                TVMazeSeriesData? data = seriesData.FirstOrDefault(p => p.OriginalTitle == titleToSearch);
                 if (data == null)
                 {
                     data = new TVMazeSeriesData()
                     {
-                        OriginalTitle = videoFile.SeriesTitle.OriginalTitle,
+                        OriginalTitle = titleToSearch,
                         SeriesTitle = null,
                         SeriesId = null,
                         EpisodeData = null
@@ -116,7 +118,7 @@ namespace TheMagic
 
                     if (tvMazeApi != null)
                     {
-                        var apiResponse = GetTitleAndIdFromTVMazeApi(tvMazeApi, videoFile.SeriesTitle.OriginalTitle);
+                        var apiResponse = GetTitleAndIdFromTVMazeApi(tvMazeApi, titleToSearch);
                         data.SeriesTitle = apiResponse.Item1;
                         data.SeriesId = apiResponse.Item2;
 
