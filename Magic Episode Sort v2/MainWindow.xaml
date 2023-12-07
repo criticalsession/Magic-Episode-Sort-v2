@@ -31,8 +31,6 @@
                 <MenuItem Header="_Preferences" Click="Preferences_Click" />
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="_Using Magic Episode Sort" />
-                <Separator />
                 <MenuItem Header="_About" Click="About_Click" />
                 <MenuItem Header="View Source on _Github" Click="Github_Click" />
             </MenuItem>

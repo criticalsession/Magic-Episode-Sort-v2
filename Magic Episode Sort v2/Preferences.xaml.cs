@@ -31,6 +31,7 @@ namespace Magic_Episode_Sort_v2
             chkUseTVMazeAPI.IsChecked = SettingsManager.UseTVMazeAPI;
             txtTargetDirectory.Text = SettingsManager.OutputDirectory;
             chkRenameFilenames.IsChecked = SettingsManager.RenameFilenames;
+            chkDeleteParent.IsChecked = SettingsManager.DeleteParentFolder;
 
             if (!chkSearchSubFolders.IsChecked.GetValueOrDefault(false))
             {
@@ -53,6 +54,7 @@ namespace Magic_Episode_Sort_v2
             SettingsManager.UseTVMazeAPI = chkUseTVMazeAPI.IsChecked.GetValueOrDefault(false);
             SettingsManager.RenameFilenames = SettingsManager.UseTVMazeAPI ? chkRenameFilenames.IsChecked.GetValueOrDefault(false) : false;
             SettingsManager.OutputDirectory = txtTargetDirectory.Text;
+            SettingsManager.DeleteParentFolder = chkDeleteParent.IsChecked.GetValueOrDefault(false);
 
             SettingsManager.SaveSettings();
             this.Close();

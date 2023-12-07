@@ -95,6 +95,16 @@ namespace TheMagic
             set => settings.renameFilenames = value;
         }
 
+        public static bool DeleteParentFolder
+        {
+            get
+            {
+                LoadSettings();
+                return settings.deleteParentFolder;
+            }
+            set => settings.deleteParentFolder = value;
+        }
+
         public static CustomSeriesTitleManager CustomSeriesTitleManager
         {
             get

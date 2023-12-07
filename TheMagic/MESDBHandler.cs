@@ -61,6 +61,9 @@ namespace TheMagic
             {
                 if (!ColExists("Settings", "renameFilenames"))
                     conn.Execute("ALTER TABLE Settings ADD COLUMN renameFilenames INTEGER NOT NULL DEFAULT 0");
+
+                if (!ColExists("Settings", "deleteParent"))
+                    conn.Execute("ALTER TABLE Settings ADD COLUMN deleteParent INTEGER NOT NULL DEFAULT 0");
             }
         }
 
@@ -125,7 +128,8 @@ namespace TheMagic
                         recursiveSearchSubFolders = loaded.recursive,
                         searchSubFolders = loaded.searchSub,
                         useTVMazeApi = loaded.useTvMaze,
-                        renameFilenames = loaded.renameFilenames
+                        renameFilenames = loaded.renameFilenames,
+                        deleteParentFolder = loaded.deleteParent
                     };
 
                     CheckOutputDirectoryExists(result);
@@ -157,8 +161,8 @@ namespace TheMagic
 
                 if (isNew)
                 {
-                    conn.Execute("insert into Settings(askNew, openOutput, outputDirectory, recursive, searchSub, useTvMaze, renameFilenames) values " +
-                        "(@askNew, @openOutput, @outputDirectory, @recursive, @searchSub, @useTvMaze, @renameFilenames)", model);
+                    conn.Execute("insert into Settings(askNew, openOutput, outputDirectory, recursive, searchSub, useTvMaze, renameFilenames, deleteParent) values " +
+                        "(@askNew, @openOutput, @outputDirectory, @recursive, @searchSub, @useTvMaze, @renameFilenames, @deleteParent)", model);
                 }
                 else
                 {
@@ -169,7 +173,8 @@ namespace TheMagic
                         "recursive = @recursive," +
                         "searchSub = @searchSub," +
                         "renameFilenames = @renameFilenames," +
-                        "useTvMaze = @useTvMaze", model);
+                        "useTvMaze = @useTvMaze," +
+                        "deleteParent = @deleteParent", model);
                 }
             }
         }

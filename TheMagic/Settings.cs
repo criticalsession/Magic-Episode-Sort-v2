@@ -16,5 +16,6 @@ namespace TheMagic
         internal bool openOutputDirectoryAfterSort = false;
         internal string outputDirectory = "";
         internal bool renameFilenames = true;
+        internal bool deleteParentFolder = false;
     }
 }

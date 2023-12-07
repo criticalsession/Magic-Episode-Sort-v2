@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d"
-        Title="Magic Episode Sort > Preferences" Height="440" Width="451" Icon="/MESIcon.png"
+        Title="Magic Episode Sort > Preferences" Height="459" Width="523" Icon="/MESIcon.png"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary Source="Styles.xaml"/>
@@ -45,6 +45,8 @@
             <StackPanel Orientation="Vertical" Margin="0">
                 <CheckBox Name="chkOpenOutputDirectory" FontSize="14"
                 Content="Open output directory in explorer" IsThreeState="False" />
+                <CheckBox Name="chkDeleteParent" FontSize="14"
+                Content="Delete parent folder if folder name matches video filename" IsThreeState="False" />
             </StackPanel>
         </GroupBox>
 

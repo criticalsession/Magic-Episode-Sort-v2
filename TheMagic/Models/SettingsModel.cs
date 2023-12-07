@@ -15,6 +15,7 @@ namespace TheMagic.Models
         public string outputDirectory { get; set; }
         public bool openOutput { get; set; }
         public bool renameFilenames { get; set; }
+        public bool deleteParent { get; set; }
 
         internal void Fill(Settings settings)
         {
@@ -25,6 +26,7 @@ namespace TheMagic.Models
             searchSub = settings.searchSubFolders;
             useTvMaze = settings.useTVMazeApi;
             renameFilenames = settings.renameFilenames;
+            deleteParent = settings.deleteParentFolder;
         }
     }
 }
