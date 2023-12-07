@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d"
-        Title="Magic Episode Sort > Preferences" Height="459" Width="523" Icon="/MESIcon.png"
+        Title="Magic Episode Sort > Preferences" Height="459" Width="538" Icon="/MESIcon.png"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <ResourceDictionary Source="Styles.xaml"/>
@@ -35,9 +35,9 @@
         
         <GroupBox Header="Output"  Padding="10">
             <StackPanel Orientation="Horizontal" Margin="0">
-                <Label FontSize="14">Output Directory:</Label>
-                <TextBox Name="txtTargetDirectory" Width="200" IsReadOnly="True" Text="C:/downloads/sorted-episodes" VerticalAlignment="Center" Padding="0 5" FontSize="12" />
-                <Button Padding="10 0" Click="SelectTargetDirectory_Click" Style="{StaticResource NoCorner}" Width="13">...</Button>
+                <Label Name="lblTargetDirectory" FontSize="14">Output Directory:</Label>
+                <TextBox Name="txtTargetDirectory" Width="200" Text="C:/downloads/sorted-episodes" VerticalAlignment="Center" Padding="0 5" FontSize="12" />
+                <Button Name="btnSelectDirectory" Margin="5 0" Padding="5 0" Click="SelectTargetDirectory_Click" Width="146">Change Directory</Button>
             </StackPanel>
         </GroupBox>
 

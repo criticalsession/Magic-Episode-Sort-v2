@@ -38,6 +38,21 @@ namespace Magic_Episode_Sort_v2
                 chkRecursiveSearchSubFolders.IsChecked = false;
                 chkRecursiveSearchSubFolders.IsEnabled = false;
             }
+
+            if (String.IsNullOrEmpty(SettingsManager.OutputDirectory))
+            {
+                txtTargetDirectory.Visibility = Visibility.Collapsed;
+                lblTargetDirectory.Visibility = Visibility.Collapsed;
+                btnSelectDirectory.Content = "Select Output Directory";
+                btnSelectDirectory.Width = 200;
+            } 
+            else
+            {
+                txtTargetDirectory.Visibility = Visibility.Visible;
+                lblTargetDirectory.Visibility = Visibility.Visible;
+                btnSelectDirectory.Content = "Change Directory";
+                btnSelectDirectory.Width = 150;
+            }
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -77,6 +92,10 @@ namespace Magic_Episode_Sort_v2
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
                 txtTargetDirectory.Text = dialog.FileName;
+                txtTargetDirectory.Visibility = Visibility.Visible;
+                lblTargetDirectory.Visibility = Visibility.Visible;
+                btnSelectDirectory.Content = "Change Directory";
+                btnSelectDirectory.Width = 150;
             }
 
             this.Focus();
