@@ -305,7 +305,7 @@ namespace Magic_Episode_Sort_v2
 
             SettingsManager.SaveSettings();
 
-            Thread.Sleep(1000);
+            Thread.Sleep(200);
 
             if (directories.VideoFiles.Any(p => p.MoveError != EpisodeMover.MoveErrors.None))
             {

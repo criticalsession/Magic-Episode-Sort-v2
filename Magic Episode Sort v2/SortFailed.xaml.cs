@@ -37,6 +37,20 @@ namespace Magic_Episode_Sort_v2
         {
             lstAlreadyExist.ItemsSource = failedVideoFiles.Where(p => p.MoveError == EpisodeMover.MoveErrors.FileAlreadyExists).Select(p => p.SourcePath);
             lstNotFound.ItemsSource = failedVideoFiles.Where(p => p.MoveError == EpisodeMover.MoveErrors.FileDoesNotExist).Select(p => p.SourcePath);
+
+            if (failedVideoFiles.Any(p => p.MoveError == EpisodeMover.MoveErrors.CouldNotDeleteDirectory))
+            {
+                this.Height = 510;
+                txtDeleteError.Visibility = Visibility.Visible;
+                lstDeleteError.Visibility = Visibility.Visible;
+                lstDeleteError.ItemsSource = failedVideoFiles.Where(p => p.MoveError == EpisodeMover.MoveErrors.CouldNotDeleteDirectory).Select(p => p.SourcePath);
+            }
+            else
+            {
+                this.Height = 375;
+                txtDeleteError.Visibility = Visibility.Collapsed;
+                lstDeleteError.Visibility = Visibility.Collapsed;
+            }
         }
     }
 }

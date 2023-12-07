@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d"
-        Title="Magic Episode Sort > Sort Failed" Height="372" Width="381" Icon="/MESIcon.png"
+        Title="Magic Episode Sort > Sort Failed" Height="510" Width="381" Icon="/MESIcon.png"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
     <Window.Resources>
         <ResourceDictionary Source="Styles.xaml"/>
@@ -14,13 +14,14 @@
         <TextBlock Name="txtInformation" FontSize="14" TextWrapping="Wrap">Warning: <Bold>Magic Episode Sort</Bold> could not successfully sort all episode files.</TextBlock>
         <Line Height="5"></Line>
         <TextBlock TextWrapping="Wrap">The following files no longer exist in the Source directories. This will automatically be resolved when you close this window.</TextBlock>
-        <ListView Height="100" Name="lstNotFound">
-            
-        </ListView>
+        <ListView Height="100" Name="lstNotFound"></ListView>
+
         <Line Height="5"></Line>
         <TextBlock TextWrapping="Wrap">The following files already exist in the Output directory. To fix this, please delete the video files before attempting to sort again.</TextBlock>
-        <ListView Height="100" Name="lstAlreadyExist">
+        <ListView Height="100" Name="lstAlreadyExist"></ListView>
 
-        </ListView>
+        <Line Height="5"></Line>
+        <TextBlock Name="txtDeleteError" TextWrapping="Wrap"><Run Text="The parent directories of the following files could not be deleted. Files were still sorted."/></TextBlock>
+        <ListView Height="100" x:Name="lstDeleteError"/>
     </StackPanel>
 </Window>

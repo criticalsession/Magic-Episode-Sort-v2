@@ -14,6 +14,8 @@ namespace TheMagic
         public string TargetPath { get; set; }
         public SeriesTitle SeriesTitle { get; set; }
         public string FileName { get; set; }
+        public string? ParentDirectory => Path.GetDirectoryName(SourcePath);
+        public string? ParentDirectoryName => Path.GetFileName(ParentDirectory);
         public string Extension { get; set; }
         public string? EpisodeName { get; set; }
         public int SeasonNumber { get; set; }

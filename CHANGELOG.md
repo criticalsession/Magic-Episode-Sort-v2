@@ -9,14 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- New setting to delete episode parent folder if it matches the video filename
+
 ### Changed
 
 - Can now resize and maximize the main window
+- Settings now only show output directory text box if one is set, otherwise just the button is shown
 
 ### Fixed
 
 - When searching TVMaze API for episode information now uses custom title if set
 - About window was showing the wrong version number and release date
+
+### Removed
+
+- "Using Magic Episode Sort" link in Help Menu as currently not finished
 
 ## [2.2.3] - 2023-08-17
 
