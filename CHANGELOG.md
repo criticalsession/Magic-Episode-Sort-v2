@@ -11,9 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Can now resize and maximize the main window
+
 ### Fixed
 
 - When searching TVMaze API for episode information now uses custom title if set
+- About window was showing the wrong version number and release date
 
 ## [2.2.3] - 2023-08-17
 

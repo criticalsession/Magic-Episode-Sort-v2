@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
         mc:Ignorable="d"
-        Title="Magic Episode Sort" Height="600" Width="860"
-        ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen" Activated="Window_Activated" Icon="/MESIcon.png">
+        Title="Magic Episode Sort" Height="600" Width="860" MinHeight="400" MinWidth="600"
+        WindowStartupLocation="CenterScreen" Activated="Window_Activated" Icon="/MESIcon.png">
     <Window.Resources>
         <ResourceDictionary Source="Styles.xaml"/>
     </Window.Resources>
