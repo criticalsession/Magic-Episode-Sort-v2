@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Can now resize and maximize the main window
-- Settings now only show output directory text box if one is set, otherwise just the button is shown
+- Settings now only show output directory textbox if one is set, otherwise just the button is shown
 
 ### Fixed
 
