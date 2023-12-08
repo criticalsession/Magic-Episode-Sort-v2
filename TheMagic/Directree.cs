@@ -22,6 +22,7 @@ namespace TheMagic
         public event EventHandler? DirectorySearched;
         public event EventHandler? FoundVideoFile;
         public event EventHandler? FillingCustomSeriesTitles;
+        public event EventHandler? UpdateStatus;
 
         public List<string> DistinctSeriesTitles
             => VideoFiles.Select(p => p.SeriesTitle.CustomTitle).Distinct().ToList();
@@ -103,6 +104,7 @@ namespace TheMagic
 
             foreach (var videoFile in VideoFiles)
             {
+                UpdateStatus?.Invoke(this, EventArgs.Empty);
                 string titleToSearch = SettingsManager.CustomSeriesTitleManager.GetCustomSeriesTitle(videoFile.SeriesTitle.OriginalTitle)?.CustomTitle ?? videoFile.SeriesTitle.OriginalTitle;
 
                 TVMazeSeriesData? data = seriesData.FirstOrDefault(p => p.OriginalTitle == titleToSearch);

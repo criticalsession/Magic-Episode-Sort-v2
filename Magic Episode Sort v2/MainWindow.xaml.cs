@@ -170,6 +170,11 @@ namespace Magic_Episode_Sort_v2
                     });
                 };
 
+                directories.UpdateStatus += (sender, e) =>
+                {
+                    UpdateStatusBar();
+                };
+
                 directories.InitializeAndPopulateVideoData(SettingsManager.DirectoriesManager.SourceDirectories, 
                     SettingsManager.SearchSubFolders, SettingsManager.RecursiveSearchSubFolders);
 
