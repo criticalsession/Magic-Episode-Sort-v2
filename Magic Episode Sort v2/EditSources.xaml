@@ -1,37 +1,56 @@
-﻿<Window x:Class="Magic_Episode_Sort_v2.EditSources"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
-        mc:Ignorable="d" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Icon="/MESIcon.png"
-        Title="Magic Episode Sort > Edit Sources" Height="550" Width="450" Loaded="Window_Loaded">
+﻿<Window
+    x:Class="Magic_Episode_Sort_v2.EditSources"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Magic Episode Sort &gt; Edit Sources"
+    Width="450"
+    Height="550"
+    Icon="/MESIcon.png"
+    Loaded="Window_Loaded"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.Resources>
-        <ResourceDictionary Source="Styles.xaml"/>
+        <ResourceDictionary Source="Styles.xaml" />
     </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="25"></RowDefinition>
-            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="25" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="25" />
+            <RowDefinition Height="25" />
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" FontWeight="Bold" FontSize="14" VerticalAlignment="Center">Sources:</TextBlock>
+        <TextBlock
+            Grid.Row="0"
+            VerticalAlignment="Center"
+            FontSize="14"
+            FontWeight="Bold">
+            Sources:
+        </TextBlock>
 
         <!--
         <StackPanel Grid.Row="1" Orientation="Vertical" Name="pnlSources">
             <TextBlock Padding="0 5">C:\Users\Amante\source\repos\Magic Episode Sort v2\Magic Episode Sort v2\bin\Debug\net6.0-windows</TextBlock>
             <TextBlock Padding="0 5">C:\Drawing</TextBlock>
             <TextBlock Padding="0 5">C:\Drawing\3D Assets</TextBlock>
-        </StackPanel> -->
-        <ListView Grid.Row="1" Name="lstSources" MouseRightButtonUp="lstSources_MouseRightButtonUp">
+        </StackPanel>-->
+        <ListView
+            Name="lstSources"
+            Grid.Row="1"
+            MouseRightButtonUp="lstSources_MouseRightButtonUp">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding}" Padding="5">
+                    <TextBlock Padding="5" Text="{Binding}">
                         <TextBlock.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Delete Source" Name="ctxDeleteSource" Click="ctxDeleteSource_Click" />
+                                <MenuItem
+                                    Name="ctxDeleteSource"
+                                    Click="ctxDeleteSource_Click"
+                                    Header="Delete Source" />
                             </ContextMenu>
                         </TextBlock.ContextMenu>
                     </TextBlock>
@@ -39,18 +58,42 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <TextBlock Grid.Row="2" FontWeight="Bold" FontSize="14" VerticalAlignment="Center">Add Source:</TextBlock>
+        <TextBlock
+            Grid.Row="2"
+            VerticalAlignment="Center"
+            FontSize="14"
+            FontWeight="Bold">
+            Add Source:
+        </TextBlock>
 
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="130"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="100"></ColumnDefinition>
+                <ColumnDefinition Width="130" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="100" />
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Cursor="Hand" Name="btnAddSourceDirectory" Click="btnAddSourceDirectory_Click">Select Directory</Button>
-            <TextBox Margin="5 0" Grid.Column="1" IsReadOnly="True" Padding="0 3 0 0" Name="txtAddSource" />
-            <Button Grid.Column="2" Cursor="Hand" Name="btnAddSource" Click="btnAddSource_Click" IsEnabled="False">Add Source</Button>
+            <Button
+                Name="btnAddSourceDirectory"
+                Grid.Column="0"
+                Click="btnAddSourceDirectory_Click"
+                Cursor="Hand">
+                Select Directory
+            </Button>
+            <TextBox
+                Name="txtAddSource"
+                Grid.Column="1"
+                Margin="5,0"
+                Padding="0,3,0,0"
+                IsReadOnly="True" />
+            <Button
+                Name="btnAddSource"
+                Grid.Column="2"
+                Click="btnAddSource_Click"
+                Cursor="Hand"
+                IsEnabled="False">
+                Add Source
+            </Button>
         </Grid>
     </Grid>
 </Window>

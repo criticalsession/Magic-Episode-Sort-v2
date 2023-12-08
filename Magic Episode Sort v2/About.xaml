@@ -1,28 +1,35 @@
-﻿<Window x:Class="Magic_Episode_Sort_v2.About"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
-        mc:Ignorable="d"
-        Title="Magic Episode Sort > About" Height="268" Width="309" ResizeMode="NoResize" Icon="/MESIcon.png"
-        WindowStartupLocation="CenterScreen">
-    <Border Margin="10 10 10 0">
+﻿<Window
+    x:Class="Magic_Episode_Sort_v2.About"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Magic Episode Sort &gt; About"
+    Width="309"
+    Height="268"
+    Icon="/MESIcon.png"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+    <Border Margin="10,10,10,0">
         <StackPanel Orientation="Vertical">
-            <TextBlock FontSize="24" FontWeight="Bold">Magic Episode Sort
-                <Image Source="/MESIcon.png" Width="16"></Image>
+            <TextBlock FontSize="24" FontWeight="Bold">
+                Magic Episode Sort
+                <Image Width="16" Source="/MESIcon.png" />
             </TextBlock>
-            <TextBlock Text="Version 2.2.3 - The Great SQLite Migration" FontSize="14" />
-            <TextBlock Text="Released: 17 August, 2023"  FontSize="14" />
+            <TextBlock FontSize="14" Text="Version 2.2.3 - The Great SQLite Migration" />
+            <TextBlock FontSize="14" Text="Released: 17 August, 2023" />
             <Border Height="10" />
             <TextBlock TextWrapping="Wrap">
-                Thank you for downloading, using and supporting free and open source software.
-                <LineBreak /><LineBreak />
-                <Hyperlink NavigateUri="https://github.com/criticalsession/Magic-Episode-Sort-v2" RequestNavigate="Hyperlink_Click">Click here</Hyperlink> 
-                    to visit the project's github if you have any issues, feedback, feature requests or want to contribute!
-            </TextBlock>
+                Thank you for downloading, using and supporting free and open source software.<LineBreak /><LineBreak />
+                <Hyperlink NavigateUri="https://github.com/criticalsession/Magic-Episode-Sort-v2" RequestNavigate="Hyperlink_Click">Click here</Hyperlink>
+                to visit the project's github if you have any issues, feedback, feature requests or want to contribute!</TextBlock>
             <Border Height="10" />
-            <TextBlock FontWeight="Bold" HorizontalAlignment="Center" Text="// criticalsession" />
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontWeight="Bold"
+                Text="// criticalsession" />
         </StackPanel>
     </Border>
 </Window>

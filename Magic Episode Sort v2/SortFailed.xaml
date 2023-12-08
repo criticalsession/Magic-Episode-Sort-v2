@@ -1,27 +1,38 @@
-﻿<Window x:Class="Magic_Episode_Sort_v2.SortFailed"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
-        mc:Ignorable="d"
-        Title="Magic Episode Sort > Sort Failed" Height="510" Width="381" Icon="/MESIcon.png"
-        ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Activated="Window_Activated">
+﻿<Window
+    x:Class="Magic_Episode_Sort_v2.SortFailed"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Magic Episode Sort &gt; Sort Failed"
+    Width="381"
+    Height="510"
+    Activated="Window_Activated"
+    Icon="/MESIcon.png"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.Resources>
-        <ResourceDictionary Source="Styles.xaml"/>
+        <ResourceDictionary Source="Styles.xaml" />
     </Window.Resources>
-    <StackPanel Orientation="Vertical" Margin="10">
-        <TextBlock Name="txtInformation" FontSize="14" TextWrapping="Wrap">Warning: <Bold>Magic Episode Sort</Bold> could not successfully sort all episode files.</TextBlock>
-        <Line Height="5"></Line>
+    <StackPanel Margin="10" Orientation="Vertical">
+        <TextBlock
+            Name="txtInformation"
+            FontSize="14"
+            TextWrapping="Wrap">
+            Warning:<Bold>Magic Episode Sort</Bold>
+            could not successfully sort all episode files.</TextBlock>
+        <Line Height="5" />
         <TextBlock TextWrapping="Wrap">The following files no longer exist in the Source directories. This will automatically be resolved when you close this window.</TextBlock>
-        <ListView Height="100" Name="lstNotFound"></ListView>
+        <ListView Name="lstNotFound" Height="100" />
 
-        <Line Height="5"></Line>
+        <Line Height="5" />
         <TextBlock TextWrapping="Wrap">The following files already exist in the Output directory. To fix this, please delete the video files before attempting to sort again.</TextBlock>
-        <ListView Height="100" Name="lstAlreadyExist"></ListView>
+        <ListView Name="lstAlreadyExist" Height="100" />
 
-        <Line Height="5"></Line>
-        <TextBlock Name="txtDeleteError" TextWrapping="Wrap"><Run Text="The parent directories of the following files could not be deleted. Files were still sorted."/></TextBlock>
-        <ListView Height="100" x:Name="lstDeleteError"/>
+        <Line Height="5" />
+        <TextBlock Name="txtDeleteError" TextWrapping="Wrap"><Run Text="The parent directories of the following files could not be deleted. Files were still sorted." /></TextBlock>
+        <ListView x:Name="lstDeleteError" Height="100" />
     </StackPanel>
 </Window>

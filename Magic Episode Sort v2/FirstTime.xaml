@@ -1,29 +1,46 @@
-﻿<Window x:Class="Magic_Episode_Sort_v2.FirstTime"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
-        mc:Ignorable="d" Icon="/MESIcon.png"
-        Title="Welcome to Magic Episode Sort" Height="350" Width="400" ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen">
+﻿<Window
+    x:Class="Magic_Episode_Sort_v2.FirstTime"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Welcome to Magic Episode Sort"
+    Width="400"
+    Height="350"
+    Icon="/MESIcon.png"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
     <Window.Resources>
-        <ResourceDictionary Source="Styles.xaml"/>
+        <ResourceDictionary Source="Styles.xaml" />
     </Window.Resources>
-    <StackPanel Orientation="Vertical" Margin="10">
-        <TextBlock TextWrapping="Wrap" FontSize="14">
-            Welcome to <Bold>Magic Episode Sort</Bold> v2.0.0  <Image Source="/MESIcon.png" Width="16"></Image><LineBreak /><LineBreak />
-            As this seems to be the first time you're running this software, you will now be redirected 
-            to the <Italic>Preferences</Italic> window for setup. Remember you can always change these settings
-            by going to <Italic>Edit > Preferences</Italic> on subsequent runs.</TextBlock>
-        <Border Height="20"></Border>
-        <TextBlock TextWrapping="Wrap" FontSize="14">
+    <StackPanel Margin="10" Orientation="Vertical">
+        <TextBlock FontSize="14" TextWrapping="Wrap">
+            Welcome to<Bold>Magic Episode Sort</Bold>
+            v2.0.0
+            <Image Width="16" Source="/MESIcon.png" /><LineBreak /><LineBreak />
+            As this seems to be the first time you're running this software, you will now be redirected
+            to the<Italic>Preferences</Italic>
+            window for setup. Remember you can always change these settings
+            by going to<Italic>
+                Edit >Preferences
+            </Italic>
+            on subsequent runs.</TextBlock>
+        <Border Height="20" />
+        <TextBlock FontSize="14" TextWrapping="Wrap">
             Upgrading from v1.1.0 to v2.0.0? We'll now attempt to
             migrate your settings, custom series titles and sources.
         </TextBlock>
-        <Border Height="20"></Border>
-        <TextBlock TextWrapping="Wrap" HorizontalAlignment="Center">Magic Episode Sort and its developers do not condone piracy.</TextBlock>
-        <Border Height="20"></Border>
-        <Button Height="30" Cursor="Hand" Click="Button_Click" Style="{StaticResource GreenButton}">Continue</Button>
+        <Border Height="20" />
+        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap">Magic Episode Sort and its developers do not condone piracy.</TextBlock>
+        <Border Height="20" />
+        <Button
+            Height="30"
+            Click="Button_Click"
+            Cursor="Hand"
+            Style="{StaticResource GreenButton}">
+            Continue
+        </Button>
     </StackPanel>
 </Window>
