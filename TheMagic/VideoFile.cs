@@ -138,10 +138,10 @@ namespace TheMagic
                         // get the first episode number
                         if (matched.Contains("e") || matched.Contains("-"))
                         {
-                            matched = matched.Substring(0, matched.IndexOf(matched.Contains("e") ? "e" : "-"));
+                            matched = matched.Substring(0, matched.IndexOf(matched.Contains("e") ? "e" : "-")).Replace("-", "");
                         }
 
-                        return int.Parse(matched);
+                        int.Parse(matched);
                     }
                     else if (regex.Contains("x")) //DDXDD
                     {

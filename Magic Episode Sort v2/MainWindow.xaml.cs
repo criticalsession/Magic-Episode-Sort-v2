@@ -12,6 +12,7 @@ namespace Magic_Episode_Sort_v2
     public partial class MainWindow : Window
     {
         Directree directories = new Directree();
+        Stopwatch stopwatch = new Stopwatch();
 
         public MainWindow()
         {
@@ -136,6 +137,9 @@ namespace Magic_Episode_Sort_v2
         #region *** Search ***
         private void StartSearch()
         {
+            stopwatch.Reset();
+            stopwatch.Start();
+
             if (SettingsManager.DirectoriesManager.SourceDirectories.Count > 0)
             {
                 this.Dispatcher.Invoke(() =>
@@ -209,6 +213,7 @@ namespace Magic_Episode_Sort_v2
 
         private void FinishedSearch()
         {
+            stopwatch.Stop();
             if (String.IsNullOrEmpty(SettingsManager.OutputDirectory))
             {
                 this.Dispatcher.Invoke(() =>
@@ -251,6 +256,8 @@ namespace Magic_Episode_Sort_v2
                 List<SeriesTitle> newTitles = SettingsManager.CustomSeriesTitleManager.GetNewSeriesTitles(directories.VideoFiles);
                 if (newTitles.Count > 0 && SettingsManager.AskForNewSeriesNames)
                     new EditCustomSeriesTitles(directories.VideoFiles).ShowDialog();
+
+                lblEpisodesFound.Text += String.Format(" (in {0})", stopwatch.ElapsedMilliseconds > 1000 ? (stopwatch.ElapsedMilliseconds / 1000).ToString("N1") + "s" : stopwatch.ElapsedMilliseconds + "ms");
             });
         }
         #endregion

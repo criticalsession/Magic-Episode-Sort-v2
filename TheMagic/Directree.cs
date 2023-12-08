@@ -116,7 +116,7 @@ namespace TheMagic
                         EpisodeData = null
                     };
 
-                    if (tvMazeApi != null)
+                    if (tvMazeApi != null && false)
                     {
                         var apiResponse = GetTitleAndIdFromTVMazeApi(tvMazeApi, titleToSearch);
                         data.SeriesTitle = apiResponse.Item1;
