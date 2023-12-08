@@ -13,6 +13,7 @@ namespace Magic_Episode_Sort_v2
     {
         Directree directories = new Directree();
         Stopwatch stopwatch = new Stopwatch();
+        bool startedEpisodeTitleSearch = false;
 
         public MainWindow()
         {
@@ -74,13 +75,23 @@ namespace Magic_Episode_Sort_v2
             return lstFiles.SelectedItem == null ? null : lstFiles.SelectedItem as VideoFile;
         }
 
-        private void UpdateStatusBar()
+        DateTime lastTimeUpdate = DateTime.MinValue;
+        private void UpdateStatusBar(bool forceRender = false)
         {
             this.Dispatcher.Invoke(() =>
             {
-                lblEpisodesFound.Text = "Episodes: " + directories.cVideoFiles.Count.ToString()
-                    + String.Format(" (⌚ {0})", stopwatch.ElapsedMilliseconds > 1000 ? (stopwatch.ElapsedMilliseconds / 1000.0).ToString("N1") + "s" : stopwatch.ElapsedMilliseconds + "ms");
-                lblSeriesFound.Text = "Series: " + directories.DistinctSeriesTitles.Count.ToString();
+                if (!startedEpisodeTitleSearch || forceRender)
+                {
+                    lblSeriesFound.Text = "Series: " + directories.DistinctSeriesTitles.Count.ToString();
+                }
+
+                if (DateTime.Now.Subtract(lastTimeUpdate).TotalSeconds >= 1 || !startedEpisodeTitleSearch || forceRender)
+                {
+                    lblEpisodesFound.Text = "Episodes: " + directories.TotalVideoFiles.ToString()
+                        + String.Format(" (⌚ {0})", stopwatch.ElapsedMilliseconds > 1000 ? (stopwatch.ElapsedMilliseconds / 1000.0).ToString("N1") + "s" : stopwatch.ElapsedMilliseconds + "ms");
+
+                    lastTimeUpdate = DateTime.Now;
+                }
             });
         }
 
@@ -140,6 +151,7 @@ namespace Magic_Episode_Sort_v2
         {
             stopwatch.Reset();
             stopwatch.Start();
+            startedEpisodeTitleSearch = false;
 
             if (SettingsManager.DirectoriesManager.SourceDirectories.Count > 0)
             {
@@ -157,6 +169,8 @@ namespace Magic_Episode_Sort_v2
                 directories.FoundVideoFile += (sender, e) => OnFoundVideoFile();
                 directories.FillingCustomSeriesTitles += (sender, e) =>
                 {
+                    this.startedEpisodeTitleSearch = true;
+
                     this.Dispatcher.Invoke(() =>
                     {
                         if (SettingsManager.UseTVMazeAPI)
@@ -175,11 +189,11 @@ namespace Magic_Episode_Sort_v2
                     UpdateStatusBar();
                 };
 
-                directories.InitializeAndPopulateVideoData(SettingsManager.DirectoriesManager.SourceDirectories, 
+                directories.InitializeAndPopulateVideoData(SettingsManager.DirectoriesManager.SourceDirectories,
                     SettingsManager.SearchSubFolders, SettingsManager.RecursiveSearchSubFolders);
 
                 FinishedSearch();
-            } 
+            }
             else
             {
                 this.Dispatcher.Invoke(() =>
@@ -192,8 +206,8 @@ namespace Magic_Episode_Sort_v2
                     lblEpisodesFound.Text = "Episodes: --";
                     lblSeriesFound.Text = "Series: --";
 
-                    var result = MessageBox.Show("There are no sources set. Without sources Magic Episode Sort doesn't know which directories to search.\r\n\r\nWould you like to set up sources now?", 
-                        "No Sources", MessageBoxButton.YesNo, 
+                    var result = MessageBox.Show("There are no sources set. Without sources Magic Episode Sort doesn't know which directories to search.\r\n\r\nWould you like to set up sources now?",
+                        "No Sources", MessageBoxButton.YesNo,
                         MessageBoxImage.Warning);
 
                     if (result == MessageBoxResult.Yes)
@@ -208,7 +222,7 @@ namespace Magic_Episode_Sort_v2
         {
             this.Dispatcher.Invoke(() =>
             {
-                lblDirectoriesSearched.Text = "Directories Searched: " + directories.Directories.Count.ToString();
+                lblDirectoriesSearched.Text = "Directories Searched: " + directories.TotalDirectories.ToString();
                 UpdateStatusBar();
             });
         }
@@ -227,9 +241,9 @@ namespace Magic_Episode_Sort_v2
                 {
                     btnSort.IsEnabled = false;
                     lblStatus.Text = "No output directory set.";
-                    var result = MessageBox.Show("No output directory set! Without an output directory Magic Episode Sort won't know where to sort the files.\r\n\r\nWould you like to set it up now?", 
-                        "No Output Directory", 
-                        MessageBoxButton.YesNo, 
+                    var result = MessageBox.Show("No output directory set! Without an output directory Magic Episode Sort won't know where to sort the files.\r\n\r\nWould you like to set it up now?",
+                        "No Output Directory",
+                        MessageBoxButton.YesNo,
                         MessageBoxImage.Warning);
 
                     if (result == MessageBoxResult.Yes)
@@ -237,7 +251,7 @@ namespace Magic_Episode_Sort_v2
                         OpenPreferences();
                     }
                 });
-            } 
+            }
             else
             {
                 if (directories.VideoFiles.Count > 0)
@@ -247,7 +261,7 @@ namespace Magic_Episode_Sort_v2
                         btnSort.IsEnabled = true;
                         lblStatus.Text = "";
                     });
-                } 
+                }
                 else
                 {
                     UpdateNoEpisodesFound();
@@ -265,7 +279,7 @@ namespace Magic_Episode_Sort_v2
                     new EditCustomSeriesTitles(directories.VideoFiles).ShowDialog();
             });
 
-            UpdateStatusBar();
+            UpdateStatusBar(true);
         }
         #endregion
 
@@ -294,7 +308,7 @@ namespace Magic_Episode_Sort_v2
 
 
                     FinishedSort();
-                } 
+                }
                 catch (Exception ex)
                 {
                     this.Dispatcher.Invoke(() =>
@@ -330,7 +344,7 @@ namespace Magic_Episode_Sort_v2
             }
 
             if (SettingsManager.OpenOutputDirectoryAfterSort)
-                Process.Start("explorer.exe", SettingsManager.OutputDirectory); 
+                Process.Start("explorer.exe", SettingsManager.OutputDirectory);
 
             StartSearch();
         }

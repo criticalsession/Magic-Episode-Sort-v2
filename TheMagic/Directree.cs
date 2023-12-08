@@ -13,6 +13,7 @@ namespace TheMagic
         private const string ErrorResponse = "error";
         private static readonly StringComparer IgnoreCaseComparer = StringComparer.OrdinalIgnoreCase;
 
+        public System.Collections.Concurrent.ConcurrentBag<string> cDirectories { get; } = new();
         public HashSet<string> Directories { get; } = new();
         public HashSet<string> SkipDirectories { get; private set; } = new(IgnoreCaseComparer);
         public System.Collections.Concurrent.ConcurrentBag<VideoFile> cVideoFiles { get; private set; } = new();
@@ -28,10 +29,16 @@ namespace TheMagic
         public List<string> DistinctSeriesTitles
             => VideoFiles.Count > 0 ? VideoFiles.Select(p => p.SeriesTitle.CustomTitle).Distinct().ToList() : cVideoFiles.Select(p => p.SeriesTitle.CustomTitle).Distinct().ToList();
 
+        public int TotalDirectories = 0;
+        public int TotalVideoFiles = 0;
+
         public void InitializeAndPopulateVideoData(List<SourceDirectory> sourceDirectories, bool searchSubDirectories, bool recursive)
         {
             SkipDirectories = new HashSet<string>(SettingsManager.DirectoriesManager.SkipDirectoryPaths, IgnoreCaseComparer);
             SearchDirectories(sourceDirectories, searchSubDirectories, recursive);
+
+            foreach (var d in cDirectories)
+                Directories.Add(d);
 
             BuildVideoFiles();
             FillCustomSeriesTitles();
@@ -58,8 +65,8 @@ namespace TheMagic
 
                 if (!ShouldSkipDirectory(directory))
                 {
-
-                    Directories.Add(directory);
+                    cDirectories.Add(directory);
+                    Interlocked.Add(ref TotalDirectories, 1);
                     DirectorySearched?.Invoke(this, EventArgs.Empty);
 
                     if (searchSubDirectories)
@@ -74,7 +81,8 @@ namespace TheMagic
             {
                 if (!ShouldSkipDirectory(subDirectory))
                 {
-                    Directories.Add(subDirectory);
+                    cDirectories.Add(subDirectory);
+                    Interlocked.Add(ref TotalDirectories, 1);
                     DirectorySearched?.Invoke(this, EventArgs.Empty);
 
                     if (recursive)
@@ -91,6 +99,8 @@ namespace TheMagic
                 if (videoFile.IsValidVideoFile)
                 {
                     cVideoFiles.Add(videoFile);
+                    Interlocked.Add(ref TotalVideoFiles, 1);
+
                     FoundVideoFile?.Invoke(this, EventArgs.Empty);
                 }
             });
@@ -106,7 +116,7 @@ namespace TheMagic
             var tvMazeApi = SettingsManager.UseTVMazeAPI ? new TVMazeAPI() : null;
 
             List<TVMazeSeriesData> seriesData = new List<TVMazeSeriesData>();
-            Parallel.ForEach(VideoFiles, videoFile =>
+            foreach(var videoFile in cVideoFiles)
             {
                 UpdateStatus?.Invoke(this, EventArgs.Empty);
                 string titleToSearch = SettingsManager.CustomSeriesTitleManager.GetCustomSeriesTitle(videoFile.SeriesTitle.OriginalTitle)?.CustomTitle ?? videoFile.SeriesTitle.OriginalTitle;
@@ -122,7 +132,7 @@ namespace TheMagic
                         EpisodeData = null
                     };
 
-                    if (tvMazeApi != null && false)
+                    if (tvMazeApi != null)
                     {
                         var apiResponse = GetTitleAndIdFromTVMazeApi(tvMazeApi, titleToSearch);
                         data.SeriesTitle = apiResponse.Item1;
@@ -136,7 +146,7 @@ namespace TheMagic
 
                 SetVideoFileCustomTitle(videoFile, data.SeriesTitle);
                 SetVideoFileEpisodeName(videoFile, data.EpisodeData);
-            });
+            }
         }
 
         private static void SetVideoFileCustomTitle(VideoFile videoFile, string? tvMazeTitle)
