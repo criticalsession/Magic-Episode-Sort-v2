@@ -79,7 +79,7 @@ namespace Magic_Episode_Sort_v2
             this.Dispatcher.Invoke(() =>
             {
                 lblEpisodesFound.Text = "Episodes: " + directories.cVideoFiles.Count.ToString()
-                    + String.Format(" (⌚ {0})", stopwatch.ElapsedMilliseconds > 1000 ? (stopwatch.ElapsedMilliseconds / 1000).ToString("N1") + "s" : stopwatch.ElapsedMilliseconds + "ms");
+                    + String.Format(" (⌚ {0})", stopwatch.ElapsedMilliseconds > 1000 ? (stopwatch.ElapsedMilliseconds / 1000.0).ToString("N1") + "s" : stopwatch.ElapsedMilliseconds + "ms");
                 lblSeriesFound.Text = "Series: " + directories.DistinctSeriesTitles.Count.ToString();
             });
         }
