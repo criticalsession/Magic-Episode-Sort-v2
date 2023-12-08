@@ -209,6 +209,7 @@ namespace Magic_Episode_Sort_v2
             this.Dispatcher.Invoke(() =>
             {
                 lblDirectoriesSearched.Text = "Directories Searched: " + directories.Directories.Count.ToString();
+                UpdateStatusBar();
             });
         }
 
