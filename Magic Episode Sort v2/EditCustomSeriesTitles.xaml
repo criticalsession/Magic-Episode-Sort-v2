@@ -27,7 +27,7 @@
             Grid.Row="0"
             FontSize="14"
             TextWrapping="Wrap">
-            The following<Bold>New Series Titles</Bold>
+            The following <Bold>New Series Titles</Bold>
             were found. To change the automatically generated titles, click on any title in the list and enter a new title in the field provided below.</TextBlock>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <CheckBox
