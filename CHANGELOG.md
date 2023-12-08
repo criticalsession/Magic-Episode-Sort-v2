@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Ability to delete episode parent folder if it matches the video filename
 - Display in status bar of how long it took to retrieve all video files (for no reason at all)
+- No retrieves directories and episode files faster using concurrency
 
 ### Changed
 
