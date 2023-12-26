@@ -46,7 +46,7 @@ namespace TheMagic
             foreach (var v in cVideoFiles)
                 VideoFiles.Add(v);
 
-            VideoFiles = VideoFiles.OrderBy(p => p.SeriesTitle.CustomTitle).ThenBy(p => p.SeasonNumber).ToList();
+            VideoFiles = VideoFiles.OrderBy(p => p.SeriesTitle.CustomTitle).ThenBy(p => p.SeasonNumber).ThenBy(p => p.EpisodeNumber).ToList();
 
             SearchComplete = true;
         }
@@ -116,7 +116,7 @@ namespace TheMagic
             var tvMazeApi = SettingsManager.UseTVMazeAPI ? new TVMazeAPI() : null;
 
             List<TVMazeSeriesData> seriesData = new List<TVMazeSeriesData>();
-            foreach(var videoFile in cVideoFiles)
+            foreach (var videoFile in cVideoFiles)
             {
                 UpdateStatus?.Invoke(this, EventArgs.Empty);
                 string titleToSearch = SettingsManager.CustomSeriesTitleManager.GetCustomSeriesTitle(videoFile.SeriesTitle.OriginalTitle)?.CustomTitle ?? videoFile.SeriesTitle.OriginalTitle;

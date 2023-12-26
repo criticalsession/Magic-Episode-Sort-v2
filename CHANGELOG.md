@@ -5,13 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.3.0] - 2023-12-26
 
 ### Added
 
 - Ability to delete episode parent folder if it matches the video filename
-- Display in status bar of how long it took to retrieve all video files (for no reason at all)
-- No retrieves directories and episode files faster using concurrency
+- Display how long it took to retrieve video files in status bar (for no reason at all)
+- Huge performance improvement to retrieving directories and episode files
 
 ### Changed
 
@@ -22,10 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - When searching TVMaze API for episode information now uses custom title if set
 - About window was showing the wrong version number and release date
+- Fixed issue with retrieving episode names not working correctly
 
 ### Removed
 
-- "Using Magic Episode Sort" link in Help Menu as currently not finished
+- "Using Magic Episode Sort" link in Help Menu as currently not implemented
 
 ## [2.2.3] - 2023-08-17
 

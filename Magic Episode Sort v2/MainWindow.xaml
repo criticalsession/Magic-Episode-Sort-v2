@@ -129,7 +129,7 @@
                 <TextBlock Name="lblEpisodesFound" FontSize="11" />
             </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock FontSize="11" Text="Version: 2.2.3" />
+                <TextBlock FontSize="11" Text="Version: 2.3.0" />
             </StatusBarItem>
         </StatusBar>
     </Grid>

@@ -7,29 +7,23 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Magic Episode Sort &gt; About"
     Width="309"
-    Height="268"
+    Height="252"
     Icon="/MESIcon.png"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
     <Border Margin="10,10,10,0">
         <StackPanel Orientation="Vertical">
-            <TextBlock FontSize="24" FontWeight="Bold">
+            <TextBlock FontSize="24" FontWeight="Bold" HorizontalAlignment="Center">
                 Magic Episode Sort
-                <Image Width="16" Source="/MESIcon.png" />
             </TextBlock>
-            <TextBlock FontSize="14" Text="Version 2.2.3 - The Great SQLite Migration" />
-            <TextBlock FontSize="14" Text="Released: 17 August, 2023" />
+            <TextBlock FontSize="10" HorizontalAlignment="Center"  Text="v2.3.0 - 2023/12/26" />
             <Border Height="10" />
             <TextBlock TextWrapping="Wrap">
-                Thank you for downloading, using and supporting free and open source software.<LineBreak /><LineBreak />
+                Magic Episode Sort searches for and finds episode files using common markers in the filename. It then sorts the episode files by series title and season number.<LineBreak /><LineBreak />
                 <Hyperlink NavigateUri="https://github.com/criticalsession/Magic-Episode-Sort-v2" RequestNavigate="Hyperlink_Click">Click here</Hyperlink>
                 to visit the project's github if you have any issues, feedback, feature requests or want to contribute!</TextBlock>
             <Border Height="10" />
-            <TextBlock
-                HorizontalAlignment="Center"
-                FontWeight="Bold"
-                Text="// criticalsession" />
         </StackPanel>
     </Border>
 </Window>

@@ -7,14 +7,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Magic Episode Sort v2", "Ma
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CB2AC7B6-1B58-4404-935F-65F4479A8D8F}"
 	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
 		CHANGELOG.md = CHANGELOG.md
 		LICENSE.md = LICENSE.md
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheMagic", "TheMagic\TheMagic.csproj", "{2D597BC9-159A-410D-9F87-3375ABBC6F2E}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Magic Episode Sort Setup", "Magic Episode Sort Setup\Magic Episode Sort Setup.vdproj", "{335C99AD-3EDD-4640-9331-AD13765EA761}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "doc-assets", "doc-assets", "{C58C0BB3-50EC-4059-A53E-580E88A59222}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C58C0BB3-50EC-4059-A53E-580E88A59222} = {CB2AC7B6-1B58-4404-935F-65F4479A8D8F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C8579F13-6F5F-4D34-A826-EB4E9FECEB9D}

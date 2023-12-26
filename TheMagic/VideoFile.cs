@@ -141,7 +141,7 @@ namespace TheMagic
                             matched = matched.Substring(0, matched.IndexOf(matched.Contains("e") ? "e" : "-")).Replace("-", "");
                         }
 
-                        int.Parse(matched);
+                        return int.Parse(matched);
                     }
                     else if (regex.Contains("x")) //DDXDD
                     {
