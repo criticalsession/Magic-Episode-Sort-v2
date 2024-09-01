@@ -41,7 +41,8 @@ namespace TheMagic
                     ""renameFilenames""	INTEGER NOT NULL DEFAULT 0,
 	                ""useTvMaze""	INTEGER NOT NULL DEFAULT 0,
 	                ""outputDirectory""	TEXT NOT NULL,
-	                ""openOutput""	INTEGER NOT NULL DEFAULT 0
+	                ""openOutput""	INTEGER NOT NULL DEFAULT 0,
+                    ""deleteParent"" INTEGER NOT NULL DEFAULT 0
                 )");
 
                 conn.Execute(@"CREATE TABLE ""Sources"" (
