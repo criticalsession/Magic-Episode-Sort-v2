@@ -1,63 +1,49 @@
-﻿using Microsoft.VisualBasic.FileIO;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TheMagic; 
 
-namespace TheMagic
+public class EpisodeMover
 {
-    public class EpisodeMover
+    public enum MoveErrors
     {
-        public enum MoveErrors
-        {
-            None = 0,
-            FileDoesNotExist,
-            FileAlreadyExists,
-            CouldNotDeleteDirectory
-        }
+        None = 0,
+        FileDoesNotExist,
+        FileAlreadyExists,
+        CouldNotDeleteDirectory
+    }
 
-        public void MoveEpisodeFiles(List<VideoFile> episodes)
+    public void MoveEpisodeFiles(List<VideoFile> episodes)
+    {
+        foreach (var episode in episodes)
         {
-            foreach (VideoFile episode in episodes)
+
+            if (!File.Exists(episode.SourcePath)) episode.MoveError = MoveErrors.FileDoesNotExist;
+            else
             {
-
-                if (!File.Exists(episode.SourcePath)) episode.MoveError = MoveErrors.FileDoesNotExist;
-                else
+                if (!File.Exists(episode.TargetPath))
                 {
-                    if (!File.Exists(episode.TargetPath))
-                    {
-                        File.Move(episode.SourcePath, episode.TargetPath);
-                        episode.MoveError = MoveErrors.None;
-                    }
-                    else
-                        episode.MoveError = MoveErrors.FileAlreadyExists;
+                    File.Move(episode.SourcePath, episode.TargetPath);
+                    episode.MoveError = MoveErrors.None;
                 }
+                else
+                    episode.MoveError = MoveErrors.FileAlreadyExists;
             }
-
-            DeleteParentDirectories(episodes);
         }
 
-        private void DeleteParentDirectories(List<VideoFile> episodes)
-        {
-            if (episodes != null && SettingsManager.DeleteParentFolder)
-            {
-                foreach (VideoFile episode in episodes.Where(p => p.MoveError == MoveErrors.None))
-                {
-                    if (!String.IsNullOrEmpty(episode.ParentDirectory) && 
-                        !String.IsNullOrEmpty(episode.ParentDirectoryName) && 
-                        episode.ParentDirectoryName == Path.GetFileNameWithoutExtension(episode.SourcePath))
-                    {
-                        try
-                        {
-                            Directory.Delete(episode.ParentDirectory, true);
-                        }
-                        catch
-                        {
-                            episode.MoveError = MoveErrors.CouldNotDeleteDirectory;
-                        }
-                    }
+        DeleteParentDirectories(episodes);
+    }
+
+    private void DeleteParentDirectories(List<VideoFile> episodes) {
+        if (episodes == null || !SettingsManager.DeleteParentFolder) {
+            return;
+        }
+
+        foreach (var episode in episodes.Where(p => p.MoveError == MoveErrors.None)) {
+            if (!string.IsNullOrEmpty(episode.ParentDirectory) &&
+                !string.IsNullOrEmpty(episode.ParentDirectoryName) &&
+                string.Equals(episode.ParentDirectoryName, Path.GetFileNameWithoutExtension(episode.SourcePath), StringComparison.OrdinalIgnoreCase)) {
+                try {
+                    Directory.Delete(episode.ParentDirectory, true);
+                } catch {
+                    episode.MoveError = MoveErrors.CouldNotDeleteDirectory;
                 }
             }
         }

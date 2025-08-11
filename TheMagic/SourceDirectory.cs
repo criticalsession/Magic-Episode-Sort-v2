@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TheMagic; 
 
-namespace TheMagic
+public class SourceDirectory
 {
-    public class SourceDirectory
-    {
-        public int Id;
-        public string SourcePath;
-    }
+    public int Id;
+    public required string SourcePath;
 }

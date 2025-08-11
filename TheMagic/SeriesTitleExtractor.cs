@@ -1,51 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
+﻿using System.Globalization;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
-namespace TheMagic
+namespace TheMagic; 
+
+public class SeriesTitleExtractor
 {
-    public class SeriesTitleExtractor
+    public SeriesTitle Extract(string videoFileName)
     {
-        public SeriesTitle Extract(string videoFileName)
+        var originalTitle = GetSeriesTitleFromFileName(videoFileName);
+        return new SeriesTitle()
         {
-            string originalTitle = GetSeriesTitleFromFileName(videoFileName);
-            return new SeriesTitle()
-            {
-                OriginalTitle = originalTitle,
-                CustomTitle = originalTitle,
-                IsNew = false
-            };
-        }
+            OriginalTitle = originalTitle,
+            CustomTitle = originalTitle,
+            IsNew = false
+        };
+    }
 
-        private string GetSeriesTitleFromFileName(string fileName)
+    private string GetSeriesTitleFromFileName(string fileName)
+    {
+        var seriesName = string.Empty;
+        foreach (var regex in SettingsManager.Regexes)
         {
-            string seriesName = String.Empty;
-            foreach (string regex in SettingsManager.Regexes)
+            var match = Regex.Match(fileName, regex);
+            if (match.Success)
             {
-                Match match = Regex.Match(fileName, regex);
-                if (match.Success)
-                {
-                    TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
+                var textInfo = new CultureInfo("en-US", false).TextInfo;
 
-                    seriesName = fileName.Substring(0, match.Index).Replace(".", " ").Trim();
-                    seriesName = textInfo.ToTitleCase(seriesName.ToLower());
+                seriesName = fileName.Substring(0, match.Index).Replace(".", " ").Trim();
+                seriesName = textInfo.ToTitleCase(seriesName.ToLower());
 
-                    if (seriesName.EndsWith(" -")) seriesName = seriesName.Substring(0, seriesName.LastIndexOf("-") - 1);
-                    if (seriesName.EndsWith("-")) seriesName = seriesName.Substring(0, seriesName.Length - 1);
-                    if (seriesName.EndsWith(".")) seriesName = seriesName.Substring(0, seriesName.Length - 1);
-                    seriesName = Utils.Sanitize(seriesName);
+                if (seriesName.EndsWith(" -")) seriesName = seriesName.Substring(0, seriesName.LastIndexOf("-") - 1);
+                if (seriesName.EndsWith("-")) seriesName = seriesName.Substring(0, seriesName.Length - 1);
+                if (seriesName.EndsWith(".")) seriesName = seriesName.Substring(0, seriesName.Length - 1);
+                seriesName = Utils.Sanitize(seriesName);
 
-                    break;
-                }
+                break;
             }
-
-            return seriesName;
         }
 
-
+        return seriesName;
     }
 }

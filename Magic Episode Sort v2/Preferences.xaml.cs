@@ -1,20 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using TheMagic;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using System.Windows.Media.Animation;
 
 namespace Magic_Episode_Sort_v2
 {
@@ -57,7 +44,7 @@ namespace Magic_Episode_Sort_v2
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -67,7 +54,7 @@ namespace Magic_Episode_Sort_v2
             SettingsManager.SearchSubFolders = chkSearchSubFolders.IsChecked.GetValueOrDefault(false);
             SettingsManager.OpenOutputDirectoryAfterSort = chkOpenOutputDirectory.IsChecked.GetValueOrDefault(false);
             SettingsManager.UseTVMazeAPI = chkUseTVMazeAPI.IsChecked.GetValueOrDefault(false);
-            SettingsManager.RenameFilenames = SettingsManager.UseTVMazeAPI ? chkRenameFilenames.IsChecked.GetValueOrDefault(false) : false;
+            SettingsManager.RenameFilenames = SettingsManager.UseTVMazeAPI && chkRenameFilenames.IsChecked.GetValueOrDefault(false);
             SettingsManager.OutputDirectory = txtTargetDirectory.Text;
             SettingsManager.DeleteParentFolder = chkDeleteParent.IsChecked.GetValueOrDefault(false);
 
@@ -77,8 +64,8 @@ namespace Magic_Episode_Sort_v2
 
         private void SelectTargetDirectory_Click(object sender, RoutedEventArgs e)
         {
-            string initDirectory = SettingsManager.OutputDirectory;
-            if (String.IsNullOrEmpty(initDirectory)) initDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var initDirectory = SettingsManager.OutputDirectory;
+            if (string.IsNullOrEmpty(initDirectory)) initDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             var dialog = new CommonOpenFileDialog()
             {
@@ -98,7 +85,7 @@ namespace Magic_Episode_Sort_v2
                 btnSelectDirectory.Width = 150;
             }
 
-            this.Focus();
+            Focus();
         }
 
         private void btnEditSources_Click(object sender, RoutedEventArgs e)
