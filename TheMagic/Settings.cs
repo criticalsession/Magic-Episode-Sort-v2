@@ -1,21 +1,13 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TheMagic; 
 
-namespace TheMagic
+internal class Settings
 {
-    internal class Settings
-    {
-        internal bool askForNewSeriesNames = true;
-        internal bool searchSubFolders = true;
-        internal bool recursiveSearchSubFolders = true;
-        internal bool useTVMazeApi = false;
-        internal bool openOutputDirectoryAfterSort = false;
-        internal string outputDirectory = "";
-        internal bool renameFilenames = true;
-        internal bool deleteParentFolder = false;
-    }
+    internal bool askForNewSeriesNames = true;
+    internal bool searchSubFolders = true;
+    internal bool recursiveSearchSubFolders = true;
+    internal bool useTVMazeApi = false;
+    internal bool openOutputDirectoryAfterSort = false;
+    internal string outputDirectory = "";
+    internal bool renameFilenames = true;
+    internal bool deleteParentFolder = false;
 }

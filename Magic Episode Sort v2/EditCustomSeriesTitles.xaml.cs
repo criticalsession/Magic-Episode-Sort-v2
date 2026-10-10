@@ -1,40 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using TheMagic;
 
 namespace Magic_Episode_Sort_v2
 {
     public partial class EditCustomSeriesTitles : Window
     {
-        List<SeriesTitle> seriesTitles = new List<SeriesTitle>();
-        List<SeriesTitle> filteredSeriesTitles = new List<SeriesTitle>();
-        SeriesTitle? selectedTitle;
+        private readonly List<SeriesTitle> _seriesTitles;
+        private List<SeriesTitle> _filteredSeriesTitles;
+        private SeriesTitle? _selectedTitle;
 
-        bool newTitles = false;
+        private readonly bool _newTitles;
 
         public EditCustomSeriesTitles(List<VideoFile> videoFiles)
         {
             InitializeComponent();
 
-            this.Title = "Magic Episode Sort > New Series Titles Found";
-            newTitles = true;
+            Title = "Magic Episode Sort > New Series Titles Found";
+            _newTitles = true;
 
-            seriesTitles = SettingsManager.CustomSeriesTitleManager.GetNewSeriesTitles(videoFiles);
-            filteredSeriesTitles = seriesTitles;
+            _seriesTitles = SettingsManager.CustomSeriesTitleManager.GetNewSeriesTitles(videoFiles);
+            _filteredSeriesTitles = _seriesTitles;
 
-            lstNewTitles.ItemsSource = filteredSeriesTitles;
+            lstNewTitles.ItemsSource = _filteredSeriesTitles;
             chkGroupCustomTitles.Visibility = Visibility.Hidden;
         }
 
@@ -42,11 +34,11 @@ namespace Magic_Episode_Sort_v2
         {
             InitializeComponent();
 
-            this.Title = "Magic Episode Sort > Edit Custom Series Titles";
-            newTitles = false;
+            Title = "Magic Episode Sort > Edit Custom Series Titles";
+            _newTitles = false;
 
-            seriesTitles = SettingsManager.CustomSeriesTitleManager.GetAllCustomSeriesTitles();
-            filteredSeriesTitles = seriesTitles;
+            _seriesTitles = SettingsManager.CustomSeriesTitleManager.GetAllCustomSeriesTitles();
+            _filteredSeriesTitles = _seriesTitles;
 
             RefreshTitlesList();
 
@@ -56,14 +48,14 @@ namespace Magic_Episode_Sort_v2
         private void lstNewTitles_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SaveCustomTitle();
-            selectedTitle = lstNewTitles.SelectedItem as SeriesTitle;
+            _selectedTitle = lstNewTitles.SelectedItem as SeriesTitle;
 
-            if (selectedTitle != null)
+            if (_selectedTitle != null)
             {
                 txtCustomTitle.IsEnabled = true;
                 btnCustomTitle.IsEnabled = true;
 
-                txtCustomTitle.Text = selectedTitle.CustomTitle;
+                txtCustomTitle.Text = _selectedTitle.CustomTitle;
             } 
             else
             {
@@ -79,20 +71,19 @@ namespace Magic_Episode_Sort_v2
 
         private void SaveCustomTitle()
         {
-            if (selectedTitle != null)
+            if (_selectedTitle != null)
             {
-                List<string> originalTitlesToUpdate = new List<string>();
-                originalTitlesToUpdate.Add(selectedTitle.OriginalTitle);
+                var originalTitlesToUpdate = new List<string> { _selectedTitle.OriginalTitle };
 
-                if (!newTitles && chkGroupCustomTitles.IsChecked.GetValueOrDefault(false))
+                if (!_newTitles && chkGroupCustomTitles.IsChecked.GetValueOrDefault(false))
                     originalTitlesToUpdate.AddRange(
-                        seriesTitles.Where(p => p.CustomTitle.ToLower() == selectedTitle.CustomTitle.ToLower())
+                        _seriesTitles.Where(p => p.CustomTitle.Equals(_selectedTitle.CustomTitle, System.StringComparison.CurrentCultureIgnoreCase))
                         .Select(p => p.OriginalTitle));
 
                 foreach (string original in originalTitlesToUpdate)
                 {
                     SettingsManager.CustomSeriesTitleManager.UpdateCustomSeriesTitle(original, txtCustomTitle.Text);
-                    foreach (SeriesTitle newSeriesTitle in seriesTitles.Where(p => p.OriginalTitle.ToLower() == original.ToLower()))
+                    foreach (var newSeriesTitle in _seriesTitles.Where(p => p.OriginalTitle.Equals(original, System.StringComparison.CurrentCultureIgnoreCase)))
                         newSeriesTitle.CustomTitle = txtCustomTitle.Text;
                 }
 
@@ -111,34 +102,34 @@ namespace Magic_Episode_Sort_v2
 
         private void RefreshTitlesList()
         {
-            bool hideUpdatedTitles = chkHideUpdated.IsChecked.GetValueOrDefault(false);
-            bool groupCustomTitles = !newTitles && chkGroupCustomTitles.IsChecked.GetValueOrDefault(false);
+            var hideUpdatedTitles = chkHideUpdated.IsChecked.GetValueOrDefault(false);
+            var groupCustomTitles = !_newTitles && chkGroupCustomTitles.IsChecked.GetValueOrDefault(false);
 
-            if (!hideUpdatedTitles)
-                filteredSeriesTitles = seriesTitles;
-            else
-                filteredSeriesTitles = seriesTitles.Where(p => !p.TitleChanged).ToList();
+            _filteredSeriesTitles = !hideUpdatedTitles ? _seriesTitles : _seriesTitles.Where(p => !p.TitleChanged).ToList();
 
             if (groupCustomTitles)
-                filteredSeriesTitles = filteredSeriesTitles.DistinctBy(p => p.CustomTitle).ToList();
+                _filteredSeriesTitles = _filteredSeriesTitles.DistinctBy(p => p.CustomTitle).ToList();
 
-            if (!newTitles)
-                filteredSeriesTitles = filteredSeriesTitles.OrderBy(p => p.CustomTitle).ToList();
+            if (!_newTitles)
+                _filteredSeriesTitles = _filteredSeriesTitles.OrderBy(p => p.CustomTitle).ToList();
 
-            lstNewTitles.ItemsSource = filteredSeriesTitles;
+            lstNewTitles.ItemsSource = _filteredSeriesTitles;
             lstNewTitles.Items.Refresh();
         }
 
         private void txtCustomTitle_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Enter)
+            switch (e.Key)
             {
-                btnCustomTitle_Click(sender, null);
-            } 
-            else if (e.Key == Key.Escape)
-            {
-                TextInfo textInfo = new CultureInfo("en-US", false).TextInfo;
-                txtCustomTitle.Text = textInfo.ToTitleCase(selectedTitle.OriginalTitle);
+                case Key.Enter:
+                    btnCustomTitle_Click(sender, null);
+                    break;
+                case Key.Escape:
+                {
+                    var textInfo = new CultureInfo("en-US", false).TextInfo;
+                    txtCustomTitle.Text = textInfo.ToTitleCase(_selectedTitle?.OriginalTitle);
+                    break;
+                }
             }
         }
     }

@@ -3,13 +3,11 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="clr-namespace:Magic_Episode_Sort_v2"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Magic Episode Sort &gt; Edit Sources"
     Width="450"
     Height="550"
     Icon="/MESIcon.png"
-    Loaded="Window_Loaded"
     ResizeMode="NoResize"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -32,16 +30,9 @@
             Sources:
         </TextBlock>
 
-        <!--
-        <StackPanel Grid.Row="1" Orientation="Vertical" Name="pnlSources">
-            <TextBlock Padding="0 5">C:\Users\Amante\source\repos\Magic Episode Sort v2\Magic Episode Sort v2\bin\Debug\net6.0-windows</TextBlock>
-            <TextBlock Padding="0 5">C:\Drawing</TextBlock>
-            <TextBlock Padding="0 5">C:\Drawing\3D Assets</TextBlock>
-        </StackPanel>-->
         <ListView
             Name="lstSources"
-            Grid.Row="1"
-            MouseRightButtonUp="lstSources_MouseRightButtonUp">
+            Grid.Row="1">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Padding="5" Text="{Binding}">
@@ -74,7 +65,6 @@
             </Grid.ColumnDefinitions>
 
             <Button
-                Name="btnAddSourceDirectory"
                 Grid.Column="0"
                 Click="btnAddSourceDirectory_Click"
                 Cursor="Hand">

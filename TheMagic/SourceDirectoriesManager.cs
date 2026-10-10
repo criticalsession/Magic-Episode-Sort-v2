@@ -1,133 +1,94 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TheMagic; 
 
-namespace TheMagic
+public class DirectoriesManager
 {
-    public class DirectoriesManager
+    public List<SourceDirectory> SourceDirectories => CheckDirectoriesExist(MESDBHandler.LoadSourceDirectories());
+
+    public List<SkipDirectory> SkipDirectories => MESDBHandler.LoadSkipDirectories();
+
+    public void RemoveSourceDirectory(SourceDirectory dir) => RemoveSourceDirectory(dir.SourcePath);
+
+    public List<string> SourceDirectoryPaths => SourceDirectories.Select(p => p.SourcePath).ToList();
+
+    public List<string> SkipDirectoryPaths => SkipDirectories.Select(p => p.Directory).ToList();
+
+    private List<SourceDirectory> CheckDirectoriesExist(List<SourceDirectory> directories)
     {
-        public List<SourceDirectory> SourceDirectories
+        var checkedDirectories = new List<SourceDirectory>();
+        foreach (SourceDirectory dir in directories)
         {
-            get
+            if (!Directory.Exists(dir.SourcePath))
             {
-                List<SourceDirectory> directories = MESDBHandler.LoadSourceDirectories();
-                directories = CheckDirectoriesExist(directories);
-
-                return directories;
+                RemoveSourceDirectory(dir);
+            }
+            else
+            {
+                checkedDirectories.Add(dir);
             }
         }
 
-        public List<SkipDirectory> SkipDirectories
+        return checkedDirectories;
+    }
+
+    public bool AddSourceDirectory(string dir)
+    {
+        var directories = MESDBHandler.LoadSourceDirectories();
+        if (!directories.Any(p => p.SourcePath == dir))
         {
-            get
-            {
-                List<SkipDirectory> directories = MESDBHandler.LoadSkipDirectories();
-                return directories;
-            }
+            MESDBHandler.AddSourceDirectory(dir);
+            SettingsManager.SettingsChanged = true;
+
+            return true;
         }
+        
+        return false;
+    }
 
-        private List<SourceDirectory> CheckDirectoriesExist(List<SourceDirectory> directories)
+    public bool RemoveSourceDirectory(string? dir)
+    {
+        if (!string.IsNullOrEmpty(dir))
         {
-            List<SourceDirectory> checkedDirectories = new List<SourceDirectory>();
-            foreach (SourceDirectory dir in directories)
+            var directories = MESDBHandler.LoadSourceDirectories();
+            if (directories.Any(p => p.SourcePath == dir))
             {
-                if (!Directory.Exists(dir.SourcePath))
-                {
-                    RemoveSourceDirectory(dir);
-                }
-                else
-                {
-                    checkedDirectories.Add(dir);
-                }
-            }
-
-            return checkedDirectories;
-        }
-
-        public bool AddSourceDirectory(string dir)
-        {
-            List<SourceDirectory> directories = MESDBHandler.LoadSourceDirectories();
-            if (!directories.Any(p => p.SourcePath == dir))
-            {
-                MESDBHandler.AddSourceDirectory(dir);
+                MESDBHandler.DeleteSourceDirectory(dir);
                 SettingsManager.SettingsChanged = true;
 
                 return true;
             }
-            
-            
-            return false;
         }
 
-        public void RemoveSourceDirectory(SourceDirectory dir)
-        {
-            RemoveSourceDirectory(dir.SourcePath);
-        }
+        return false;
+    }
 
-        public bool RemoveSourceDirectory(string? dir)
+    public bool AddSkipDirectory(string dir)
+    {
+        var directories = MESDBHandler.LoadSkipDirectories();
+        if (!directories.Any(p => p.Directory == dir))
         {
-            if (!String.IsNullOrEmpty(dir))
+            MESDBHandler.AddSkipDirectory(dir);
+            SettingsManager.SettingsChanged = true;
+
+            return true;
+        }
+        
+        return false;
+    }
+
+    public bool RemoveSkipDirectory(string? dir)
+    {
+        if (!string.IsNullOrEmpty(dir))
+        {
+            var directories = MESDBHandler.LoadSkipDirectories();
+            if (directories.Any(p => p.Directory == dir))
             {
-                List<SourceDirectory> directories = MESDBHandler.LoadSourceDirectories();
-                if (directories.Any(p => p.SourcePath == dir))
-                {
-                    MESDBHandler.DeleteSourceDirectory(dir);
-                    SettingsManager.SettingsChanged = true;
-
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public bool AddSkipDirectory(string dir)
-        {
-            List<SkipDirectory> directories = MESDBHandler.LoadSkipDirectories();
-            if (!directories.Any(p => p.Directory == dir))
-            {
-                MESDBHandler.AddSkipDirectory(dir);
-                SettingsManager.SettingsChanged = true;
+                MESDBHandler.DeleteSkipDirectory(dir);
+                SettingsManager.SettingsChanged= true;
 
                 return true;
             }
-            
-            return false;
         }
 
-        public bool RemoveSkipDirectory(string? dir)
-        {
-            if (!String.IsNullOrEmpty(dir))
-            {
-                List<SkipDirectory> directories = MESDBHandler.LoadSkipDirectories();
-                if (directories.Any(p => p.Directory == dir))
-                {
-                    MESDBHandler.DeleteSkipDirectory(dir);
-                    SettingsManager.SettingsChanged= true;
-
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public List<string> SourceDirectoryPaths
-        {
-            get
-            {
-                return SourceDirectories.Select(p => p.SourcePath).ToList();
-            }
-        }
-
-        public List<string> SkipDirectoryPaths
-        {
-            get
-            {
-                return SkipDirectories.Select(p => p.Directory).ToList();
-            }
-        }
+        return false;
     }
 }

@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using TheMagic;
 
@@ -56,27 +44,16 @@ namespace Magic_Episode_Sort_v2
                 btnAddDirectory.IsEnabled = false;
             }
 
-            this.Focus();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void lstDirectories_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
+            Focus();
         }
 
         private void ctxDeleteDirectory_Click(object sender, RoutedEventArgs e)
         {
             var selectedItem = lstDirectories.SelectedItem;
-            if (selectedItem != null)
-            {
-                SettingsManager.DirectoriesManager.RemoveSkipDirectory(selectedItem.ToString());
-                lstDirectories.ItemsSource = SettingsManager.DirectoriesManager.SkipDirectoryPaths;
-            }
+            if (selectedItem == null) return;
+            
+            SettingsManager.DirectoriesManager.RemoveSkipDirectory(selectedItem.ToString());
+            lstDirectories.ItemsSource = SettingsManager.DirectoriesManager.SkipDirectoryPaths;
         }
     }
 }

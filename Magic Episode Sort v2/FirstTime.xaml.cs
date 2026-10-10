@@ -1,16 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using TheMagic;
 
 namespace Magic_Episode_Sort_v2
@@ -20,7 +9,7 @@ namespace Magic_Episode_Sort_v2
     /// </summary>
     public partial class FirstTime : Window
     {
-        public bool migrationComplete = false;
+        public bool MigrationComplete;
 
         public FirstTime()
         {
@@ -29,17 +18,24 @@ namespace Magic_Episode_Sort_v2
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            (OldSettingsMigrator.MigrationResults result, int totalSeriesTitles) = OldSettingsMigrator.Migrate();
+            var (result, totalSeriesTitles) = OldSettingsMigrator.Migrate();
 
-            if (result == OldSettingsMigrator.MigrationResults.Successful)
+            switch (result)
             {
-                MessageBox.Show("Settings migration successful! " + totalSeriesTitles + " custom titles migrated.", "Migration", MessageBoxButton.OK, MessageBoxImage.Information);
-                migrationComplete = true;
+                case OldSettingsMigrator.MigrationResults.Successful:
+                    MessageBox.Show($"Settings migration successful! {totalSeriesTitles} custom titles migrated.", "Migration", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MigrationComplete = true;
+                    break;
+                case OldSettingsMigrator.MigrationResults.Error:
+                    MessageBox.Show("An unexpected error occured while migrating settings.", "Migration", MessageBoxButton.OK, MessageBoxImage.Error);
+                    break;
+                case OldSettingsMigrator.MigrationResults.NothingToMigrate:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-            else if (result == OldSettingsMigrator.MigrationResults.Error)
-                MessageBox.Show("An unexpected error occured while migrating settings.", "Migration", MessageBoxButton.OK, MessageBoxImage.Error);
 
-            this.Close();
+            Close();
         }
     }
 }

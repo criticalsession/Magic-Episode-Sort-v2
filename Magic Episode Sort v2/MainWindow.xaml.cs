@@ -4,16 +4,15 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using System.Windows.Documents;
 using TheMagic;
 
 namespace Magic_Episode_Sort_v2
 {
     public partial class MainWindow : Window
     {
-        Directree directories = new Directree();
-        Stopwatch stopwatch = new Stopwatch();
-        bool startedEpisodeTitleSearch = false;
+        private Directree _directories = new();
+        private readonly Stopwatch _stopwatch = new();
+        private bool _startedEpisodeTitleSearch;
 
         public MainWindow()
         {
@@ -21,10 +20,10 @@ namespace Magic_Episode_Sort_v2
 
             if (SettingsManager.FirstTime)
             {
-                FirstTime firsttime = new FirstTime();
-                firsttime.ShowDialog();
+                var firstTime = new FirstTime();
+                firstTime.ShowDialog();
 
-                if (!firsttime.migrationComplete)
+                if (!firstTime.MigrationComplete)
                 {
                     OpenPreferences();
                 }
@@ -37,24 +36,23 @@ namespace Magic_Episode_Sort_v2
 
         private void Window_Activated(object sender, EventArgs e)
         {
-            if (SettingsManager.SettingsChanged)
-            {
-                new Thread(() => StartSearch()).Start();
-                SettingsManager.SettingsChanged = false;
-            }
+            if (!SettingsManager.SettingsChanged) return;
+            
+            new Thread(StartSearch).Start();
+            SettingsManager.SettingsChanged = false;
         }
 
         private void btnSort_Click(object sender, RoutedEventArgs e)
         {
-            if (directories.SearchComplete)
+            if (_directories.SearchComplete)
             {
-                new Thread(() => StartSort()).Start();
+                new Thread(StartSort).Start();
             }
         }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
-            new Thread(() => StartSearch()).Start();
+            new Thread(StartSearch).Start();
         }
 
         private void RefreshEpisodeList()
@@ -66,38 +64,38 @@ namespace Magic_Episode_Sort_v2
 
             UpdateStatusBar();
 
-            if (directories.VideoFiles.Count == 0)
+            if (_directories.VideoFiles.Count == 0)
                 UpdateNoEpisodesFound();
         }
 
         private VideoFile? GetSelectedEpisode()
         {
-            return lstFiles.SelectedItem == null ? null : lstFiles.SelectedItem as VideoFile;
+            return lstFiles.SelectedItem as VideoFile;
         }
 
-        DateTime lastTimeUpdate = DateTime.MinValue;
+        private DateTime _lastTimeUpdate = DateTime.MinValue;
         private void UpdateStatusBar(bool forceRender = false)
         {
             this.Dispatcher.Invoke(() =>
             {
-                if (!startedEpisodeTitleSearch || forceRender)
+                if (!_startedEpisodeTitleSearch || forceRender)
                 {
-                    lblSeriesFound.Text = "Series: " + directories.DistinctSeriesTitles.Count.ToString();
+                    lblSeriesFound.Text = "Series: " + _directories.DistinctSeriesTitles.Count;
                 }
 
-                if (DateTime.Now.Subtract(lastTimeUpdate).TotalSeconds >= 1 || !startedEpisodeTitleSearch || forceRender)
+                if (DateTime.Now.Subtract(_lastTimeUpdate).TotalSeconds >= 1 || !_startedEpisodeTitleSearch || forceRender)
                 {
-                    lblEpisodesFound.Text = "Episodes: " + directories.TotalVideoFiles.ToString()
-                        + String.Format(" (⌚ {0})", stopwatch.ElapsedMilliseconds > 1000 ? (stopwatch.ElapsedMilliseconds / 1000.0).ToString("N1") + "s" : stopwatch.ElapsedMilliseconds + "ms");
+                    lblEpisodesFound.Text = "Episodes: " + _directories.TotalVideoFiles
+                        + $" (⌚ {(_stopwatch.ElapsedMilliseconds > 1000 ? (_stopwatch.ElapsedMilliseconds / 1000.0).ToString("N1") + "s" : _stopwatch.ElapsedMilliseconds + "ms")})";
 
-                    lastTimeUpdate = DateTime.Now;
+                    _lastTimeUpdate = DateTime.Now;
                 }
             });
         }
 
         private void UpdateNoEpisodesFound()
         {
-            this.Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
                 btnSort.IsEnabled = false;
                 lblStatus.Text = "No new video files found.";
@@ -142,16 +140,16 @@ namespace Magic_Episode_Sort_v2
 
         private void Github_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start(new ProcessStartInfo("https://github.com/criticalsession/Magic-Episode-Sort-v2") { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("https://github.com/criticalsession/Magic-Episode-Sort-v2") { UseShellExecute = true });
         }
         #endregion
 
         #region *** Search ***
         private void StartSearch()
         {
-            stopwatch.Reset();
-            stopwatch.Start();
-            startedEpisodeTitleSearch = false;
+            _stopwatch.Reset();
+            _stopwatch.Start();
+            _startedEpisodeTitleSearch = false;
 
             if (SettingsManager.DirectoriesManager.SourceDirectories.Count > 0)
             {
@@ -164,32 +162,25 @@ namespace Magic_Episode_Sort_v2
                     lblEpisodesFound.Text = "Episodes: --";
                 });
 
-                directories = new Directree();
-                directories.DirectorySearched += (sender, e) => OnDirectorySearched();
-                directories.FoundVideoFile += (sender, e) => OnFoundVideoFile();
-                directories.FillingCustomSeriesTitles += (sender, e) =>
+                _directories = new Directree();
+                _directories.DirectorySearched += (sender, e) => OnDirectorySearched();
+                _directories.FoundVideoFile += (sender, e) => OnFoundVideoFile();
+                _directories.FillingCustomSeriesTitles += (sender, e) =>
                 {
-                    this.startedEpisodeTitleSearch = true;
+                    this._startedEpisodeTitleSearch = true;
 
                     this.Dispatcher.Invoke(() =>
                     {
-                        if (SettingsManager.UseTVMazeAPI)
-                        {
-                            lblStatus.Text = "Fetching TV Maze API Series Titles...";
-                        }
-                        else
-                        {
-                            lblStatus.Text = "Loading Custom Series Titles...";
-                        }
+                        lblStatus.Text = SettingsManager.UseTVMazeAPI ? "Fetching TV Maze API Series Titles..." : "Loading Custom Series Titles...";
                     });
                 };
 
-                directories.UpdateStatus += (sender, e) =>
+                _directories.UpdateStatus += (sender, e) =>
                 {
                     UpdateStatusBar();
                 };
 
-                directories.InitializeAndPopulateVideoData(SettingsManager.DirectoriesManager.SourceDirectories,
+                _directories.InitializeAndPopulateVideoData(SettingsManager.DirectoriesManager.SourceDirectories,
                     SettingsManager.SearchSubFolders, SettingsManager.RecursiveSearchSubFolders);
 
                 FinishedSearch();
@@ -199,7 +190,7 @@ namespace Magic_Episode_Sort_v2
                 this.Dispatcher.Invoke(() =>
                 {
                     this.IsEnabled = true;
-                    lstFiles.ItemsSource = new string[0];
+                    lstFiles.ItemsSource = Array.Empty<string>();
                     btnSort.IsEnabled = false;
                     lblStatus.Text = "No sources set.";
                     lblDirectoriesSearched.Text = "";
@@ -220,9 +211,9 @@ namespace Magic_Episode_Sort_v2
 
         private void OnDirectorySearched()
         {
-            this.Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
-                lblDirectoriesSearched.Text = "Directories Searched: " + directories.TotalDirectories.ToString();
+                lblDirectoriesSearched.Text = "Directories Searched: " + _directories.TotalDirectories;
                 UpdateStatusBar();
             });
         }
@@ -234,10 +225,10 @@ namespace Magic_Episode_Sort_v2
 
         private void FinishedSearch()
         {
-            stopwatch.Stop();
-            if (String.IsNullOrEmpty(SettingsManager.OutputDirectory))
+            _stopwatch.Stop();
+            if (string.IsNullOrEmpty(SettingsManager.OutputDirectory))
             {
-                this.Dispatcher.Invoke(() =>
+                Dispatcher.Invoke(() =>
                 {
                     btnSort.IsEnabled = false;
                     lblStatus.Text = "No output directory set.";
@@ -254,9 +245,9 @@ namespace Magic_Episode_Sort_v2
             }
             else
             {
-                if (directories.VideoFiles.Count > 0)
+                if (_directories.VideoFiles.Count > 0)
                 {
-                    this.Dispatcher.Invoke(() =>
+                    Dispatcher.Invoke(() =>
                     {
                         btnSort.IsEnabled = true;
                         lblStatus.Text = "";
@@ -268,15 +259,15 @@ namespace Magic_Episode_Sort_v2
                 }
             }
 
-            this.Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
-                this.IsEnabled = true;
+                IsEnabled = true;
                 progressBar.IsIndeterminate = false;
-                lstFiles.ItemsSource = directories.VideoFiles;
+                lstFiles.ItemsSource = _directories.VideoFiles;
 
-                List<SeriesTitle> newTitles = SettingsManager.CustomSeriesTitleManager.GetNewSeriesTitles(directories.VideoFiles);
+                var newTitles = SettingsManager.CustomSeriesTitleManager.GetNewSeriesTitles(_directories.VideoFiles);
                 if (newTitles.Count > 0 && SettingsManager.AskForNewSeriesNames)
-                    new EditCustomSeriesTitles(directories.VideoFiles).ShowDialog();
+                    new EditCustomSeriesTitles(_directories.VideoFiles).ShowDialog();
             });
 
             UpdateStatusBar(true);
@@ -286,9 +277,9 @@ namespace Magic_Episode_Sort_v2
         #region *** Sort ***
         private void StartSort()
         {
-            this.Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
-                this.IsEnabled = false;
+                IsEnabled = false;
                 progressBar.IsIndeterminate = true;
                 lblStatus.Text = "Sorting...";
             });
@@ -297,13 +288,13 @@ namespace Magic_Episode_Sort_v2
             {
                 try
                 {
-                    Targetree targetree = new Targetree();
-                    bool targetreeResult = targetree.BuildDirectoryTreeInTarget(directories.VideoFiles, SettingsManager.OutputDirectory);
+                    var targetree = new Targetree();
+                    var targetreeResult = targetree.BuildDirectoryTreeInTarget(_directories.VideoFiles, SettingsManager.OutputDirectory);
 
                     if (targetreeResult)
                     {
-                        EpisodeMover epmover = new EpisodeMover();
-                        epmover.MoveEpisodeFiles(directories.VideoFiles);
+                        var episodeMover = new EpisodeMover();
+                        episodeMover.MoveEpisodeFiles(_directories.VideoFiles);
                     }
 
 
@@ -311,21 +302,22 @@ namespace Magic_Episode_Sort_v2
                 }
                 catch (Exception ex)
                 {
-                    this.Dispatcher.Invoke(() =>
+                    Dispatcher.Invoke(() =>
                     {
                         btnSort.IsEnabled = false;
                     });
 
                     StartSearch();
 
-                    MessageBox.Show("An unexpected error has occured while sorting:" + Environment.NewLine + Environment.NewLine + ex.Message, "Error While Sorting", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        $"An unexpected error has occured while sorting:{Environment.NewLine}{Environment.NewLine}{ex.Message}", "Error While Sorting", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }).Start();
         }
 
         private void FinishedSort()
         {
-            this.Dispatcher.Invoke(() =>
+            Dispatcher.Invoke(() =>
             {
                 btnSort.IsEnabled = false;
                 lblStatus.Text = "Sort Complete, Refreshing...";
@@ -335,11 +327,11 @@ namespace Magic_Episode_Sort_v2
 
             Thread.Sleep(200);
 
-            if (directories.VideoFiles.Any(p => p.MoveError != EpisodeMover.MoveErrors.None))
+            if (_directories.VideoFiles.Any(p => p.MoveError != EpisodeMover.MoveErrors.None))
             {
-                this.Dispatcher.Invoke(() =>
+                Dispatcher.Invoke(() =>
                 {
-                    new SortFailed(directories.VideoFiles.Where(p => p.MoveError != EpisodeMover.MoveErrors.None).ToList()).ShowDialog();
+                    new SortFailed(_directories.VideoFiles.Where(p => p.MoveError != EpisodeMover.MoveErrors.None).ToList()).ShowDialog();
                 });
             }
 
@@ -352,39 +344,36 @@ namespace Magic_Episode_Sort_v2
 
         private void ctxIgnoreEpisode_Click(object sender, RoutedEventArgs e)
         {
-            VideoFile? selected = GetSelectedEpisode();
-            if (selected != null)
-            {
-                directories.VideoFiles.Remove(selected);
-                RefreshEpisodeList();
+            var selected = GetSelectedEpisode();
+            if (selected == null) return;
 
-                MessageBox.Show("Episode file skipped until next refresh", "Skip Episode", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+            _directories.VideoFiles.Remove(selected);
+            RefreshEpisodeList();
+
+            MessageBox.Show("Episode file skipped until next refresh", "Skip Episode", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ctxIgnoreSeries_Click(object sender, RoutedEventArgs e)
         {
-            VideoFile? selected = GetSelectedEpisode();
-            if (selected != null)
-            {
-                directories.VideoFiles.RemoveAll(p => p.SeriesTitle.CustomTitle == selected.SeriesTitle.CustomTitle || p.SeriesTitle.OriginalTitle == selected.SeriesTitle.OriginalTitle);
-                RefreshEpisodeList();
+            var selected = GetSelectedEpisode();
+            if (selected == null) return;
+            
+            _directories.VideoFiles.RemoveAll(p => p.SeriesTitle.CustomTitle == selected.SeriesTitle.CustomTitle || p.SeriesTitle.OriginalTitle == selected.SeriesTitle.OriginalTitle);
+            RefreshEpisodeList();
 
-                MessageBox.Show("Entire series '" + selected.SeriesTitle.CustomTitle + "' skipped until next refresh", "Skip Series", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+            MessageBox.Show($"Entire series '{selected.SeriesTitle.CustomTitle}' skipped until next refresh", "Skip Series", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ctxIgnoreDirectory_Click(object sender, RoutedEventArgs e)
         {
-            VideoFile? selected = GetSelectedEpisode();
-            if (selected != null)
-            {
-                SettingsManager.DirectoriesManager.AddSkipDirectory(selected.SourceDirectory);
-                RefreshEpisodeList();
+            var selected = GetSelectedEpisode();
+            if (selected == null) return;
+            
+            SettingsManager.DirectoriesManager.AddSkipDirectory(selected.SourceDirectory);
+            RefreshEpisodeList();
 
-                MessageBox.Show("Directory '" + selected.SourceDirectory + "' added to 'Skip Directory' list. Go to Edit > Skip Directories to edit skipped directories.", "Skip Directory", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+            MessageBox.Show(
+                $"Directory '{selected.SourceDirectory}' added to 'Skip Directory' list. Go to Edit > Skip Directories to edit skipped directories.", "Skip Directory", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
     }
 }

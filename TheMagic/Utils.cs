@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
-namespace TheMagic
+namespace TheMagic; 
+public static class Utils
 {
-    public static class Utils
+    public static string Sanitize(string val)
     {
-        public static string Sanitize(string val)
-        {
-            string[] invalidCharacters = new string[] { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
-            foreach (string c in invalidCharacters) val = val.Replace(c, "");
+        string[] invalidCharacters = new string[] { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
+        foreach (string c in invalidCharacters) val = val.Replace(c, "");
 
-            val = Regex.Replace(val, @"\s+", " "); // trim extra spaces
+        val = Regex.Replace(val, @"\s+", " "); // trim extra spaces
 
-            return val;
-        }
+        return val;
     }
 }

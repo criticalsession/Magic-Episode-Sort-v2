@@ -1,32 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Text.RegularExpressions;
 
-namespace TheMagic
-{
+namespace TheMagic {
     public class VideoFile
     {
         public string SourcePath { get; set; }
         public string TargetPath { get; set; }
         public SeriesTitle SeriesTitle { get; set; }
         public string FileName { get; set; }
-        public string? ParentDirectory => Path.GetDirectoryName(SourcePath);
-        public string? ParentDirectoryName => Path.GetFileName(ParentDirectory);
         public string Extension { get; set; }
         public string? EpisodeName { get; set; }
         public int SeasonNumber { get; set; }
         public int EpisodeNumber { get; set; }
+        public string? ParentDirectory => Path.GetDirectoryName(SourcePath);
+        public string? ParentDirectoryName => Path.GetFileName(ParentDirectory);
+        private bool IsVideoFileExtension => SettingsManager.Extensions.Contains(Path.GetExtension(SourcePath).ToLower());
+        public bool IsValidVideoFile => IsVideoFileExtension && RegexMatches && !string.IsNullOrEmpty(SeriesTitle.OriginalTitle);
+        public string SeasonDirName => $"Season {SeasonNumber.ToString().PadLeft(2, '0')}";
+        public EpisodeMover.MoveErrors MoveError { get; internal set; } = EpisodeMover.MoveErrors.None;
+
 
         public string NewFileName
         {
             get
             {
                 if (SeasonNumber > 0 && EpisodeNumber > 0 && !String.IsNullOrEmpty(EpisodeName))
-                    return Utils.Sanitize(String.Format("{0} - S{1}E{2} - {3}{4}", SeriesTitle.CustomTitle, SeasonNumber.ToString().PadLeft(2, '0'), EpisodeNumber.ToString().PadLeft(2, '0'), EpisodeName, Extension));
+                    return Utils.Sanitize($"{SeriesTitle.CustomTitle} - S{SeasonNumber.ToString().PadLeft(2, '0')}E{EpisodeNumber.ToString().PadLeft(2, '0')} - {EpisodeName}{Extension}");
                 else
                     return FileName;
             }
@@ -36,21 +34,13 @@ namespace TheMagic
         {
             get
             {
-                if (String.IsNullOrEmpty(SourcePath)) return "";
+                if (string.IsNullOrEmpty(SourcePath)) return "";
                 else
                 {
                     string? directory = Path.GetDirectoryName(SourcePath);
-                    if (String.IsNullOrEmpty(directory)) return "";
+                    if (string.IsNullOrEmpty(directory)) return "";
                     else return directory;
                 }
-            }
-        }
-
-        private bool IsVideoFileExtension
-        {
-            get
-            {
-                return SettingsManager.Extensions.Contains(Path.GetExtension(SourcePath).ToLower());
             }
         }
 
@@ -67,29 +57,11 @@ namespace TheMagic
             }
         }
 
-        public bool IsValidVideoFile
-        {
-            get
-            {
-                return IsVideoFileExtension && RegexMatches && !String.IsNullOrEmpty(SeriesTitle.OriginalTitle);
-            }
-        }
-
-        public string SeasonDirName
-        {
-            get
-            {
-                return "Season " + SeasonNumber.ToString().PadLeft(2, '0');
-            }
-        }
-
-        public EpisodeMover.MoveErrors MoveError { get; internal set; } = EpisodeMover.MoveErrors.None;
-
         public VideoFile(string path)
         {
             SourcePath = path;
             FileName = Path.GetFileName(path);
-            TargetPath = String.Empty;
+            TargetPath = string.Empty;
             SeriesTitle = new SeriesTitleExtractor().Extract(FileName);
             SeasonNumber = GetSeasonNumberFromFileName().GetValueOrDefault(0);
             EpisodeNumber = GetEpisodeNumberFromFileName().GetValueOrDefault(0);
@@ -99,23 +71,22 @@ namespace TheMagic
 
         private int? GetSeasonNumberFromFileName()
         {
-            foreach (string regex in SettingsManager.Regexes)
+            foreach (var regex in SettingsManager.Regexes)
             {
-                Match match = Regex.Match(FileName, regex);
-                if (match.Success)
+                var match = Regex.Match(FileName, regex);
+                if (!match.Success) continue;
+
+                var matched = match.Value.ToLower();
+                if (regex.Contains('e')) //SDDEDD
                 {
-                    string matched = match.Value.ToLower();
-                    if (regex.Contains("e")) //SDDEDD
-                    {
-                        matched = matched.Replace("s", "");
-                        matched = matched.Substring(0, matched.IndexOf("e"));
-                        return int.Parse(matched);
-                    }
-                    else if (regex.Contains("x")) //DDXDD
-                    {
-                        matched = matched.Substring(0, matched.IndexOf("x"));
-                        return int.Parse(matched);
-                    }
+                    matched = matched.Replace("s", "");
+                    matched = matched.Substring(0, matched.IndexOf("e"));
+                    return int.Parse(matched);
+                }
+                else if (regex.Contains('x')) //DDXDD
+                {
+                    matched = matched[..matched.IndexOf("x")];
+                    return int.Parse(matched);
                 }
             }
 
@@ -124,30 +95,30 @@ namespace TheMagic
 
         private int? GetEpisodeNumberFromFileName()
         {
-            foreach (string regex in SettingsManager.Regexes)
+            foreach (var regex in SettingsManager.Regexes)
             {
-                Match match = Regex.Match(FileName, regex);
-                if (match.Success)
+                var match = Regex.Match(FileName, regex);
+                if (!match.Success) continue;
+
+                var matched = match.Value.ToLower();
+                if (regex.Contains('e')) //SDDEDD
                 {
-                    string matched = match.Value.ToLower();
-                    if (regex.Contains("e")) //SDDEDD
-                    {
-                        matched = matched.Substring(matched.IndexOf("e") + 1);
+                    matched = matched[(matched.IndexOf("e") + 1)..];
 
-                        // if the matched result contains "e" or "-", then it's a double episode
-                        // get the first episode number
-                        if (matched.Contains("e") || matched.Contains("-"))
-                        {
-                            matched = matched.Substring(0, matched.IndexOf(matched.Contains("e") ? "e" : "-")).Replace("-", "");
-                        }
-
-                        return int.Parse(matched);
-                    }
-                    else if (regex.Contains("x")) //DDXDD
+                    // if the matched result contains "e" or "-", then it's a double episode
+                    // get the first episode number
+                    if (matched.Contains('e') || matched.Contains('-'))
                     {
-                        matched = matched.Substring(matched.IndexOf("x") + 1);
-                        return int.Parse(matched);
+                        var sep = matched.Contains('e') ? "e" : "-";
+                        matched = matched[..matched.IndexOf(sep)].Replace("-", "");
                     }
+
+                    return int.Parse(matched);
+                }
+                else if (regex.Contains('x')) //DDXDD
+                {
+                    matched = matched[(matched.IndexOf("x") + 1)..];
+                    return int.Parse(matched);
                 }
             }
 
@@ -156,23 +127,23 @@ namespace TheMagic
 
         public override string ToString()
         {
-            if (String.IsNullOrEmpty(EpisodeName))
+            if (string.IsNullOrEmpty(EpisodeName))
             {
-                return String.Format("{0} > S{1}{2} > {3}", SeriesTitle.CustomTitle, SeasonNumber.ToString().PadLeft(2, '0'), EpisodeNumber > 0 ? "E" + EpisodeNumber : "", FileName);
+                return $"{SeriesTitle.CustomTitle} > S{SeasonNumber.ToString().PadLeft(2, '0')}{(EpisodeNumber > 0 ? "E" + EpisodeNumber : "")} > {FileName}";
             }
             else
             {
-                return String.Format("{0} > S{1}E{2} > \"{3}\"", SeriesTitle.CustomTitle, SeasonNumber.ToString().PadLeft(2, '0'), EpisodeNumber.ToString().PadLeft(2, '0'), EpisodeName);
+                return $"{SeriesTitle.CustomTitle} > S{SeasonNumber.ToString().PadLeft(2, '0')}E{EpisodeNumber.ToString().PadLeft(2, '0')} > \"{EpisodeName}\"";
             }
         }
 
         public void SetCustomTitle(string? customTitle, bool isNew)
         {
-            this.SeriesTitle.CustomTitle = customTitle == null ? this.SeriesTitle.OriginalTitle : customTitle;
-            this.SeriesTitle.IsNew = isNew;
+            SeriesTitle.CustomTitle = customTitle ?? SeriesTitle.OriginalTitle;
+            SeriesTitle.IsNew = isNew;
 
             if (isNew)
-                SettingsManager.CustomSeriesTitleManager.AddCustomSeriesTitle(this.SeriesTitle.OriginalTitle, this.SeriesTitle.CustomTitle, true);
+                SettingsManager.CustomSeriesTitleManager.AddCustomSeriesTitle(SeriesTitle.OriginalTitle, SeriesTitle.CustomTitle, isNew);
         }
     }
 }

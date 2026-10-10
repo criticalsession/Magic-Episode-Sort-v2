@@ -13,13 +13,10 @@ namespace TheMagic
         private const string ErrorResponse = "error";
         private static readonly StringComparer IgnoreCaseComparer = StringComparer.OrdinalIgnoreCase;
 
-        public System.Collections.Concurrent.ConcurrentBag<string> cDirectories { get; } = new();
-        public HashSet<string> Directories { get; } = new();
-        public HashSet<string> SkipDirectories { get; private set; } = new(IgnoreCaseComparer);
-        public System.Collections.Concurrent.ConcurrentBag<VideoFile> cVideoFiles { get; private set; } = new();
-        public List<VideoFile> VideoFiles { get; private set; } = new();
-
-        public bool SearchComplete { get; private set; }
+        private System.Collections.Concurrent.ConcurrentBag<string> cDirectories { get; } = [];
+        private HashSet<string> Directories { get; } = [];
+        private HashSet<string> SkipDirectories { get; set; } = new(IgnoreCaseComparer);
+        private System.Collections.Concurrent.ConcurrentBag<VideoFile> cVideoFiles { get; set; } = [];
 
         public event EventHandler? DirectorySearched;
         public event EventHandler? FoundVideoFile;
@@ -29,8 +26,11 @@ namespace TheMagic
         public List<string> DistinctSeriesTitles
             => VideoFiles.Count > 0 ? VideoFiles.Select(p => p.SeriesTitle.CustomTitle).Distinct().ToList() : cVideoFiles.Select(p => p.SeriesTitle.CustomTitle).Distinct().ToList();
 
+        public bool SearchComplete { get; private set; }
         public int TotalDirectories = 0;
         public int TotalVideoFiles = 0;
+
+        public List<VideoFile> VideoFiles { get; private set; } = [];
 
         public void InitializeAndPopulateVideoData(List<SourceDirectory> sourceDirectories, bool searchSubDirectories, bool recursive)
         {
@@ -149,7 +149,7 @@ namespace TheMagic
             }
         }
 
-        private static void SetVideoFileCustomTitle(VideoFile videoFile, string? tvMazeTitle)
+        private void SetVideoFileCustomTitle(VideoFile videoFile, string? tvMazeTitle)
         {
             string originalTitle = videoFile.SeriesTitle.OriginalTitle;
             SeriesTitle? storedTitle = SettingsManager.CustomSeriesTitleManager.GetCustomSeriesTitle(originalTitle);
@@ -158,7 +158,7 @@ namespace TheMagic
             else videoFile.SetCustomTitle(String.IsNullOrEmpty(tvMazeTitle) ? originalTitle : tvMazeTitle, true);
         }
 
-        private static (string?, int?) GetTitleAndIdFromTVMazeApi(TVMazeAPI? tvMazeApi, string originalTitle)
+        private (string?, int?) GetTitleAndIdFromTVMazeApi(TVMazeAPI? tvMazeApi, string originalTitle)
         {
             if (tvMazeApi != null)
             {
@@ -169,18 +169,18 @@ namespace TheMagic
             return (null, null);
         }
 
-        private static void SetVideoFileEpisodeName(VideoFile videoFile, TVMazeAPI.EpisodeListApiModel[]? episodeData)
+        private void SetVideoFileEpisodeName(VideoFile videoFile, TVMazeAPI.EpisodeListApiModel[]? episodeData)
         {
             if (episodeData == null) return;
 
-            TVMazeAPI.EpisodeListApiModel? thisEpisode = episodeData.FirstOrDefault(p => p.season == videoFile.SeasonNumber && p.number == videoFile.EpisodeNumber);
+            TVMazeAPI.EpisodeListApiModel? thisEpisode = episodeData.FirstOrDefault(p => p.Season == videoFile.SeasonNumber && p.Number == videoFile.EpisodeNumber);
 
             if (thisEpisode == null) return;
 
-            videoFile.EpisodeName = thisEpisode.name;
+            videoFile.EpisodeName = thisEpisode.Name;
         }
 
-        private static (string?, int?) GetSeriesDetailsFromApi(TVMazeAPI tvMazeApi, string originalTitle)
+        private (string?, int?) GetSeriesDetailsFromApi(TVMazeAPI tvMazeApi, string originalTitle)
         {
             (string?, int?) apiResponse = (null, null);
             int errorCount = 0;
@@ -198,7 +198,6 @@ namespace TheMagic
             return apiResponse;
         }
 
-        private static bool ReceivedValidResponse(string? apiResponse)
-            => !string.IsNullOrEmpty(apiResponse) && apiResponse != ErrorResponse;
+        private bool ReceivedValidResponse(string? apiResponse) => !string.IsNullOrEmpty(apiResponse) && apiResponse != ErrorResponse;
     }
 }

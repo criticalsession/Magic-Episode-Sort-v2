@@ -1,57 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TheMagic; 
 
-namespace TheMagic
+public class CustomSeriesTitleManager
 {
-    public class CustomSeriesTitleManager
+    internal List<SeriesTitle> CustomSeriesTitles => MESDBHandler.LoadCustomTitles();
+
+    public void AddCustomSeriesTitle(string originalTitle, string customTitle, bool isNew)
     {
-        internal List<SeriesTitle> CustomSeriesTitles
+        MESDBHandler.SaveCustomTitle(new SeriesTitle()
         {
-            get
-            {
-                return MESDBHandler.LoadCustomTitles();
-            }
-        }
+            CustomTitle = customTitle,
+            OriginalTitle = originalTitle,
+            IsNew = isNew
+        });
 
-        public void AddCustomSeriesTitle(string originalTitle, string customTitle, bool isNew)
-        {
-            MESDBHandler.SaveCustomTitle(new SeriesTitle()
-            {
-                CustomTitle = customTitle,
-                OriginalTitle = originalTitle,
-                IsNew = isNew
-            });
-
-            SettingsManager.SettingsChanged = true;
-        }
-
-        public void UpdateCustomSeriesTitle(string originalTitle, string customTitle)
-        {
-            AddCustomSeriesTitle(originalTitle, customTitle, false);
-        }
-
-        public void RemoveCustomSeriesTitle(string originalTitle)
-        {
-            MESDBHandler.DeleteCustomTitle(originalTitle);
-            SettingsManager.SettingsChanged = true;
-        }
-
-        public List<SeriesTitle> GetAllCustomSeriesTitles()
-        {
-            return CustomSeriesTitles;
-        }
-
-        public SeriesTitle? GetCustomSeriesTitle(string originalTitle)
-        {
-            return CustomSeriesTitles.FirstOrDefault(p => p.OriginalTitle.ToLower() == originalTitle.ToLower());
-        }
-
-        public List<SeriesTitle> GetNewSeriesTitles(List<VideoFile> videoFiles)
-        {
-            return videoFiles.Where(p => p.SeriesTitle.IsNew).Select(p => p.SeriesTitle).Distinct().ToList();
-        }
+        SettingsManager.SettingsChanged = true;
     }
+
+    public void UpdateCustomSeriesTitle(string originalTitle, string customTitle)
+    {
+        AddCustomSeriesTitle(originalTitle, customTitle, false);
+    }
+
+    public void RemoveCustomSeriesTitle(string originalTitle)
+    {
+        MESDBHandler.DeleteCustomTitle(originalTitle);
+        SettingsManager.SettingsChanged = true;
+    }
+
+    public List<SeriesTitle> GetAllCustomSeriesTitles() => CustomSeriesTitles;
+
+    public SeriesTitle? GetCustomSeriesTitle(string originalTitle) => CustomSeriesTitles.FirstOrDefault(p => string.Equals(p.OriginalTitle, originalTitle, StringComparison.OrdinalIgnoreCase));
+
+    public List<SeriesTitle> GetNewSeriesTitles(List<VideoFile> videoFiles) => videoFiles.Where(p => p.SeriesTitle.IsNew).Select(p => p.SeriesTitle).Distinct().ToList();
 }
